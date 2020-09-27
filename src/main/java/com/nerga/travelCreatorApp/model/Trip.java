@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 public class Trip {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tripId;
 
     private String tripName;
@@ -25,9 +27,12 @@ public class Trip {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @ManyToMany
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "organizedTrips")
     private List<User> organizers;
-    @ManyToMany
+
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "usersTrips")
     private List<User> members;
 
 }
