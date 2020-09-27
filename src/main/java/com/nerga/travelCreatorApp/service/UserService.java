@@ -36,6 +36,7 @@ public class UserService {
         }
 
         User user = userSignUpMapper.transform(account);
+        System.out.println(user);
         user = userRepository.save(user);
         return user;
     }

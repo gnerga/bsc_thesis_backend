@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.controller;
 
+import com.nerga.travelCreatorApp.dto.user.UserSignInDto;
 import com.nerga.travelCreatorApp.dto.user.UserSignUpDto;
 import com.nerga.travelCreatorApp.exception.user.UserException;
 import com.nerga.travelCreatorApp.service.UserService;
@@ -24,7 +25,7 @@ public class UserController {
         return "Hello !" ;
     }
 
-    @PostMapping(path = "signUp", consumes = "application/json")
+    @PostMapping(path = "signup", consumes = "application/json")
     @ResponseBody
     public ResponseEntity signUp(@RequestBody UserSignUpDto accountDetails) {
         return createUserAccount(accountDetails) ? new ResponseEntity(HttpStatus.CREATED) : new ResponseEntity(HttpStatus.CONFLICT);
@@ -42,10 +43,16 @@ public class UserController {
         }
     }
 
-//    @PostMapping(path="login", consumes = "application/json")
-//    public ResponseEntity logIn(@RequestBody UserSignInDto authenticationDetails) throws Exception {
-//
-//    }
+    @GetMapping(path="login", consumes = "application/json")
+    public ResponseEntity login(@RequestBody UserSignInDto authenticationDetails) throws Exception {
+        try {
+           Boolean logStatus = userService
+                   .sillyAuthenticate(authenticationDetails.getLogin(), authenticationDetails.getPassword());
+                    return ResponseEntity.ok(new String("You are in !"));
+        } catch (UserException e) {
+            return new ResponseEntity(e, HttpStatus.UNAUTHORIZED);
+        }
+    }
 
 
 

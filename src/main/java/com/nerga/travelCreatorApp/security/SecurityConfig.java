@@ -15,6 +15,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity builder) throws Exception {
         builder.csrf().disable(); // wyłączenie obsługi tokenu csrf
+        builder.headers().frameOptions().disable();
         builder
                 .authorizeRequests()
                 .antMatchers("/")
