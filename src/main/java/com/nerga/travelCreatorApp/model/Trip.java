@@ -20,7 +20,12 @@ public class Trip {
     private Long tripId;
 
     private String tripName;
-    @ManyToOne
+
+    @JsonManagedReference
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinTable(name="trip_location",
+            joinColumns = @JoinColumn(name="trip_id"),
+            inverseJoinColumns = @JoinColumn(name="location_id"))
     private Location location;
     private String tripDescription;
 
