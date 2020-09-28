@@ -23,19 +23,28 @@ public class LocationService {
         this.locationMapper = locationMapper;
     }
 
-    public Location createNewLocation(LocationDto locationDetails){
+    public Location createNewLocation(LocationDto locationDetails) {
         return locationRepository.save(locationMapper.transform(locationDetails));
     }
 
-    public List<Location> findAllLocations(){
+    public List<Location> findAllLocations() {
         return Optional.of(locationRepository.findAll())
-                                                    .orElseThrow(LocationNotFoundException::new);
+                .orElseThrow(LocationNotFoundException::new);
     }
 
+    public Location findById(Long id) {
+        return Optional.of(locationRepository.findById(id)).get()
+                .orElseThrow(LocationNotFoundException::new);
+    }
 
+    public List<Location> findByDescription(String elementOfDescription) {
+        return Optional.of(locationRepository.findLocationsByLocationDescriptionContains(elementOfDescription))
+                .orElseThrow(LocationNotFoundException::new);
+    }
 
-
-
+    public Location findByName(String locationName) {
+        return Optional.of(locationRepository.findLocationByLocationName(locationName))
+                .orElseThrow(LocationNotFoundException::new);
+    }
 
 }
-
