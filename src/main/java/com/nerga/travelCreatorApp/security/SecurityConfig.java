@@ -18,9 +18,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         builder.headers().frameOptions().disable();
         builder
                 .authorizeRequests()
-                .antMatchers("/")
-                .permitAll() // pozwalamy wchodzic na root context bez logowania
+                .antMatchers("/user", "/user/**","/location","location/**")
+                // pozwalamy wchodzic na root context bez logowania
 //                .anyRequest().authenticated()
+                .permitAll()
                 .and()
                 .formLogin().permitAll()
                 .and()

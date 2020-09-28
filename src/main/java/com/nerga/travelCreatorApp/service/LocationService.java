@@ -27,7 +27,7 @@ public class LocationService {
         return locationRepository.save(locationMapper.transform(locationDetails));
     }
 
-    public List<Location> findAllLocation(){
+    public List<Location> findAllLocations(){
         return Optional.of(locationRepository.findAll())
                                                     .orElseThrow(LocationNotFoundException::new);
     }

@@ -1,11 +1,18 @@
 package com.nerga.travelCreatorApp.controller;
 
+import com.nerga.travelCreatorApp.dto.location.LocationDto;
+import com.nerga.travelCreatorApp.exception.location.LocationException;
 import com.nerga.travelCreatorApp.model.Location;
 import com.nerga.travelCreatorApp.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/location")
+import java.util.List;
+
+@RestController
+@RequestMapping("/location")
 public class LocationController {
 
     private final LocationService locationService;
@@ -15,8 +22,28 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    public Location createNewLocation() {
-        return null;
+    @PostMapping(path="test")
+    @ResponseBody
+    public String helloUserMethod(){
+        return "Hello !" ;
+    }
+
+    @PostMapping(path="create_location")
+    @ResponseBody
+    public Location createNewLocation(@RequestBody LocationDto locationDetails) {
+        return locationService.createNewLocation(locationDetails);
+    }
+
+    @GetMapping(path="find_all")
+    @ResponseBody
+    public ResponseEntity findAll(){
+        try {
+            List<Location> locationsList = locationService.findAllLocations();
+            return ResponseEntity.ok(locationsList);
+
+        } catch (LocationException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
