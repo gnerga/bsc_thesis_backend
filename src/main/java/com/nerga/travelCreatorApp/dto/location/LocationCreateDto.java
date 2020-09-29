@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class LocationDto {
+public class LocationCreateDto {
 
     private String locationName;
     private String locationDescription;

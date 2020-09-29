@@ -1,6 +1,6 @@
 package com.nerga.travelCreatorApp.service;
 
-import com.nerga.travelCreatorApp.dto.location.LocationDto;
+import com.nerga.travelCreatorApp.dto.location.LocationCreateDto;
 import com.nerga.travelCreatorApp.dto.location.LocationMapper;
 import com.nerga.travelCreatorApp.exception.location.LocationNotFoundException;
 import com.nerga.travelCreatorApp.model.Location;
@@ -23,7 +23,7 @@ public class LocationService {
         this.locationMapper = locationMapper;
     }
 
-    public Location createNewLocation(LocationDto locationDetails) {
+    public Location createNewLocation(LocationCreateDto locationDetails) {
         return locationRepository.save(locationMapper.transform(locationDetails));
     }
 

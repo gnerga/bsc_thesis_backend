@@ -1,6 +1,6 @@
 package com.nerga.travelCreatorApp.exception.location;
 
-public class LocationException extends RuntimeException{
+public abstract class LocationException extends RuntimeException{
     public LocationException() {
     }
 

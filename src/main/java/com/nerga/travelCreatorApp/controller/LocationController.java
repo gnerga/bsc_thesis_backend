@@ -1,18 +1,15 @@
 package com.nerga.travelCreatorApp.controller;
 
-import com.nerga.travelCreatorApp.dto.location.LocationDto;
+import com.nerga.travelCreatorApp.dto.location.LocationCreateDto;
 import com.nerga.travelCreatorApp.exception.location.LocationException;
 import com.nerga.travelCreatorApp.model.Location;
 import com.nerga.travelCreatorApp.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/location")
@@ -33,7 +30,7 @@ public class LocationController {
 
     @PostMapping(path="create_location")
     @ResponseBody
-    public Location createNewLocation(@RequestBody LocationDto locationDetails) {
+    public Location createNewLocation(@RequestBody LocationCreateDto locationDetails) {
         return locationService.createNewLocation(locationDetails);
     }
 

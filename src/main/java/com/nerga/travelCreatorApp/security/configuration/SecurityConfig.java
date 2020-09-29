@@ -1,9 +1,7 @@
 package com.nerga.travelCreatorApp.security.configuration;
 
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,7 +16,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         builder.headers().frameOptions().disable();
         builder
                 .authorizeRequests()
-                .antMatchers("/user", "/user/**","/location","location/**")
+                .antMatchers(
+                        "/user",
+                        "/user/**",
+                        "/location",
+                        "/location/**",
+                        "/trip",
+                        "/trip/**")
                 // pozwalamy wchodzic na root context bez logowania
 //                .anyRequest().authenticated()
                 .permitAll()
