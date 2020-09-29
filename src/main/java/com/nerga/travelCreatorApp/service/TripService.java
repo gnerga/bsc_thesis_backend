@@ -64,7 +64,8 @@ public class TripService {
                     trip.getTripDescription(),
                     trip.getLocation().getLocationName(),
                     trip.getLocation().getLocationDescription(),
-                    trip.getLocation().getGoogleMapUrl()
+                    trip.getLocation().getGoogleMapUrl(),
+                        TripOutputDto.test()
                 )).collect(Collectors.toList());
     }
 
@@ -79,7 +80,8 @@ public class TripService {
                 optionalTrip.get().getTripDescription(),
                 optionalTrip.get().getLocation().getLocationName(),
                 optionalTrip.get().getLocation().getLocationDescription(),
-                optionalTrip.get().getLocation().getGoogleMapUrl()
+                optionalTrip.get().getLocation().getGoogleMapUrl(),
+                TripOutputDto.test()
         );
     }
 

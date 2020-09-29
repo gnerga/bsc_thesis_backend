@@ -4,6 +4,9 @@ import com.nerga.travelCreatorApp.model.Location;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class TripOutputDto {
@@ -14,5 +17,16 @@ public class TripOutputDto {
     private String locationName;
     private String locationDescription;
     private String googleMapUrl;
+    private List<String> users;
+
+    // todo zmienic lobmbokowy konstruktor na własny ... chyba bedzie lepiej
+
+    public static List<String> test(){
+        List<String> users = new ArrayList<>();
+        for (int i=0;i<5;i++){
+            users.add("test");
+        }
+        return users;
+    }
 
 }
