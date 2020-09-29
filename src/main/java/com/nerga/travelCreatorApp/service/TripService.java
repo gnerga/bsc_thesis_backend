@@ -2,6 +2,7 @@ package com.nerga.travelCreatorApp.service;
 
 
 import com.nerga.travelCreatorApp.dto.trip.TripCreateDto;
+import com.nerga.travelCreatorApp.dto.trip.TripOutputDto;
 import com.nerga.travelCreatorApp.exception.location.LocationNotFoundException;
 import com.nerga.travelCreatorApp.exception.trip.TripCannotBeCreatedException;
 import com.nerga.travelCreatorApp.exception.trip.TripNotFoundException;
@@ -53,32 +54,34 @@ public class TripService {
         return trip;
     }
 
-//    public List<Trip> findAllTrips () {
-//
-//        Optional<List<Trip>> optionalTripList = Optional.of(tripRepository.findAll());
-//        return optionalTripList.get();
-//    }
-
-    public List<JSONObject> findAllTrips() {
+    public List<TripOutputDto> findAllTrips() {
         Optional<List<Trip>> optionalTripList = Optional.of(tripRepository.findAll());
-        List<JSONObject> objectList = optionalTripList.get().stream().map(this::parseTripToJsonObject).collect(Collectors.toList());
-        return objectList;
+        return optionalTripList.get()
+                .stream()
+                .map(trip -> new TripOutputDto(
+                    trip.getTripId(),
+                    trip.getTripName(),
+                    trip.getTripDescription(),
+                    trip.getLocation().getLocationName(),
+                    trip.getLocation().getLocationDescription(),
+                    trip.getLocation().getGoogleMapUrl()
+                )).collect(Collectors.toList());
     }
 
-    private JSONObject parseTripToJsonObject(Trip trip){
-
-        JSONObject location = new JSONObject();
-//        location.put("locationId", trip.getLocation().getLocationId());
-        location.put("locationName", trip.getLocation().getLocationName());
-        location.put("locationDescription", trip.getLocation().getLocationDescription());
-        location.put("googleMapUrl", trip.getLocation().getGoogleMapUrl());
-
-        JSONObject tripJson = new JSONObject();
-        tripJson.put("tripId", trip.getTripId());
-        tripJson.put("tripName", trip.getTripName());
-        tripJson.put("tripDescription", trip.getTripDescription());
-        tripJson.put("location", location);
-        return tripJson;
+    public TripOutputDto findTripById(Long id){
+        Optional<Trip> optionalTrip = Optional.of(tripRepository.findById(id)).orElseThrow(TripNotFoundException::new);
+        if (optionalTrip.isEmpty()){
+            throw new TripNotFoundException();
+        }
+        return new TripOutputDto(
+                optionalTrip.get().getTripId(),
+                optionalTrip.get().getTripName(),
+                optionalTrip.get().getTripDescription(),
+                optionalTrip.get().getLocation().getLocationName(),
+                optionalTrip.get().getLocation().getLocationDescription(),
+                optionalTrip.get().getLocation().getGoogleMapUrl()
+        );
     }
+
 
 }

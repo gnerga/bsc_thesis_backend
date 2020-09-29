@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.controller;
 
 import com.nerga.travelCreatorApp.dto.trip.TripCreateDto;
+import com.nerga.travelCreatorApp.dto.trip.TripOutputDto;
 import com.nerga.travelCreatorApp.exception.trip.TripException;
 import com.nerga.travelCreatorApp.service.TripService;
 import org.json.JSONObject;
@@ -37,11 +38,22 @@ public class TripController {
     }
 
     @GetMapping(path="findAll")
-    @ResponseBody
     public ResponseEntity findAll(){
-        List<JSONObject> test = tripService.findAllTrips();
-        System.out.println(test);
-        return test;
+        List<TripOutputDto> test = tripService.findAllTrips();
+        return ResponseEntity.ok(test);
     }
+
+    @GetMapping(path="findById/{id}")
+    public ResponseEntity findById(@PathVariable("id") Long id){
+        try{
+            TripOutputDto test = tripService.findTripById(id);
+            return ResponseEntity.ok(test);
+        } catch (TripException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+
 
 }
