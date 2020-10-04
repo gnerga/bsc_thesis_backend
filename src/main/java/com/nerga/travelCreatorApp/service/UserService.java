@@ -1,7 +1,6 @@
 package com.nerga.travelCreatorApp.service;
 
-import com.nerga.travelCreatorApp.dto.user.UserSignUpDto;
-import com.nerga.travelCreatorApp.dto.user.UserSignUpMapper;
+import com.nerga.travelCreatorApp.dto.user.*;
 import com.nerga.travelCreatorApp.exception.user.BadUserCredentialsException;
 import com.nerga.travelCreatorApp.exception.user.EmailAlreadyUseException;
 import com.nerga.travelCreatorApp.exception.user.LoginAlreadyUsedException;
@@ -41,7 +40,7 @@ public class UserService {
         return user;
     }
 
-    public boolean sillyAuthenticate(String login, String password) throws Exception {
+    public UserSignInDetailsDto sillyAuthenticate(String login, String password) throws Exception {
 
         if (StringUtils.isEmpty(login) || StringUtils.isEmpty(password)){
             throw new Exception("Empty credentials");
@@ -50,7 +49,16 @@ public class UserService {
         if (userRepository.existsByUserLogin(login)) {
             Optional<User> user = userRepository.findUserByUserLogin(login);
             if (user.isPresent()) {
-                return user.get().getPassword().equals(password);
+                if (user.get().getPassword().equals(password)){
+                    UserSignInDetailsDto userDetails = new UserSignInDetailsDto();
+                    userDetails.setLogin(user.get().getUserLogin());
+                    userDetails.setUserId(user.get().getUserId().intValue());
+                    userDetails.setJwt("jwtcode");
+                    return userDetails;
+                } else {
+                    throw new BadUserCredentialsException("Wrong password");
+                }
+
             }
         }
 
