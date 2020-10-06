@@ -118,6 +118,20 @@ public class TripService {
         return trips.stream().map(this::tripToTripDto).collect(Collectors.toList());
     }
 
+    public TripOutputDto addNewParticipantBy(Long tripId, Long userId){
+
+        User user = findUserById(userId);
+        Optional<Trip> tripOptional = Optional.of(tripRepository.findById(tripId)).orElseThrow(TripNotFoundException::new);
+        if (tripOptional.isEmpty()){
+            throw new TripNotFoundException();
+        }
+        tripOptional.get().addParticipant(user);
+        Trip trip = tripRepository.save(tripOptional.get());
+
+        return tripToTripDto(trip);
+
+    }
+
     private User findUserById(Long userId){
         Optional<User> user = Optional.of(userRepository.findUserByUserId(userId)).orElseThrow(MyUserNotFoundException::new);
         if (user.isEmpty()) {

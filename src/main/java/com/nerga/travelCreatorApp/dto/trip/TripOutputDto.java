@@ -38,7 +38,7 @@ public class TripOutputDto {
 //    private List<User> users;
 
     private List<UserDetailsDto> organizers;
-    private List<UserDetailsDto> users;
+    private List<UserDetailsDto> members;
 
 
 

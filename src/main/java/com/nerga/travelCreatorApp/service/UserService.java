@@ -4,13 +4,16 @@ import com.nerga.travelCreatorApp.dto.user.*;
 import com.nerga.travelCreatorApp.exception.user.BadUserCredentialsException;
 import com.nerga.travelCreatorApp.exception.user.EmailAlreadyUseException;
 import com.nerga.travelCreatorApp.exception.user.LoginAlreadyUsedException;
+import com.nerga.travelCreatorApp.exception.user.MyUserNotFoundException;
 import com.nerga.travelCreatorApp.model.User;
 import com.nerga.travelCreatorApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("userService")
 public class UserService {
@@ -35,7 +38,6 @@ public class UserService {
         }
 
         User user = userSignUpMapper.transform(account);
-        System.out.println(user);
         user = userRepository.save(user);
         return user;
     }
@@ -63,6 +65,24 @@ public class UserService {
         }
 
         throw new BadUserCredentialsException("Invalid credentials");
+    }
+
+    public UserDetailsDto findUserById(Long userId){
+        return null;
+    }
+
+    public UserDetailsDto findUserByLogin(String login){
+        return null;
+    }
+
+    public List<UserDetailsDto> findAllUsers(){
+        Optional<List<User>> optionalUserList = Optional.ofNullable(Optional.of(userRepository.findAll()).orElseThrow(MyUserNotFoundException::new));
+        if (optionalUserList.isEmpty()) {
+            throw new MyUserNotFoundException();
+        }
+        return optionalUserList.get().stream()
+                .map(User::userToUserDetailsDto)
+                .collect(Collectors.toList());
     }
 
 }

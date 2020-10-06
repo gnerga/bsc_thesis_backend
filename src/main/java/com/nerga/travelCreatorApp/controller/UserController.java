@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.controller;
 
+import com.nerga.travelCreatorApp.dto.user.UserDetailsDto;
 import com.nerga.travelCreatorApp.dto.user.UserSignInDetailsDto;
 import com.nerga.travelCreatorApp.dto.user.UserSignInDto;
 import com.nerga.travelCreatorApp.dto.user.UserSignUpDto;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -55,6 +58,16 @@ public class UserController {
                     return ResponseEntity.ok(user.toJson());
         } catch (UserException e) {
             return new ResponseEntity(e, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping(path = "findAllUsers")
+    public ResponseEntity findAll(){
+        try {
+            List<UserDetailsDto> usersList = userService.findAllUsers();
+            return ResponseEntity.ok(usersList);
+        } catch (UserException e) {
+            return new ResponseEntity(e, HttpStatus.NOT_FOUND);
         }
     }
 
