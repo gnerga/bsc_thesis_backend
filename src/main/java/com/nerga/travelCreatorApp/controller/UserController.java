@@ -2,7 +2,6 @@ package com.nerga.travelCreatorApp.controller;
 
 import com.nerga.travelCreatorApp.dto.user.UserDetailsDto;
 import com.nerga.travelCreatorApp.dto.user.UserSignInDetailsDto;
-import com.nerga.travelCreatorApp.dto.user.UserSignInDto;
 import com.nerga.travelCreatorApp.dto.user.UserSignUpDto;
 import com.nerga.travelCreatorApp.exception.user.UserException;
 import com.nerga.travelCreatorApp.service.UserService;

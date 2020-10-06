@@ -28,13 +28,13 @@ public class LocationController {
         return "Hello !" ;
     }
 
-    @PostMapping(path="create_location")
+    @PostMapping(path="createLocation")
     @ResponseBody
     public Location createNewLocation(@RequestBody LocationCreateDto locationDetails) {
         return locationService.createNewLocation(locationDetails);
     }
 
-    @GetMapping(path="find_all")
+    @GetMapping(path="findAll")
     @ResponseBody
     public ResponseEntity findAll(){
         try {
