@@ -6,15 +6,19 @@ import com.nerga.travelCreatorApp.dto.trip.TripOutputDto;
 import com.nerga.travelCreatorApp.exception.location.LocationNotFoundException;
 import com.nerga.travelCreatorApp.exception.trip.TripCannotBeCreatedException;
 import com.nerga.travelCreatorApp.exception.trip.TripNotFoundException;
+import com.nerga.travelCreatorApp.exception.user.MyUserNotFoundException;
 import com.nerga.travelCreatorApp.model.Location;
 import com.nerga.travelCreatorApp.model.Trip;
+import com.nerga.travelCreatorApp.model.User;
 import com.nerga.travelCreatorApp.repository.LocationRepository;
 import com.nerga.travelCreatorApp.repository.TripRepository;
-import org.json.JSONObject;
+import com.nerga.travelCreatorApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,11 +28,13 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final LocationRepository locationRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TripService(TripRepository tripRepository, LocationRepository locationRepository) {
+    public TripService(TripRepository tripRepository, LocationRepository locationRepository, UserRepository userRepository) {
         this.tripRepository = tripRepository;
         this.locationRepository = locationRepository;
+        this.userRepository = userRepository;
     }
 
     public Trip addTrip (TripCreateDto tripCreateDto) {
@@ -38,17 +44,29 @@ public class TripService {
                         .findById(tripCreateDto.getLocationId()))
                         .orElseThrow(LocationNotFoundException::new);
 
+        Optional<User> optionalUser = Optional.of(
+                userRepository.findUserByUserId(tripCreateDto.getCreatorId()))
+                            .orElseThrow(MyUserNotFoundException::new);
+
         if (optionalLocation.isEmpty()){
             throw new TripCannotBeCreatedException("Location not found");
         }
 
+        if (optionalUser.isEmpty()) {
+            throw new MyUserNotFoundException("User not found");
+        }
+
         Location location = optionalLocation.get();
+        User user = optionalUser.get();
 
-        Trip trip = new Trip();
-        trip.setTripName(tripCreateDto.getTripName());
-        trip.setTripDescription(tripCreateDto.getTripDescription());
-        trip.setLocation(location);
-
+        Trip trip = Trip.builder()
+                    .tripName(tripCreateDto.getTripName())
+                    .tripDescription(tripCreateDto.getTripDescription())
+                    .location(location)
+                    .startDate(LocalDate.parse(tripCreateDto.getStartDate()))
+                    .endDate(LocalDate.parse(tripCreateDto.getEndDate()))
+                    .build();
+        trip.addOrganizer(user);
         trip = tripRepository.save(trip);
 
         return trip;
@@ -58,32 +76,90 @@ public class TripService {
         Optional<List<Trip>> optionalTripList = Optional.of(tripRepository.findAll());
         return optionalTripList.get()
                 .stream()
-                .map(trip -> new TripOutputDto(
-                    trip.getTripId(),
-                    trip.getTripName(),
-                    trip.getTripDescription(),
-                    trip.getLocation().getLocationName(),
-                    trip.getLocation().getLocationDescription(),
-                    trip.getLocation().getGoogleMapUrl(),
-                        TripOutputDto.test()
-                )).collect(Collectors.toList());
+                .map(this::tripToTripDto)
+                .collect(Collectors.toList());
     }
 
     public TripOutputDto findTripById(Long id){
-        Optional<Trip> optionalTrip = Optional.of(tripRepository.findById(id)).orElseThrow(TripNotFoundException::new);
-        if (optionalTrip.isEmpty()){
+        Optional<Trip> trip = Optional.of(tripRepository.findById(id)).orElseThrow(TripNotFoundException::new);
+        if (trip.isEmpty()){
             throw new TripNotFoundException();
         }
-        return new TripOutputDto(
-                optionalTrip.get().getTripId(),
-                optionalTrip.get().getTripName(),
-                optionalTrip.get().getTripDescription(),
-                optionalTrip.get().getLocation().getLocationName(),
-                optionalTrip.get().getLocation().getLocationDescription(),
-                optionalTrip.get().getLocation().getGoogleMapUrl(),
-                TripOutputDto.test()
-        );
+        return tripToTripDto(trip.get());
     }
 
+    public List<TripOutputDto> findOrganizedTripsByUserId(Long userId){
+        User user = findUserById(userId);
+        List<Trip> trips = findTripsByUser(user);
+        return trips
+                .stream()
+                .map(this::tripToTripDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<TripOutputDto> findParticipatedTripsByUserId(Long userId){
+        User user = findUserById(userId);
+        List<Trip> trips = findTripsByUser(user);
+        return trips
+                .stream()
+                .map(this::tripToTripDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<TripOutputDto> findOrganizedTripsByUserLogin(String userLogin){
+        User user = findUserByLogin(userLogin);
+        List<Trip> trips = findTripsByUser(user);
+        return trips.stream().map(this::tripToTripDto).collect(Collectors.toList());
+    }
+
+    public List<TripOutputDto> findParticipatedTripsByUserLogin(String userLogin){
+        User user = findUserByLogin(userLogin);
+        List<Trip> trips = findTripsByUser(user);
+        return trips.stream().map(this::tripToTripDto).collect(Collectors.toList());
+    }
+
+    private User findUserById(Long userId){
+        Optional<User> user = Optional.of(userRepository.findUserByUserId(userId)).orElseThrow(MyUserNotFoundException::new);
+        if (user.isEmpty()) {
+            throw new MyUserNotFoundException();
+        }
+        return user.get();
+    }
+
+    private List<Trip> findTripsByUser(User user) {
+        Optional<List<Trip>> trips = Optional.of(tripRepository.findByOrganizersContaining(user).orElseThrow(TripNotFoundException::new));
+        return trips.get();
+    }
+
+    private User findUserByLogin(String userLogin){
+        Optional<User> user = Optional.of(userRepository.findUserByUserLogin(userLogin)).orElseThrow(MyUserNotFoundException::new);
+        if (user.isEmpty()) {
+            throw new MyUserNotFoundException();
+        }
+        return user.get();
+    }
+
+    private TripOutputDto tripToTripDto(Trip trip) {
+        return new TripOutputDto(
+                trip.getTripId(),
+                trip.getTripName(),
+                trip.getTripDescription(),
+                trip.getStartDate(),
+                trip.getEndDate(),
+                trip.getLocation()
+                        .getLocationName(),
+                trip.getLocation()
+                        .getLocationDescription(),
+                trip.getLocation()
+                        .getGoogleMapUrl(),
+                trip.getOrganizers()
+                        .stream()
+                        .map(User::userToUserDetailsDto)
+                        .collect(Collectors.toList()),
+                trip.getMembers()
+                        .stream()
+                        .map(User::userToUserDetailsDto)
+                        .collect(Collectors.toList()));
+    }
 
 }

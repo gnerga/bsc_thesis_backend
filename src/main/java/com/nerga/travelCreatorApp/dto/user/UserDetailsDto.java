@@ -1,10 +1,12 @@
 package com.nerga.travelCreatorApp.dto.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDetailsDto {
 
     private Long userId;
@@ -13,5 +15,4 @@ public class UserDetailsDto {
     private String lastName;
     private String email;
     private String phoneNumber;
-
 }

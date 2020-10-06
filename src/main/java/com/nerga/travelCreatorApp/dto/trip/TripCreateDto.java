@@ -11,10 +11,8 @@ public class TripCreateDto {
     private String tripName;
     private String tripDescription;
     private Long locationId;
-
-//    private String startDate;
-//    private String endDate;
-//    private String organizers;
-//    private String members;
+    private String startDate;
+    private String endDate;
+    private Long creatorId;
 
 }

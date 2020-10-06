@@ -52,7 +52,6 @@ public class UserController {
            UserSignInDetailsDto user = userService
                    //.sillyAuthenticate(authenticationDetails.getLogin(), authenticationDetails.getPassword());
                    .sillyAuthenticate(login, password);
-            System.out.println(user.toJson());
                     return ResponseEntity.ok(user.toJson());
         } catch (UserException e) {
             return new ResponseEntity(e, HttpStatus.UNAUTHORIZED);
