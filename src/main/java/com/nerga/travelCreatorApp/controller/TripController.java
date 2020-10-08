@@ -65,10 +65,10 @@ public class TripController {
         }
     }
 
-    @GetMapping(path = "findAllMemberedTripsByUserid/{userLogin}")
-    public ResponseEntity findAllUserMemberedTripsByUserLogin(@PathVariable("userLogin") String userLogin){
+    @GetMapping(path = "findAllMemberedTripsByUserId/{userId}")
+    public ResponseEntity findAllUserMemberedTripsByUserLogin(@PathVariable("userId") Long userId){
         try {
-            List<TripOutputDto> userTrips = tripService.findOrganizedTripsByUserLogin(userLogin);
+            List<TripOutputDto> userTrips = tripService.findParticipatedTripsByUserId(userId);
             return ResponseEntity.ok(userTrips);
         } catch (TripException | UserException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -79,6 +79,8 @@ public class TripController {
     public ResponseEntity addNewParticipantToTrip(
             @PathVariable("tripId") Long tripId,
             @PathVariable("userId") Long userId) {
+        System.out.println(tripId);
+        System.out.println(userId);
         try {
            TripOutputDto trip = tripService.addNewParticipantBy(tripId, userId);
            return ResponseEntity.ok(trip);

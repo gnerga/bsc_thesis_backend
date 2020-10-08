@@ -90,7 +90,7 @@ public class TripService {
 
     public List<TripOutputDto> findOrganizedTripsByUserId(Long userId){
         User user = findUserById(userId);
-        List<Trip> trips = findTripsByUser(user);
+        List<Trip> trips = findOrganizedTripsByUser(user);
         return trips
                 .stream()
                 .map(this::tripToTripDto)
@@ -99,7 +99,7 @@ public class TripService {
 
     public List<TripOutputDto> findParticipatedTripsByUserId(Long userId){
         User user = findUserById(userId);
-        List<Trip> trips = findTripsByUser(user);
+        List<Trip> trips = findMemberedTripsByUser(user);
         return trips
                 .stream()
                 .map(this::tripToTripDto)
@@ -108,13 +108,13 @@ public class TripService {
 
     public List<TripOutputDto> findOrganizedTripsByUserLogin(String userLogin){
         User user = findUserByLogin(userLogin);
-        List<Trip> trips = findTripsByUser(user);
+        List<Trip> trips = findOrganizedTripsByUser(user);
         return trips.stream().map(this::tripToTripDto).collect(Collectors.toList());
     }
 
     public List<TripOutputDto> findParticipatedTripsByUserLogin(String userLogin){
         User user = findUserByLogin(userLogin);
-        List<Trip> trips = findTripsByUser(user);
+        List<Trip> trips = findMemberedTripsByUser(user);
         return trips.stream().map(this::tripToTripDto).collect(Collectors.toList());
     }
 
@@ -140,8 +140,13 @@ public class TripService {
         return user.get();
     }
 
-    private List<Trip> findTripsByUser(User user) {
+    private List<Trip> findOrganizedTripsByUser(User user) {
         Optional<List<Trip>> trips = Optional.of(tripRepository.findByOrganizersContaining(user).orElseThrow(TripNotFoundException::new));
+        return trips.get();
+    }
+
+    private List<Trip> findMemberedTripsByUser(User user) {
+        Optional<List<Trip>> trips = Optional.of(tripRepository.findByMembersContaining(user).orElseThrow(TripNotFoundException::new));
         return trips.get();
     }
 
