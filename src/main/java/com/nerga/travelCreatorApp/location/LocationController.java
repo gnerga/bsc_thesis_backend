@@ -1,9 +1,6 @@
-package com.nerga.travelCreatorApp.controller;
+package com.nerga.travelCreatorApp.location;
 
-import com.nerga.travelCreatorApp.dto.location.LocationCreateDto;
 import com.nerga.travelCreatorApp.exception.location.LocationException;
-import com.nerga.travelCreatorApp.model.Location;
-import com.nerga.travelCreatorApp.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

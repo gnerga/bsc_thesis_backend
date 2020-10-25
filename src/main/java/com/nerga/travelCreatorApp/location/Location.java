@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.model;
+package com.nerga.travelCreatorApp.location;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

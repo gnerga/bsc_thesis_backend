@@ -1,10 +1,10 @@
-package com.nerga.travelCreatorApp.controller;
+package com.nerga.travelCreatorApp.trip;
 
-import com.nerga.travelCreatorApp.dto.trip.TripCreateDto;
-import com.nerga.travelCreatorApp.dto.trip.TripOutputDto;
+import com.nerga.travelCreatorApp.trip.TripCreateDto;
+import com.nerga.travelCreatorApp.trip.TripOutputDto;
 import com.nerga.travelCreatorApp.exception.trip.TripException;
 import com.nerga.travelCreatorApp.exception.user.UserException;
-import com.nerga.travelCreatorApp.service.TripService;
+import com.nerga.travelCreatorApp.trip.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

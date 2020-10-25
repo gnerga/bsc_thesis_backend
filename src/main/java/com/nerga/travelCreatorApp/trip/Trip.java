@@ -1,7 +1,9 @@
-package com.nerga.travelCreatorApp.model;
+package com.nerga.travelCreatorApp.trip;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.user.User;
 import lombok.*;
 
 import javax.persistence.*;

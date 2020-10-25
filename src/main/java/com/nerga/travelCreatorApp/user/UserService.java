@@ -1,12 +1,9 @@
-package com.nerga.travelCreatorApp.service;
+package com.nerga.travelCreatorApp.user;
 
-import com.nerga.travelCreatorApp.dto.user.*;
 import com.nerga.travelCreatorApp.exception.user.BadUserCredentialsException;
 import com.nerga.travelCreatorApp.exception.user.EmailAlreadyUseException;
 import com.nerga.travelCreatorApp.exception.user.LoginAlreadyUsedException;
 import com.nerga.travelCreatorApp.exception.user.MyUserNotFoundException;
-import com.nerga.travelCreatorApp.model.User;
-import com.nerga.travelCreatorApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

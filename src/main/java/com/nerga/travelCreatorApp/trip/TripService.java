@@ -1,23 +1,18 @@
-package com.nerga.travelCreatorApp.service;
+package com.nerga.travelCreatorApp.trip;
 
 
-import com.nerga.travelCreatorApp.dto.trip.TripCreateDto;
-import com.nerga.travelCreatorApp.dto.trip.TripOutputDto;
 import com.nerga.travelCreatorApp.exception.location.LocationNotFoundException;
 import com.nerga.travelCreatorApp.exception.trip.TripCannotBeCreatedException;
 import com.nerga.travelCreatorApp.exception.trip.TripNotFoundException;
 import com.nerga.travelCreatorApp.exception.user.MyUserNotFoundException;
-import com.nerga.travelCreatorApp.model.Location;
-import com.nerga.travelCreatorApp.model.Trip;
-import com.nerga.travelCreatorApp.model.User;
-import com.nerga.travelCreatorApp.repository.LocationRepository;
-import com.nerga.travelCreatorApp.repository.TripRepository;
-import com.nerga.travelCreatorApp.repository.UserRepository;
+import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.user.User;
+import com.nerga.travelCreatorApp.location.LocationRepository;
+import com.nerga.travelCreatorApp.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;

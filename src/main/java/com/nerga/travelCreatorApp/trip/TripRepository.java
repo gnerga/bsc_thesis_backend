@@ -1,12 +1,10 @@
-package com.nerga.travelCreatorApp.repository;
+package com.nerga.travelCreatorApp.trip;
 
-import com.nerga.travelCreatorApp.model.Trip;
-import com.nerga.travelCreatorApp.model.User;
+import com.nerga.travelCreatorApp.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

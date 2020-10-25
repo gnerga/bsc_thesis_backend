@@ -1,7 +1,6 @@
-package com.nerga.travelCreatorApp.dto.location;
+package com.nerga.travelCreatorApp.location;
 
 import com.nerga.travelCreatorApp.common.Transformer;
-import com.nerga.travelCreatorApp.model.Location;
 import org.springframework.stereotype.Component;
 
 @Component

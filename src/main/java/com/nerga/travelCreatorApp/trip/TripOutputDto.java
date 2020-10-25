@@ -1,15 +1,12 @@
-package com.nerga.travelCreatorApp.dto.trip;
+package com.nerga.travelCreatorApp.trip;
 
-import com.nerga.travelCreatorApp.dto.user.UserDetailsDto;
-import com.nerga.travelCreatorApp.model.Location;
-import com.nerga.travelCreatorApp.model.User;
+import com.nerga.travelCreatorApp.user.UserDetailsDto;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

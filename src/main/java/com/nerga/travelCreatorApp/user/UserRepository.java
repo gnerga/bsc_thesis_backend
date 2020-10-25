@@ -1,12 +1,8 @@
-package com.nerga.travelCreatorApp.repository;
+package com.nerga.travelCreatorApp.user;
 
-import com.nerga.travelCreatorApp.exception.user.MyUserNotFoundException;
-import com.nerga.travelCreatorApp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository

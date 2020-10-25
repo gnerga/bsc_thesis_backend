@@ -1,18 +1,17 @@
-package com.nerga.travelCreatorApp.dto.user;
+package com.nerga.travelCreatorApp.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class UserDetailsDto {
+public class UserSignUpDto {
 
-    private Long userId;
     private String userLogin;
+    private String password;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
+
 }

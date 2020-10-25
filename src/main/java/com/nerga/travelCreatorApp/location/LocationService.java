@@ -1,10 +1,6 @@
-package com.nerga.travelCreatorApp.service;
+package com.nerga.travelCreatorApp.location;
 
-import com.nerga.travelCreatorApp.dto.location.LocationCreateDto;
-import com.nerga.travelCreatorApp.dto.location.LocationMapper;
 import com.nerga.travelCreatorApp.exception.location.LocationNotFoundException;
-import com.nerga.travelCreatorApp.model.Location;
-import com.nerga.travelCreatorApp.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

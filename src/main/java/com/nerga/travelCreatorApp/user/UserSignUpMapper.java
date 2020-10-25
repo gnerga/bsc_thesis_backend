@@ -1,7 +1,6 @@
-package com.nerga.travelCreatorApp.dto.user;
+package com.nerga.travelCreatorApp.user;
 
 import com.nerga.travelCreatorApp.common.Transformer;
-import com.nerga.travelCreatorApp.model.User;
 import org.springframework.stereotype.Component;
 
 @Component
