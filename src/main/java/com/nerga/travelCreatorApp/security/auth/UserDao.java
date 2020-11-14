@@ -1,4 +1,4 @@
 package com.nerga.travelCreatorApp.security.auth;
 
-public class User extends UserDetails {
+public class UserDao {
 }
