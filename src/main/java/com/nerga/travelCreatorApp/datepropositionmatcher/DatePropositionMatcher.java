@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.datePropositionMatcher;
+package com.nerga.travelCreatorApp.datepropositionmatcher;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
