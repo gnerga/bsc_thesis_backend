@@ -23,7 +23,6 @@ public class User {
     private String userLogin;
     @NotNull
     private String password;
-
     private String firstName;
     private String lastname;
     @Column(unique = true)
