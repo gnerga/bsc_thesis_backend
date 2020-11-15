@@ -1,21 +1,30 @@
 package com.nerga.travelCreatorApp.security.auth.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nerga.travelCreatorApp.security.configuration.UserRole;
 import com.nerga.travelCreatorApp.trip.Trip;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
-@Data
 @NoArgsConstructor
+@Data
+@Builder(access= AccessLevel.PUBLIC)
 public class UserEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String username;
+    @NonNull
     private String password;
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> permissions;
@@ -25,42 +34,75 @@ public class UserEntity {
     private boolean isEnabled;
     private String firstName;
     private String lastName;
-    @Column(unique=true)
+    @Column(unique = true)
     private String email;
-    @Column(unique=true)
+    @Column(unique = true)
     private String phoneNumber;
 
     @JsonIgnore
-    @ManyToMany(fetch= FetchType.LAZY)
-    @JoinTable(name="user_trups",
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_trips",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name="trip_id"))
+            inverseJoinColumns = @JoinColumn(name = "trip_id"))
     private List<Trip> usersTrips;
     @JsonIgnore
-    @ManyToMany(fetch=FetchType.LAZY)
-    @JoinTable(name="user_organized_trips",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name="trip_id"))
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_organized_trips",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "trip_id"))
     private List<Trip> organizedTrips;
 
-    public UserEntity(Long id,
-                      String username,
-                      String password,
-                      Set<String> permissions,
-                      boolean isAccountNonExpired, boolean isAccountNonLock, boolean isCredentialsNonExpired, boolean isEnabled, String firstName, String lastName, String email, String phoneNumber, List<Trip> usersTrips, List<Trip> organizedTrips) {
-        this.id = id;
+    public UserEntity(
+            String username,
+            String password,
+            UserRole userRole,
+            String email
+    ) {
         this.username = username;
         this.password = password;
-        this.permissions = permissions;
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLock = isAccountNonLock;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
-        this.isEnabled = isEnabled;
+        this.permissions = getPermissions(userRole.getGrantedAuthority());
+        this.isAccountNonExpired = true;
+        this.isAccountNonLock = true;
+        this.isCredentialsNonExpired = true;
+        this.isEnabled = true;
+        this.firstName = "n/d";
+        this.lastName = "n/d";
+        this.email = email;
+        this.phoneNumber = "n/d";
+        this.usersTrips = new ArrayList<>();
+        this.organizedTrips = new ArrayList<>();
+    }
+
+    public UserEntity(
+            String username,
+            String password,
+            UserRole userRole,
+            String firstName,
+            String lastName,
+            String email,
+            String phoneNumber
+    ) {
+        this.username = username;
+        this.password = password;
+        this.permissions = getPermissions(userRole.getGrantedAuthority());
+        this.isAccountNonExpired = true;
+        this.isAccountNonLock = true;
+        this.isCredentialsNonExpired = true;
+        this.isEnabled = true;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.usersTrips = usersTrips;
-        this.organizedTrips = organizedTrips;
+        this.usersTrips = new ArrayList<>();
+        this.organizedTrips = new ArrayList<>();
+    }
+
+
+
+    private Set<String> getPermissions(Collection<? extends GrantedAuthority> grantedAuthority) {
+        return grantedAuthority
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
     }
 }
