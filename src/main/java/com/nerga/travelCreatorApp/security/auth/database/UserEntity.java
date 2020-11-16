@@ -1,9 +1,11 @@
 package com.nerga.travelCreatorApp.security.auth.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.configuration.UserRole;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -68,6 +70,7 @@ public class UserEntity {
         this.lastName = "n/d";
         this.email = email;
         this.phoneNumber = "n/d";
+
 //        this.usersTrips = new ArrayList<>();
 //        this.organizedTrips = new ArrayList<>();
     }
@@ -92,16 +95,29 @@ public class UserEntity {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+
 //        this.usersTrips = new ArrayList<>();
 //        this.organizedTrips = new ArrayList<>();
+
     }
 
-
+    public User getUserFromEntity(){
+        return new User(
+                username, password, getGrantedAuthority(), isAccountNonExpired, isAccountNonLock, isCredentialsNonExpired,
+                isEnabled, firstName, lastName, email, phoneNumber
+        );
+    }
 
     private Set<String> getPermissions(Collection<? extends GrantedAuthority> grantedAuthority) {
         return grantedAuthority
                 .stream()
                 .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
+    }
+
+    private Set<SimpleGrantedAuthority> getGrantedAuthority() {
+        return permissions.stream()
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
     }
 }
