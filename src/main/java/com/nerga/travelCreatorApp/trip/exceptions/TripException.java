@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.exception.trip;
+package com.nerga.travelCreatorApp.trip.exceptions;
 
 public abstract class TripException extends RuntimeException{
 

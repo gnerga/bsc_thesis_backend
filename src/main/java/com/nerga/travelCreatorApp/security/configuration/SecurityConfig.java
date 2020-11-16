@@ -12,19 +12,19 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity builder) throws Exception {
-        builder.csrf().disable(); // wyłączenie obsługi tokenu csrf
+        builder.csrf().disable();
         builder.headers().frameOptions().disable();
         builder
                 .authorizeRequests()
                 .antMatchers(
                         "/user",
-                        "/user/**",
-                        "/location",
-                        "/location/**",
-                        "/trip",
-                        "/trip/**")
-                // pozwalamy wchodzic na root context bez logowania
-//                .anyRequest().authenticated()
+                        "/user/**"
+//                        "/location",
+//                        "/location/**",
+//                        "/trip",
+//                        "/trip/**"
+                )
+
                 .permitAll()
                 .and()
                 .formLogin().permitAll()

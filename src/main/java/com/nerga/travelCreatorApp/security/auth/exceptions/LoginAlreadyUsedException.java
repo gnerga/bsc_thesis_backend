@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.exception.user;
+package com.nerga.travelCreatorApp.security.auth.exceptions;
 
 public class LoginAlreadyUsedException extends UserException{
 

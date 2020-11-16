@@ -1,9 +1,5 @@
 package com.nerga.travelCreatorApp.security.auth;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nerga.travelCreatorApp.trip.Trip;
-import com.nerga.travelCreatorApp.user.UserDetailsDto;
-import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
