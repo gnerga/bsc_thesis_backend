@@ -1,9 +1,11 @@
 package com.nerga.travelCreatorApp.security;
 
+import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
 import com.nerga.travelCreatorApp.security.dto.UserIdDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -20,9 +22,8 @@ public class GeneralUserController {
     }
 
     @PostMapping(path="/register")
-    public String registerNewUser(@RequestBody CreateUserDto createUserDto){
-        generalUserService.createUser(createUserDto);
-        return "Created";
+    public ResponseEntity registerNewUser(@RequestBody CreateUserDto createUserDto){
+        return generalUserService.createUser(createUserDto).toResponseEntity();
     }
 
     @GetMapping("user/findId/{username}")
