@@ -1,6 +1,9 @@
 package com.nerga.travelCreatorApp.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nerga.travelCreatorApp.security.GeneralUserService;
+import com.nerga.travelCreatorApp.security.auth.UserService;
+import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +26,11 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
 
-    public JwtCredentialsAuthenticationFilter(AuthenticationManager authenticationManager, JwtConfig jwtConfig, SecretKey secretKey) {
+
+
+    public JwtCredentialsAuthenticationFilter(AuthenticationManager authenticationManager,
+                                              JwtConfig jwtConfig,
+                                              SecretKey secretKey) {
         this.authenticationManager = authenticationManager;
         this.jwtConfig = jwtConfig;
         this.secretKey = secretKey;
@@ -64,7 +71,7 @@ public class JwtCredentialsAuthenticationFilter extends UsernamePasswordAuthenti
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
                 .signWith(secretKey)
                 .compact();
-        response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
 
-    }
+        response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
+            }
 }

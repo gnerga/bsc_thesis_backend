@@ -8,10 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -120,4 +117,23 @@ public class UserEntity {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
     }
+
+    public Map<String, String> toJson(){
+        Map<String, String> entity = new HashMap<>();
+        entity.put("login", this.username);
+        entity.put("userId", String.valueOf(this.id));
+        return entity;
+    }
+
+    public Map<String, String> detailsToJson(){
+        Map<String, String> entity = new HashMap<>();
+        entity.put("login", this.username);
+        entity.put("userId", String.valueOf(this.id));
+        entity.put("firstName", this.firstName);
+        entity.put("lastName", this.lastName);
+        entity.put("email", this.email);
+        entity.put("phoneNumber", this.phoneNumber);
+        return entity;
+    }
+
 }
