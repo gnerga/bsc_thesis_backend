@@ -2,6 +2,7 @@ package com.nerga.travelCreatorApp.security;
 
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
+import com.nerga.travelCreatorApp.security.dto.UserIdDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,8 @@ public class GeneralUserController {
     }
 
     @GetMapping("user/findId/{username}")
-    public Map<String, String> findUserByUsername(@PathVariable("username") String username){
+//    public Map<String, String> findUserByUsername(@PathVariable("username") String username){
+    public UserIdDto findUserByUsername(@PathVariable("username") String username){
         return generalUserService.getUserByUsername(username);
     }
 

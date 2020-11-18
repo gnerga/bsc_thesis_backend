@@ -118,14 +118,14 @@ public class UserEntity {
                 .collect(Collectors.toSet());
     }
 
-    public Map<String, String> toJson(){
+    public Map<String, String> toIdJson(){
         Map<String, String> entity = new HashMap<>();
         entity.put("login", this.username);
         entity.put("userId", String.valueOf(this.id));
         return entity;
     }
 
-    public Map<String, String> detailsToJson(){
+    public Map<String, String> toDetailsJson(){
         Map<String, String> entity = new HashMap<>();
         entity.put("login", this.username);
         entity.put("userId", String.valueOf(this.id));
