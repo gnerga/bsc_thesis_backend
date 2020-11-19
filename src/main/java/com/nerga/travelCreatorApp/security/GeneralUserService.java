@@ -6,6 +6,7 @@ import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.configuration.UserRole;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.security.dto.UserIdDto;
 import com.nerga.travelCreatorApp.common.response.Error;
 import io.vavr.control.Either;
@@ -38,24 +39,38 @@ public class GeneralUserService {
                 .fold(Function.identity(), Success::accepted);
     }
 
-    public UserIdDto getUserByUsername(String username) {
+    public Response findUserDetailsByUsername(String username) {
+        return isUserExist(username)
+                .map(user -> getUserDetailsByUserName(username))
+                .fold(Function.identity(), Success::ok);
+    }
+
+    public Response findUserIdByUsername(String username) {
+        return isUserExist(username)
+                .map(user -> getUserIdByUsername(username))
+                .fold(Function.identity(), Success::ok);
+    }
+
+    private UserIdDto getUserIdByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new
                 UsernameNotFoundException("PROVIDED_USERNAME_DOSE_NOT_EXIST"));
         return new UserIdDto(userEntity);
     }
 
-    public Map<String, String> getUserDetailsByUsername(String username){
+    private UserDetailsDto getUserDetailsByUserName(String username) {
         UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new
                 UsernameNotFoundException("PROVIDED_USERNAME_DOSE_NOT_EXIST"));
-        return userEntity.toDetailsJson();
+        return new UserDetailsDto(userEntity);
     }
 
-//    private Optional<UserEntity> findUserByUsername(String username) {
-//        return userRepository.findByUsername(username);
-//    }
+    private Validation<Error, String> isUserExist(String username){
+        return userRepository.existsByUsername(username) ? Validation.valid(username)
+                : Validation.invalid(Error.badRequest("USER_NOT_FOUND"));
+    }
 
-    private Validation<Error, UserEntity> isUserExist(String username){
-        return null; //todo gnerga implementacja
+    private Validation<Error, CreateUserDto> canRegister(CreateUserDto createUserDto) {
+        return !userRepository.existsByUsername(createUserDto.getUsername()) ? Validation.valid(createUserDto)
+                : Validation.invalid(Error.badRequest("USERNAME_ALREADY_IN_USE"));
     }
 
     private UserIdDto registerUserAccount(CreateUserDto createUserDto, UserRole userRole) {
@@ -70,11 +85,6 @@ public class GeneralUserService {
                 createUserDto.getPhoneNumber()
         );
         return new UserIdDto(userRepository.save(userEntity));
-    }
-
-    private Validation<Error, CreateUserDto> canRegister(CreateUserDto createUserDto) {
-        return !userRepository.existsByUsername(createUserDto.getUsername()) ? Validation.valid(createUserDto)
-                : Validation.invalid(Error.badRequest("USERNAME_ALREADY_IN_USE"));
     }
 
 }
