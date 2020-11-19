@@ -63,6 +63,14 @@ public class GeneralUserService {
         return new UserDetailsDto(userEntity);
     }
 
+    private Validation<Error, Long> isIdExists(String username){
+        return null;
+    }
+
+    private Validation<Error, Long> isUserExistAndReturnId(String username){
+        return null;
+    }
+
     private Validation<Error, String> isUserExist(String username){
         return userRepository.existsByUsername(username) ? Validation.valid(username)
                 : Validation.invalid(Error.badRequest("USER_NOT_FOUND"));
