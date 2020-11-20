@@ -1,16 +1,11 @@
 package com.nerga.travelCreatorApp.security;
 
-import com.nerga.travelCreatorApp.common.response.Response;
-import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
 import com.nerga.travelCreatorApp.security.dto.UserCredentialsDto;
-import com.nerga.travelCreatorApp.security.dto.UserIdDto;
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.datasource.UserCredentialsDataSourceAdapter;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/")
@@ -40,42 +35,41 @@ public class GeneralUserController {
 
     @GetMapping("user/details/byId/{id}")
     public ResponseEntity findUserDetails(@PathVariable("id") Long id){
-        return null;
+        return generalUserService.findUserDetailsById(id).toResponseEntity();
     }
 
     @PutMapping("user/update/byUsername/{username}")
     public ResponseEntity updateUserDetails(@PathVariable("username") String username,
-                                            @RequestBody CreateUserDto createUserDto){
-        return null;
+                                            @RequestBody UserDetailsDto userDetailsDto){
+        return generalUserService.updateUserByUsername(username, userDetailsDto).toResponseEntity();
     }
 
     @PutMapping("user/update/byId/{id}")
     public ResponseEntity updateUserDetails(@PathVariable("id") Long id,
-                                            @RequestBody CreateUserDto createUserDto){
-        return null;
+                                            @RequestBody UserDetailsDto userDetailsDto){
+        return generalUserService.updateUserById(id, userDetailsDto).toResponseEntity();
     }
 
     @PutMapping("user/updatepassword/byUsername/{username}")
-    public ResponseEntity updatePassword(@PathVariable("username") String name,
+    public ResponseEntity updatePassword(@PathVariable("username") String username,
                                          @RequestBody UserCredentialsDto userCredentialsDto){
-        return null;
+        return generalUserService.updateUserPasswordByUsername(username, userCredentialsDto).toResponseEntity();
     }
 
     @PutMapping("user/updatepassword/byId/{id}")
     public ResponseEntity updatePassword(@PathVariable("id") Long id,
                                          @RequestBody UserCredentialsDto userCredentialsDto){
-        return null;
+        return generalUserService.updateUserPasswordById(id, userCredentialsDto).toResponseEntity();
     }
 
     @DeleteMapping("user/delete/byUsername/{username}")
     public ResponseEntity deleteUser(@PathVariable("username") String username) {
-        return null;
+        return generalUserService.deleteUserByUsername(username).toResponseEntity();
     }
 
     @DeleteMapping("user/delete/byId/{id}")
     public ResponseEntity deleteUser(@PathVariable("id") Long id){
-        return null;
+        return generalUserService.deleteUserById(id).toResponseEntity();
     }
-
 
 }

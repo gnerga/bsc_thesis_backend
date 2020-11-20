@@ -6,6 +6,7 @@ import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.configuration.UserRole;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
+import com.nerga.travelCreatorApp.security.dto.UserCredentialsDto;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.security.dto.UserIdDto;
 import com.nerga.travelCreatorApp.common.response.Error;
@@ -70,8 +71,29 @@ public class GeneralUserService {
                 .fold(Function.identity(), Success::ok);
     }
 
+    public Response updateUserPasswordByUsername(String username, UserCredentialsDto userCredentialsDto){
+        return Option.ofOptional(userRepository.findByUsername(username))
+                .peek(userEntity -> userEntity.setPassword(passwordEncoder.encode(userCredentialsDto.getPassword())))
+                .toEither(Error.badRequest("USER_NOT_FOUND"))
+                .fold(Function.identity(), Success::ok);
+    }
+
+    public Response updateUserPasswordById(Long id, UserCredentialsDto userCredentialsDto){
+        return Option.ofOptional(userRepository.findById(id))
+                .peek(userEntity -> userEntity.setPassword(passwordEncoder.encode(userCredentialsDto.getPassword())))
+                .toEither(Error.badRequest("USER_NOT_FOUND"))
+                .fold(Function.identity(), Success::ok);
+    }
+
     public Response deleteUserByUsername(String username){
         return Option.ofOptional(userRepository.findByUsername(username))
+                .peek(userRepository::delete)
+                .toEither(Error.badRequest("USER_NOT_FOUND"))
+                .fold(Function.identity(), Success::ok);
+    }
+
+    public Response deleteUserById(Long id){
+        return Option.ofOptional(userRepository.findById(id))
                 .peek(userRepository::delete)
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
@@ -95,62 +117,5 @@ public class GeneralUserService {
         );
         return new UserIdDto(userRepository.save(userEntity));
     }
-
-//    public Response tryChangePasswordByUserId(Long id, String newPassword) {
-//        return Option.ofOptional(userRepository.findById(id))
-//                .peek(userEntity -> userEntity.setPassword(passwordEncoder.encode(newPassword)))
-//                .map(userRepository::save)
-//                .toEither(Error.badRequest("USER_NOT_FOUND"))
-//                .fold(Function.identity(), Success::ok);
-//    }
-//
-//    public Response tryChangePasswordByUsername(String username, String newPassword){
-//        return Option.ofOptional(userRepository.findByUsername(username))
-//                .peek(userEntity -> userEntity.setPassword(passwordEncoder.encode(newPassword)))
-//                .map(userRepository::save)
-//                .toEither(Error.badRequest("USER_NOT_FOUND"))
-//                .fold(Function.identity(), Success::ok);
-//    }
-
-//    private UserIdDto deleteUserByUserName(String username){
-//        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(
-//                () -> new UsernameNotFoundException("PROVIDED_USERNAME_DOSE_NOT_EXIST")
-//        );
-//        UserIdDto userIdDto = new UserIdDto(userEntity);
-//        userRepository.delete(userEntity);
-//        return userIdDto;
-//    }
-//
-//    private UserIdDto getUserIdByUsername(String username) {
-//        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new
-//                UsernameNotFoundException("PROVIDED_USERNAME_DOSE_NOT_EXIST"));
-//        return new UserIdDto(userEntity);
-//    }
-//
-//    private UserDetailsDto getUserDetailsByUserName(String username) {
-//        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new
-//                UsernameNotFoundException("PROVIDED_USERNAME_DOSE_NOT_EXIST"));
-//        return new UserDetailsDto(userEntity);
-//    }
-//
-//    private Validation<Error, Long> isIdExists(Long id){
-//        return userRepository.existsById(id) ? Validation.valid(id)
-//                : Validation.invalid(Error.badRequest("USER_NOT_FOUND"));
-//    }
-//
-//    private Validation<Error, String> isUserExist(String username){
-//        return userRepository.existsByUsername(username) ? Validation.valid(username)
-//                : Validation.invalid(Error.badRequest("USER_NOT_FOUND"));
-//    }
-//
-//    private UserDetailsDto updateUserById(Long id, UserDetailsDto userDetailsDto) {
-//        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new
-//                UsernameNotFoundException("PROVIDED_USERNAME_ID_DOES_NOT_EXIST"));
-//
-//        UserEntity updatedUserEntity = userRepository.save(userEntity.updateUserEntity(userDetailsDto));
-//        System.out.println(updatedUserEntity);
-//
-//        return new UserDetailsDto(updatedUserEntity);
-//    }
 
 }
