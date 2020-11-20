@@ -3,6 +3,7 @@ package com.nerga.travelCreatorApp.security.auth.database;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.configuration.UserRole;
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -118,22 +119,41 @@ public class UserEntity {
                 .collect(Collectors.toSet());
     }
 
-    public Map<String, String> toIdJson(){
-        Map<String, String> entity = new HashMap<>();
-        entity.put("login", this.username);
-        entity.put("userId", String.valueOf(this.id));
-        return entity;
+    public UserEntity updateUserEntity (UserDetailsDto userDetailsDto) {
+
+        this.firstName = simpleValidatorEmptyInputString(userDetailsDto.getFirstName(), this.firstName);
+        this.lastName = simpleValidatorEmptyInputString(userDetailsDto.getLastName(), this.lastName);
+        this.email = simpleValidatorEmptyInputString(userDetailsDto.getEmail(), this.email);
+        this.phoneNumber = simpleValidatorEmptyInputString(userDetailsDto.getPhoneNumber(), this.phoneNumber);
+
+        return this;
     }
 
-    public Map<String, String> toDetailsJson(){
-        Map<String, String> entity = new HashMap<>();
-        entity.put("login", this.username);
-        entity.put("userId", String.valueOf(this.id));
-        entity.put("firstName", this.firstName);
-        entity.put("lastName", this.lastName);
-        entity.put("email", this.email);
-        entity.put("phoneNumber", this.phoneNumber);
-        return entity;
+    private String simpleValidatorEmptyInputString(String inputNewValue, String inputOldValue){
+        if (inputNewValue.isBlank()) {
+            return inputOldValue;
+        } else {
+            return inputNewValue;
+        }
     }
+
+
+//    public Map<String, String> toIdJson(){
+//        Map<String, String> entity = new HashMap<>();
+//        entity.put("login", this.username);
+//        entity.put("userId", String.valueOf(this.id));
+//        return entity;
+//    }
+//
+//    public Map<String, String> toDetailsJson(){
+//        Map<String, String> entity = new HashMap<>();
+//        entity.put("login", this.username);
+//        entity.put("userId", String.valueOf(this.id));
+//        entity.put("firstName", this.firstName);
+//        entity.put("lastName", this.lastName);
+//        entity.put("email", this.email);
+//        entity.put("phoneNumber", this.phoneNumber);
+//        return entity;
+//    }
 
 }

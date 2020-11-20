@@ -51,6 +51,28 @@ public class GeneralUserService {
                 .fold(Function.identity(), Success::ok);
     }
 
+    public Response tryUpdateUserById(Long id, UserDetailsDto userDetailsDto) {
+        return isIdExists(id)
+                .map(userId -> updateUserById(id, userDetailsDto))
+                .fold(Function.identity(), Success::ok);
+    }
+
+    public Response tryUpdateUserByUserName(String username, UserDetailsDto userDetailsDto) {
+        return isUserExist(username)
+                .map(this::getUserIdByUsername)
+                .map(id -> updateUserById(id.getId(), userDetailsDto))
+                .fold(Function.identity(), Success::ok);
+    }
+
+
+    public Response changePasswordByUserId(Long id) {
+        return null;
+    }
+
+    public Response changePasswordByUsername(String username){
+        return null;
+    }
+
     private UserIdDto getUserIdByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new
                 UsernameNotFoundException("PROVIDED_USERNAME_DOSE_NOT_EXIST"));
@@ -63,12 +85,14 @@ public class GeneralUserService {
         return new UserDetailsDto(userEntity);
     }
 
-    private Validation<Error, Long> isIdExists(String username){
-        return null;
+    private Validation<Error, Long> isIdExists(Long id){
+        return userRepository.existsById(id) ? Validation.valid(id)
+                : Validation.invalid(Error.badRequest("USER_NOT_FOUND"));
     }
 
     private Validation<Error, Long> isUserExistAndReturnId(String username){
-        return null;
+        return userRepository.existsByUsername(username) ? Validation.valid(getUserDetailsByUserName(username).getId())
+                : Validation.invalid(Error.badRequest("USER_NOT_FOUND"));
     }
 
     private Validation<Error, String> isUserExist(String username){
@@ -93,6 +117,16 @@ public class GeneralUserService {
                 createUserDto.getPhoneNumber()
         );
         return new UserIdDto(userRepository.save(userEntity));
+    }
+
+    private UserDetailsDto updateUserById(Long id, UserDetailsDto userDetailsDto) {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new
+                UsernameNotFoundException("PROVIDED_USERNAME_ID_DOES_NOT_EXIST"));
+
+        UserEntity updatedUserEntity = userRepository.save(userEntity.updateUserEntity(userDetailsDto));
+        System.out.println(updatedUserEntity);
+
+        return new UserDetailsDto(updatedUserEntity);
     }
 
 }
