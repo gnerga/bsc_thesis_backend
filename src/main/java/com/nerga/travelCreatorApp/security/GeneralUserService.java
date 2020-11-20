@@ -64,14 +64,24 @@ public class GeneralUserService {
                 .fold(Function.identity(), Success::ok);
     }
 
-
-    public Response changePasswordByUserId(Long id) {
+    public Response tryChangePasswordByUserId(Long id) {
         return null;
     }
 
-    public Response changePasswordByUsername(String username){
+    public Response tryChangePasswordByUsername(String username){
         return null;
     }
+
+    private UserIdDto deleteUserByUserName(String username){
+        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("PROVIDED_USERNAME_DOSE_NOT_EXIST")
+        );
+        UserIdDto userIdDto = new UserIdDto(userEntity);
+        userRepository.delete(userEntity);
+        return userIdDto;
+    }
+
+    private void
 
     private UserIdDto getUserIdByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new
@@ -87,11 +97,6 @@ public class GeneralUserService {
 
     private Validation<Error, Long> isIdExists(Long id){
         return userRepository.existsById(id) ? Validation.valid(id)
-                : Validation.invalid(Error.badRequest("USER_NOT_FOUND"));
-    }
-
-    private Validation<Error, Long> isUserExistAndReturnId(String username){
-        return userRepository.existsByUsername(username) ? Validation.valid(getUserDetailsByUserName(username).getId())
                 : Validation.invalid(Error.badRequest("USER_NOT_FOUND"));
     }
 
