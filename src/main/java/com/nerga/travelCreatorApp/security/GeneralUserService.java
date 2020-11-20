@@ -81,7 +81,9 @@ public class GeneralUserService {
         return userIdDto;
     }
 
-    private void
+    private void changePassword(String username, String newPassword) {
+
+    }
 
     private UserIdDto getUserIdByUsername(String username) {
         UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new

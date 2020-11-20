@@ -23,5 +23,6 @@ public class Location {
     private String locationName;
     private String locationDescription;
     private String googleMapUrl;
+    private Long votes;
 
 }

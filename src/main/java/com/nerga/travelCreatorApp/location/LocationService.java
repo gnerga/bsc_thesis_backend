@@ -43,4 +43,8 @@ public class LocationService {
                 .orElseThrow(LocationNotFoundException::new);
     }
 
+    // todo add sort methods
+    // change controller into more functional way
+
+
 }

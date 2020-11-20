@@ -10,5 +10,6 @@ public class LocationCreateDto {
     private String locationName;
     private String locationDescription;
     private String googleMapUrl;
+    private Long votes;
 
 }
