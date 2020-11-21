@@ -1,6 +1,9 @@
 package com.nerga.travelCreatorApp.location;
 
+import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.location.exceptions.LocationNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,16 +14,16 @@ import java.util.Optional;
 public class LocationService {
 
     private final LocationRepository locationRepository;
-    private final LocationMapper locationMapper;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public LocationService(LocationRepository locationRepository, LocationMapper locationMapper) {
+    public LocationService(LocationRepository locationRepository, ModelMapper modelMapper) {
         this.locationRepository = locationRepository;
-        this.locationMapper = locationMapper;
+        this.modelMapper = modelMapper;
     }
 
     public Location createNewLocation(LocationCreateDto locationDetails) {
-        return locationRepository.save(locationMapper.transform(locationDetails));
+        return locationRepository.save(convertToLocation(locationDetails));
     }
 
     public List<Location> findAllLocations() {
@@ -45,6 +48,13 @@ public class LocationService {
 
     // todo add sort methods
     // change controller into more functional way
+    // https://amydegregorio.com/2018/12/16/modelmapper-in-spring-boot-no-starter/
+    private LocationDetailsDto convertToDto(Location location){
+        return modelMapper.map(location, LocationDetailsDto.class);
+    }
 
+    private Location convertToLocation(LocationCreateDto locationCreateDto) {
+        return modelMapper.map(locationCreateDto, Location.class);
+    }
 
 }
