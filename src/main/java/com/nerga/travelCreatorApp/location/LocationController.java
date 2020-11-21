@@ -19,12 +19,6 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    @PostMapping(path="test")
-    @ResponseBody
-    public String helloUserMethod(){
-        return "Hello !" ;
-    }
-
     @PostMapping(path="createLocation")
     @ResponseBody
     public Location createNewLocation(@RequestBody LocationCreateDto locationDetails) {

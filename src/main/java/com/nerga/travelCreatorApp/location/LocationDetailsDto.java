@@ -5,8 +5,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class LocationCreateDto {
+public class LocationDetailsDto {
 
+    private Long id;
     private String locationName;
     private String locationDescription;
     private String googleMapUrl;

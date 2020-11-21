@@ -130,11 +130,7 @@ public class UserEntity {
     }
 
     private String simpleValidatorEmptyInputString(String inputNewValue, String inputOldValue){
-        if (inputNewValue.isBlank()) {
-            return inputOldValue;
-        } else {
-            return inputNewValue;
-        }
+        return inputNewValue.isBlank() ? inputOldValue : inputNewValue;
     }
 
 

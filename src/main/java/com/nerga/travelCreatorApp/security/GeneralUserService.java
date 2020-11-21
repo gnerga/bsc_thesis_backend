@@ -13,7 +13,6 @@ import com.nerga.travelCreatorApp.common.response.Error;
 import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.function.Function;

@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Data
@@ -23,6 +25,13 @@ public class Location {
     private String locationName;
     private String locationDescription;
     private String googleMapUrl;
-    private Long votes;
+
+    public Map<String, String> locationToJson(){
+        Map<String, String> entity = new HashMap<>();
+        entity.put("locationId",locationId.toString());
+        entity.put("locationDescription", locationDescription);
+        entity.put("googleMapUrl", googleMapUrl);
+        return entity;
+    }
 
 }
