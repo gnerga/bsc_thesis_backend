@@ -1,8 +1,11 @@
 package com.nerga.travelCreatorApp.location;
 
 import com.nerga.travelCreatorApp.common.response.Response;
+import com.nerga.travelCreatorApp.common.response.Success;
+import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.exceptions.LocationNotFoundException;
 import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
@@ -25,46 +28,34 @@ public class LocationService {
     }
 
     public Response createNewLocation (LocationCreateDto locationCreateDto) {
+        Location location = locationRepository.save(modelMapper.map(locationCreateDto, Location.class));
+        return location!=null ? Success.accepted(location) : Error.badRequest("LOCATION_CANNOT_BE_CREATED");
+    }
+
+    public Response findAllLocations(){
+        List<Location> locationList = locationRepository.findAll();
+        return !locationList.isEmpty() ? Success.ok(locationList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+    }
+
+    public Response findById(Long id){
         return null;
     }
 
-//    public Response createNewLocation (LocationCreateDto locationCreateDto) {
-//        return Option.ofOptional()
-//                .map(locationRepository.save(convertToLocation(locationCreateDto)))
-//    }
+    public Response findAllLocationsWithLocationName(String locationName){
+        return null;
+    }
 
-//    public Location createNewLocation(LocationCreateDto locationDetails) {
-//        return locationRepository.save(convertToLocation(locationDetails));
-//    }
+    public Response findAllWithDescription(String fragmentOfTheDescription){
+        return null;
+    }
 
-//    public List<Location> findAllLocations() {
-//        return Optional.of(locationRepository.findAll())
-//                .orElseThrow(LocationNotFoundException::new);
-//    }
-//
-//    public Location findById(Long id) {
-//        return Optional.of(locationRepository.findById(id)).get()
-//                .orElseThrow(LocationNotFoundException::new);
-//    }
-//
-//    public List<Location> findByDescription(String elementOfDescription) {
-//        return Optional.of(locationRepository.findLocationsByLocationDescriptionContains(elementOfDescription))
-//                .orElseThrow(LocationNotFoundException::new);
-//    }
-//
-//    public Location findByName(String locationName) {
-//        return Optional.of(locationRepository.findLocationByLocationName(locationName))
-//                .orElseThrow(LocationNotFoundException::new);
-//    }
+    public Response updateLocationById(Long id, LocationDetailsDto locationDetailsDto) {
+        return null;
+    }
 
-//    private LocationDetailsDto convertToDto(Location location){
-//        return modelMapper.map(location, LocationDetailsDto.class);
-//    }
-//
-//    private Location convertToLocation(LocationCreateDto locationCreateDto) {
-//        return modelMapper.map(locationCreateDto, Location.class);
-//    }
+    public Response removeLocationById(Long id){
+        return null;
+    }
 
-    private void
 
 }
