@@ -99,13 +99,6 @@ public class UserEntity {
 
     }
 
-    public User getUserFromEntity(){
-        return new User(
-                username, password, getGrantedAuthority(), isAccountNonExpired, isAccountNonLock, isCredentialsNonExpired,
-                isEnabled, firstName, lastName, email, phoneNumber
-        );
-    }
-
     private Set<String> getPermissions(Collection<? extends GrantedAuthority> grantedAuthority) {
         return grantedAuthority
                 .stream()

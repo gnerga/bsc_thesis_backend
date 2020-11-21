@@ -12,6 +12,7 @@ import com.nerga.travelCreatorApp.security.dto.UserIdDto;
 import com.nerga.travelCreatorApp.common.response.Error;
 import io.vavr.control.Option;
 import io.vavr.control.Validation;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,13 @@ public class GeneralUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public GeneralUserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public GeneralUserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
     public Response createUser (CreateUserDto createUserDto){
@@ -37,21 +40,21 @@ public class GeneralUserService {
 
     public Response findUserDetailsByUsername(String username) {
         return Option.ofOptional(userRepository.findByUsername(username))
-                .map(UserDetailsDto::new)
+                .map(userEntity -> modelMapper.map(userEntity, UserDetailsDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
 
     public Response findUserDetailsById(Long id) {
         return Option.ofOptional(userRepository.findById(id))
-                .map(UserDetailsDto::new)
+                .map(userEntity -> modelMapper.map(userEntity, UserDetailsDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
 
     public Response findUserIdByUsername(String username) {
         return Option.ofOptional(userRepository.findByUsername(username))
-                .map(UserIdDto::new)
+                .map(userEntity -> modelMapper.map(userEntity, UserIdDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
@@ -114,7 +117,7 @@ public class GeneralUserService {
                 createUserDto.getEmail(),
                 createUserDto.getPhoneNumber()
         );
-        return new UserIdDto(userRepository.save(userEntity));
+        return modelMapper.map(userRepository.save(userEntity), UserIdDto.class);
     }
 
 }
