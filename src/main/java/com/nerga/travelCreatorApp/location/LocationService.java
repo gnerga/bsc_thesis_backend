@@ -5,18 +5,13 @@ import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
-import com.nerga.travelCreatorApp.location.Location;
-import com.nerga.travelCreatorApp.location.exceptions.LocationNotFoundException;
 import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service("locationService")
@@ -74,18 +69,36 @@ public class LocationService {
 
     public Response updateLocationById(Long id, LocationDetailsDto locationDetailsDto) {
         return Option.ofOptional(locationRepository.findById(id))
-                .map(location -> locationRepository.save(updateLocationEntity(locationDetailsDto, location)))
-                .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_CANNOTBE_FOUND"))
+                .peek(location -> locationRepository.save(updateLocationEntity(locationDetailsDto, location)))
+                .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_CANNOT_BE_FOUND"))
                 .fold(Function.identity(), Success::ok);
 
     }
 
-    public Response removeLocationById(Long id){
-        return null;
+    public Response deleteUserById(Long id){
+        return Option.ofOptional(locationRepository.findById(id))
+                .peek(locationRepository::delete)
+                .toEither(Error.badRequest("LOCATION_NOT_FOUND"))
+                .fold(Function.identity(), Success::ok);
     }
 
     private Location updateLocationEntity(LocationDetailsDto locationDetailsDto, Location location) {
-        return null;
+
+        location.setLocationName(simplyValidatorInputEmptyString(
+                locationDetailsDto.getLocationName(),
+                location.getLocationName()));
+        location.setLocationDescription(simplyValidatorInputEmptyString(
+                locationDetailsDto.getLocationDescription(),
+                location.getLocationDescription()));
+        location.setGoogleMapUrl(simplyValidatorInputEmptyString(
+                locationDetailsDto.getGoogleMapUrl(),
+                location.getGoogleMapUrl()));
+
+        return location;
+    }
+
+    private String simplyValidatorInputEmptyString(String newInput, String oldInput){
+        return newInput.isBlank() ? oldInput : newInput;
     }
 
 
