@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -35,34 +38,40 @@ public class Trip {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-    //@JsonManagedReference
-//    @ManyToMany(mappedBy = "organizedTrips")
-////    @Singular
-//    private List<User> organizers;
-//
-//    //@JsonManagedReference
-//    @ManyToMany(mappedBy = "usersTrips")
-////    @Singular
-//    private List<User> members;
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "organizedTrips")
+//    @Singular
+    private List<UserEntity> organizers;
 
-//    public void addOrganizer(User user) {
-//        if (organizers == null) {
-//            organizers = new ArrayList<>();
-//        }
-//        organizers.add(user);
-//        user.getOrganizedTrips().add(this);
-//    }
-//
-//    public void removeOrganizer(User user) {
-//        organizers.remove(user);
-//        user.getOrganizedTrips().remove(this);
-//    }
-//
-//    public void addParticipant(User user) {
-//        if (members == null) {
-//            members = new ArrayList<>();
-//        }
-//        members.add(user);
-//        user.getUsersTrips().add(this);
-//    }
+    //@JsonManagedReference
+    @ManyToMany(mappedBy = "participatedTrips")
+//    @Singular
+    private List<UserEntity> participants;
+
+    public void addOrganizer(UserEntity user) {
+        if (organizers == null) {
+            organizers = new ArrayList<>();
+        }
+        organizers.add(user);
+        user.getOrganizedTrips().add(this);
+    }
+
+    public void removeOrganizer(UserEntity user) {
+        organizers.remove(user);
+        user.getOrganizedTrips().remove(this);
+    }
+
+    public void addParticipant(UserEntity user) {
+        if (participants == null) {
+            participants = new ArrayList<>();
+        }
+        participants.add(user);
+        user.getParticipatedTrips().add(this);
+    }
+
+    public void removeParticipant(UserEntity user){
+        participants.remove(user);
+        user.getParticipatedTrips().remove(this);
+    }
+
 }

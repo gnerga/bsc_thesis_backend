@@ -30,10 +30,7 @@ public class TripOutputDto {
     @NotNull
     private String googleMapUrl;
 
-
 //    private List<UserDetailsDto> organizers;
 //    private List<UserDetailsDto> members;
-
-
 
 }
