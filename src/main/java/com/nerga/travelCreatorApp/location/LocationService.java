@@ -12,8 +12,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service("locationService")
 public class LocationService {
@@ -38,22 +42,49 @@ public class LocationService {
     }
 
     public Response findById(Long id){
-        return null;
+        return Option.of(locationRepository.findById(id))
+                .map(locationEntity -> modelMapper.map(locationEntity, LocationDetailsDto.class))
+                .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_NOT_FOUND"))
+                .fold(Function.identity(), Success::ok);
     }
 
     public Response findAllLocationsWithLocationName(String locationName){
-        return null;
+        List<Location> locationsList = locationRepository.findLocationsByLocationNameContains(locationName);
+
+        return !locationsList.isEmpty() ? Success.ok(returnLocationDtosList(locationsList))
+                : Error.badRequest("LOCATIONS_WITH_GIVEN_LOCATION_NAME_NOT_FOUND");
+
+    }
+
+    private List<LocationDetailsDto> returnLocationDtosList(List<Location> locationList){
+        return locationList
+                .stream()
+                .map(location -> modelMapper
+                        .map(location, LocationDetailsDto.class)
+                ).collect(Collectors.toList());
     }
 
     public Response findAllWithDescription(String fragmentOfTheDescription){
-        return null;
+
+        List<Location> locationsList = locationRepository.findLocationsByLocationDescriptionContains(fragmentOfTheDescription);
+
+        return !locationsList.isEmpty() ? Success.ok(returnLocationDtosList(locationsList))
+                : Error.badRequest("LOCATION_WITH_GIVEN_FRAGMENT_NOT_FOUND");
     }
 
     public Response updateLocationById(Long id, LocationDetailsDto locationDetailsDto) {
-        return null;
+        return Option.ofOptional(locationRepository.findById(id))
+                .map(location -> locationRepository.save(updateLocationEntity(locationDetailsDto, location)))
+                .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_CANNOTBE_FOUND"))
+                .fold(Function.identity(), Success::ok);
+
     }
 
     public Response removeLocationById(Long id){
+        return null;
+    }
+
+    private Location updateLocationEntity(LocationDetailsDto locationDetailsDto, Location location) {
         return null;
     }
 

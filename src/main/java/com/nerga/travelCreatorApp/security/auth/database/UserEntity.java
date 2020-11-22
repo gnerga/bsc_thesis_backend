@@ -112,21 +112,6 @@ public class UserEntity {
                 .collect(Collectors.toSet());
     }
 
-    public UserEntity updateUserEntity (UserDetailsDto userDetailsDto) {
-
-        this.firstName = simpleValidatorEmptyInputString(userDetailsDto.getFirstName(), this.firstName);
-        this.lastName = simpleValidatorEmptyInputString(userDetailsDto.getLastName(), this.lastName);
-        this.email = simpleValidatorEmptyInputString(userDetailsDto.getEmail(), this.email);
-        this.phoneNumber = simpleValidatorEmptyInputString(userDetailsDto.getPhoneNumber(), this.phoneNumber);
-
-        return this;
-    }
-
-    private String simpleValidatorEmptyInputString(String inputNewValue, String inputOldValue){
-        return inputNewValue.isBlank() ? inputOldValue : inputNewValue;
-    }
-
-
 //    public Map<String, String> toIdJson(){
 //        Map<String, String> entity = new HashMap<>();
 //        entity.put("login", this.username);

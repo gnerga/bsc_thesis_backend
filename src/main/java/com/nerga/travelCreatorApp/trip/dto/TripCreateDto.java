@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.trip;
+package com.nerga.travelCreatorApp.trip.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

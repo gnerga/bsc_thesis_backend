@@ -61,14 +61,14 @@ public class GeneralUserService {
 
     public Response updateUserById(Long id, UserDetailsDto userDetailsDto) {
         return Option.ofOptional(userRepository.findById(id))
-                .map(userEntity -> userRepository.save(userEntity.updateUserEntity(userDetailsDto)))
+                .map(userEntity -> userRepository.save(updateUserEntity(userDetailsDto, userEntity)))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
 
     public Response updateUserByUsername(String username, UserDetailsDto userDetailsDto) {
         return Option.ofOptional(userRepository.findByUsername(username))
-                .map(userEntity -> userRepository.save(userEntity.updateUserEntity(userDetailsDto)))
+                .map(userEntity -> userRepository.save(updateUserEntity(userDetailsDto, userEntity)))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
@@ -118,6 +118,28 @@ public class GeneralUserService {
                 createUserDto.getPhoneNumber()
         );
         return modelMapper.map(userRepository.save(userEntity), UserIdDto.class);
+    }
+
+    private UserEntity updateUserEntity (UserDetailsDto userDetailsDto, UserEntity userEntity) {
+
+        userEntity.setFirstName(simpleValidatorEmptyInputString(
+                userDetailsDto.getFirstName(),
+                userEntity.getFirstName()));
+        userEntity.setLastName(simpleValidatorEmptyInputString(
+                userDetailsDto.getLastName(),
+                userEntity.getLastName()));
+        userEntity.setEmail(simpleValidatorEmptyInputString(
+                userDetailsDto.getEmail(),
+                userEntity.getEmail()));
+        userEntity.setPhoneNumber(simpleValidatorEmptyInputString(
+                userDetailsDto.getPhoneNumber(),
+                userEntity.getPhoneNumber()));
+
+        return userEntity;
+    }
+
+    private String simpleValidatorEmptyInputString(String inputNewValue, String inputOldValue){
+        return inputNewValue.isBlank() ? inputOldValue : inputNewValue;
     }
 
 }
