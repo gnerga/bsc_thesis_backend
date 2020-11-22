@@ -113,6 +113,13 @@ public class UserEntity {
                 .collect(Collectors.toSet());
     }
 
+    public User getUserFromEntity(){
+        return new User(
+                username, password, getGrantedAuthority(), isAccountNonExpired, isAccountNonLock, isCredentialsNonExpired,
+                isEnabled, firstName, lastName, email, phoneNumber
+        );
+    }
+
     public void addOrganizedTrip(Trip trip) {
         if (organizedTrips == null) {
             organizedTrips = new ArrayList<>();
@@ -138,6 +145,8 @@ public class UserEntity {
         participatedTrips.remove(trip);
         trip.getParticipants().remove(this);
     }
+
+
 
 //    public Map<String, String> toIdJson(){
 //        Map<String, String> entity = new HashMap<>();
