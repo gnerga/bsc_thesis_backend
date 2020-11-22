@@ -14,7 +14,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-@NoArgsConstructor
 @Data
 //@Builder(access= AccessLevel.PUBLIC)
 public class UserEntity {
@@ -70,6 +69,11 @@ public class UserEntity {
         this.email = email;
         this.phoneNumber = "n/d";
 
+        this.participatedTrips = new ArrayList<>();
+        this.organizedTrips = new ArrayList<>();
+    }
+
+    public UserEntity(){
         this.participatedTrips = new ArrayList<>();
         this.organizedTrips = new ArrayList<>();
     }

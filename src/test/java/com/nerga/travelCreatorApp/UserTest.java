@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class UserDtoTest {
+public class UserTest {
 
     private ModelMapper modelMapper;
 

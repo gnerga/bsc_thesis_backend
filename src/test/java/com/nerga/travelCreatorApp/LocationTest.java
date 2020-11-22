@@ -9,7 +9,7 @@ import org.modelmapper.ModelMapper;
 
 import static org.junit.Assert.assertEquals;
 
-public class LocationDtoTest {
+public class LocationTest {
 
     private ModelMapper modelMapper;
 

@@ -26,12 +26,12 @@ public class Location {
     private String locationDescription;
     private String googleMapUrl;
 
-    public Map<String, String> locationToJson(){
-        Map<String, String> entity = new HashMap<>();
-        entity.put("locationId",locationId.toString());
-        entity.put("locationDescription", locationDescription);
-        entity.put("googleMapUrl", googleMapUrl);
-        return entity;
-    }
+//    public Map<String, String> locationToJson(){
+//        Map<String, String> entity = new HashMap<>();
+//        entity.put("locationId",locationId.toString());
+//        entity.put("locationDescription", locationDescription);
+//        entity.put("googleMapUrl", googleMapUrl);
+//        return entity;
+//    }
 
 }
