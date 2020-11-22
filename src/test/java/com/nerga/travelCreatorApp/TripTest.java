@@ -4,10 +4,12 @@ import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.trip.Trip;
+import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
 import java.time.LocalDate;
 
@@ -21,7 +23,9 @@ public class TripTest {
 
     @Before
     public void beforeTest(){
+
         modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 
         userEntity = new UserEntity();
         userEntity_2 = new UserEntity();
@@ -61,6 +65,7 @@ public class TripTest {
 
     @Test
     public void whenCreateNewTrip() {
+
         Trip trip = new Trip();
         trip.setTripName("Wakacje Ekipy");
         trip.setTripDescription("Najlepsze wakacje ever");
@@ -107,6 +112,16 @@ public class TripTest {
         trip_2.removeParticipant(userEntity_3);
 
         Assert.assertTrue(trip_2.getParticipants().isEmpty());
+
+    }
+
+    @Test
+    public void whenConvertLocationCreateToLocationEntity_thenCorrect() {
+        trip_2.addParticipant(userEntity_2);
+        TripDetailsDto tripDetailsDto = modelMapper.map(trip_2, TripDetailsDto.class);
+        Assert.assertEquals(trip_2.getTripName(), tripDetailsDto.getTripName());
+        Assert.assertEquals(trip_2.getOrganizers().get(0).getUsername(), tripDetailsDto.getOrganizers().get(0).getUsername());
+        Assert.assertEquals(trip_2.getLocation().getLocationName(), tripDetailsDto.getLocation().getLocationName());
 
     }
 

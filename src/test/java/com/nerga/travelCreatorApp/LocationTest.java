@@ -49,7 +49,6 @@ public class LocationTest {
         assertEquals(locationCreateDto.getLocationDescription(), location.getLocationDescription());
         assertEquals(locationCreateDto.getGoogleMapUrl(), location.getGoogleMapUrl());
 
-
     }
 
 

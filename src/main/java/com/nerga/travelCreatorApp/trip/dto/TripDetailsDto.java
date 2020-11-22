@@ -1,5 +1,7 @@
 package com.nerga.travelCreatorApp.trip.dto;
 
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class TripOutputDto {
+public class TripDetailsDto {
 
     @NotNull
     private Long tripId;
@@ -24,13 +26,10 @@ public class TripOutputDto {
     @NotNull
     private LocalDate endDate;
     @NotNull
-    private String locationName;
-    @NotNull
-    private String locationDescription;
-    @NotNull
-    private String googleMapUrl;
+    private LocationDetailsDto location;
 
-//    private List<UserDetailsDto> organizers;
-//    private List<UserDetailsDto> members;
+
+    private List<UserDetailsDto> organizers;
+    private List<UserDetailsDto> members;
 
 }

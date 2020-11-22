@@ -1,15 +1,21 @@
 package com.nerga.travelCreatorApp;
 
+import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.security.dto.UserIdDto;
+import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static org.junit.Assert.assertEquals;
 
 public class UserTest {
 
@@ -85,7 +91,20 @@ public class UserTest {
         Assert.assertEquals(userEntity.getUsername(), userIdDto.getUsername());
     }
 
+    @Test
+    public void whenConvertTripToTripDetailsDto_thenCorrect(){
 
+
+
+    }
+
+    @Test
+    public void whenConvertTripCreateDtoToTrip_thenCorrect(){
+
+        TripCreateDto tripCreateDto = new TripCreateDto();
+
+
+    }
 
 
 }
