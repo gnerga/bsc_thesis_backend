@@ -3,6 +3,8 @@ package com.nerga.travelCreatorApp.trip;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
+import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.sun.istack.NotNull;
@@ -53,6 +55,8 @@ public class Trip {
     @ManyToMany(mappedBy = "participatedTrips")
 //    @Singular
     private List<UserEntity> participants;
+
+
 
     public void addOrganizer(UserEntity user) {
         if (organizers == null) {

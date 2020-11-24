@@ -117,6 +117,7 @@ public class TripTest {
 
     @Test
     public void whenConvertLocationCreateToLocationEntity_thenCorrect() {
+
         trip_2.addParticipant(userEntity_2);
         TripDetailsDto tripDetailsDto = modelMapper.map(trip_2, TripDetailsDto.class);
         Assert.assertEquals(trip_2.getTripName(), tripDetailsDto.getTripName());

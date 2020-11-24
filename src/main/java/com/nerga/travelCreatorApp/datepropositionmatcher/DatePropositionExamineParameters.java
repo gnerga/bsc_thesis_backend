@@ -20,8 +20,6 @@ public class DatePropositionExamineParameters {
     @NonNull
     private DateProposition testedProposition;
 
-
-
     public void setAllExamineParameters() {
         this.examineLength = examineProposition.getLeftEdge() + examineProposition.getPropositionDuration();
         this.testedLength = testedProposition.getLeftEdge() + testedProposition.getPropositionDuration();

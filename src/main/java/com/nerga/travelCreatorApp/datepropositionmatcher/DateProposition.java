@@ -1,17 +1,23 @@
 package com.nerga.travelCreatorApp.datepropositionmatcher;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
+@Entity
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class DateProposition implements Comparable<DateProposition> {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long datePropositionId;
     @NonNull
     private LocalDate startDate;
     @NonNull

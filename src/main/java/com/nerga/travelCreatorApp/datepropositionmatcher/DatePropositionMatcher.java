@@ -3,6 +3,10 @@ package com.nerga.travelCreatorApp.datepropositionmatcher;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -12,9 +16,16 @@ import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
+@Entity
 public class DatePropositionMatcher {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+
     private List<DateProposition> datePropositionList;
+
     private List<DateProposition> analyzedDatePropositionList;
     private int planedTripLength;
 
@@ -59,9 +70,9 @@ public class DatePropositionMatcher {
     private void examineAccuracy(int planedTripLength){
         this.planedTripLength = planedTripLength;
         setStartAndEndDateThenSetDurationOfProposition();
-        DatePropositionCollection datePropositionCollection =
-                new DatePropositionCollection(collectAllDatesFromPropositionsIntoOneCollection());
-        setPropositionLeftAndRightEdge(datePropositionCollection);
+        DatePropositionSet datePropositionSet =
+                new DatePropositionSet(collectAllDatesFromPropositionsIntoOneCollection());
+        setPropositionLeftAndRightEdge(datePropositionSet);
         countAccuracy();
     }
 
@@ -166,10 +177,10 @@ public class DatePropositionMatcher {
         }
     }
 
-    private void setPropositionLeftAndRightEdge(DatePropositionCollection datePropositionCollection){
+    private void setPropositionLeftAndRightEdge(DatePropositionSet datePropositionSet){
         this.datePropositionList.forEach(dateProposition -> {
-            dateProposition.setLeftEdge(ChronoUnit.DAYS.between(datePropositionCollection.getMin(), dateProposition.getStartDate()));
-            dateProposition.setRightEdge(Math.abs(ChronoUnit.DAYS.between(datePropositionCollection.getMin(), dateProposition.getEndDate())));
+            dateProposition.setLeftEdge(ChronoUnit.DAYS.between(datePropositionSet.getMin(), dateProposition.getStartDate()));
+            dateProposition.setRightEdge(Math.abs(ChronoUnit.DAYS.between(datePropositionSet.getMin(), dateProposition.getEndDate())));
         });
     }
 
