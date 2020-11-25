@@ -46,6 +46,10 @@ public class Trip {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
+    @OneToOne
+    @JoinColumn
+    private DatePropositionMatcher datePropositionMatcher;
+
     @JsonManagedReference
     @ManyToMany(mappedBy = "organizedTrips")
 //    @Singular
@@ -55,8 +59,6 @@ public class Trip {
     @ManyToMany(mappedBy = "participatedTrips")
 //    @Singular
     private List<UserEntity> participants;
-
-
 
     public void addOrganizer(UserEntity user) {
         if (organizers == null) {

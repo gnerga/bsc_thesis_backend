@@ -19,9 +19,9 @@ public class DatePropositionSet {
 
     private void setMinAndMaxValue() {
        this.min = allDatePropositions.stream()
-                .min(LocalDate::compareTo).get();
+                .min(LocalDate::compareTo).orElseThrow();
         this.max = allDatePropositions.stream()
-                .max(LocalDate::compareTo).get();
+                .max(LocalDate::compareTo).orElseThrow();
     }
 
 }

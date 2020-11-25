@@ -1,11 +1,9 @@
 package com.nerga.travelCreatorApp.datepropositionmatcher;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -18,9 +16,15 @@ public class DateProposition implements Comparable<DateProposition> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long datePropositionId;
+
+    @ManyToOne
+    private DatePropositionMatcher datePropositionMatcher;
+
     @NonNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @NonNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
     private Long leftEdge;

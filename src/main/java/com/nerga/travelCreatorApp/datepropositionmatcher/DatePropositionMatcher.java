@@ -1,12 +1,10 @@
 package com.nerga.travelCreatorApp.datepropositionmatcher;
 
+import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -23,15 +21,19 @@ public class DatePropositionMatcher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    @OneToMany
     private List<DateProposition> datePropositionList;
 
+    @OneToMany
     private List<DateProposition> analyzedDatePropositionList;
+
     private int planedTripLength;
 
     public DatePropositionMatcher(){
         this.datePropositionList = new ArrayList<>();
     }
+
+
 
     public void addDateProposition(DateProposition newDateProposition){
         if (newDateProposition!=null){
