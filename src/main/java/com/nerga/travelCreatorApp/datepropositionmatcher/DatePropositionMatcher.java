@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Data
 @AllArgsConstructor
 @Entity
+@Table(name = "DatePropositionMatcher")
 public class DatePropositionMatcher {
 
     @Id
@@ -32,8 +33,6 @@ public class DatePropositionMatcher {
     public DatePropositionMatcher(){
         this.datePropositionList = new ArrayList<>();
     }
-
-
 
     public void addDateProposition(DateProposition newDateProposition){
         if (newDateProposition!=null){

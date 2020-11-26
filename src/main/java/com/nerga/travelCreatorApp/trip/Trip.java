@@ -47,7 +47,7 @@ public class Trip {
     private LocalDate endDate;
 
     @OneToOne
-    @JoinColumn
+    @JoinColumn(name = "datePropositionMatcher_id", referencedColumnName = "id")
     private DatePropositionMatcher datePropositionMatcher;
 
     @JsonManagedReference
@@ -84,6 +84,14 @@ public class Trip {
     public void removeParticipant(UserEntity user){
         participants.remove(user);
         user.getParticipatedTrips().remove(this);
+    }
+
+    public void addDateProposition(){
+
+    }
+
+    public void removeDateProposition(){
+
     }
 
 }
