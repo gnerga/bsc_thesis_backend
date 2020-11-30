@@ -26,6 +26,10 @@ public class DateProposition implements Comparable<DateProposition> {
     @NonNull
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    @NonNull
+    private String ownerLogin;
+    @NonNull
+    private Long ownerId;
 
     private Long leftEdge;
     private Long rightEdge;
