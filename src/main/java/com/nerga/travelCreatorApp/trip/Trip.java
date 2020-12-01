@@ -3,6 +3,7 @@ package com.nerga.travelCreatorApp.trip;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.location.Location;
@@ -86,13 +87,15 @@ public class Trip {
         user.getParticipatedTrips().remove(this);
     }
 
-    public void addDateProposition(DatePropositionDto datePropositionDto){
+    public void addDateProposition(DateProposition dateProposition){
 
-
+        datePropositionMatcher.addDateProposition(dateProposition);
 
     }
 
-    public void removeDateProposition(DatePropositionDto datePropositionDto){
+    public boolean removeDateProposition(DateProposition dateProposition) {
+
+        return datePropositionMatcher.removeDateProposition(dateProposition);
 
     }
 

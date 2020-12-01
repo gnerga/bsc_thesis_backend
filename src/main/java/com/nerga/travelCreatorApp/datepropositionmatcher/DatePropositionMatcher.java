@@ -47,6 +47,11 @@ public class DatePropositionMatcher {
         return false;
     }
 
+    public void clearDatePropositionMatcher(){
+        this.datePropositionList.clear();
+        this.analyzedDatePropositionList.clear();
+    }
+
     public void displayDateProposition(){
         this.datePropositionList
                 .forEach(System.out::println);

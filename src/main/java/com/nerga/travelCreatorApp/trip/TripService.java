@@ -37,7 +37,7 @@ public class TripService {
         this.userRepository = userRepository;
     }
 
-    public Response addTrip (TripCreateDto tripCreateDto) {
+    public Response createTrip (TripCreateDto tripCreateDto) {
 
         return null;
 
