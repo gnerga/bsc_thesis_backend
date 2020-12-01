@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.sun.istack.NotNull;
@@ -85,11 +86,13 @@ public class Trip {
         user.getParticipatedTrips().remove(this);
     }
 
-    public void addDateProposition(){
+    public void addDateProposition(DatePropositionDto datePropositionDto){
+
+
 
     }
 
-    public void removeDateProposition(){
+    public void removeDateProposition(DatePropositionDto datePropositionDto){
 
     }
 

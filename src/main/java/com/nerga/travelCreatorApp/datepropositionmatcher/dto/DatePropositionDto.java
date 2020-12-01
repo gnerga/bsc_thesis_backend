@@ -9,7 +9,7 @@ public class DatePropositionDto {
 
     private String startDate;
     private String endDate;
-    private String login;
-    private Long id;
+    private String ownerUsername;
+    private Long ownerId;
 
 }
