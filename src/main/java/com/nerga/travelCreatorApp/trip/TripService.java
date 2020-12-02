@@ -2,23 +2,12 @@ package com.nerga.travelCreatorApp.trip;
 
 
 import com.nerga.travelCreatorApp.common.response.Response;
-import com.nerga.travelCreatorApp.location.exceptions.LocationNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
-import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
-import com.nerga.travelCreatorApp.trip.exceptions.TripCannotBeCreatedException;
-import com.nerga.travelCreatorApp.trip.exceptions.TripNotFoundException;
-import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
-import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 //@Service("tripService")
 public class TripService {
@@ -26,18 +15,22 @@ public class TripService {
     private final TripRepository tripRepository;
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public TripService(TripRepository tripRepository,
                        LocationRepository locationRepository,
-                       UserRepository userRepository
-    ) {
+                       UserRepository userRepository,
+                       ModelMapper modelMapper) {
         this.tripRepository = tripRepository;
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     public Response createTrip (TripCreateDto tripCreateDto) {
+
+        Trip trip = modelMapper.map(tripCreateDto, Trip.class);
 
         return null;
 
