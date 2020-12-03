@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.modelmapper.*;
+import org.modelmapper.convention.MatchingStrategies;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +24,7 @@ public class DatePropositionMatcherTest {
         datePropositionMatcher = new DatePropositionMatcher();
         modelMapper = new ModelMapper();
 
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         Provider<LocalDate> localDateProvider = new AbstractProvider<LocalDate>() {
             @Override

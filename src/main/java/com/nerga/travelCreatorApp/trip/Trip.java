@@ -2,6 +2,7 @@ package com.nerga.travelCreatorApp.trip;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
@@ -19,8 +20,8 @@ import java.util.List;
 @Entity
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Trip {
 
     @Id
@@ -30,13 +31,13 @@ public class Trip {
     @NotNull
     private String tripName;
 
-    @NotNull
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(name = "trip_location",
             joinColumns = @JoinColumn(name = "trip_id"),
             inverseJoinColumns = @JoinColumn(name = "location_id"))
     private Location location;
+
     @NotNull
     private String tripDescription;
 

@@ -6,6 +6,7 @@ import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,6 +17,7 @@ public class LocationTest {
     @Before
     public void beforeTest(){
         modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
     @Test
@@ -31,7 +33,7 @@ public class LocationTest {
         assertEquals(location.getGoogleMapUrl(), locationDetailsDto.getGoogleMapUrl());
         assertEquals(location.getLocationName(), locationDetailsDto.getLocationName());
         assertEquals(location.getLocationDescription(), locationDetailsDto.getLocationDescription());
-        assertEquals(location.getLocationId(), locationDetailsDto.getId());
+        assertEquals(location.getLocationId(), locationDetailsDto.getLocationId());
 
     }
 
@@ -44,7 +46,6 @@ public class LocationTest {
         locationCreateDto.setGoogleMapUrl("url/url");
 
         Location location = modelMapper.map(locationCreateDto, Location.class);
-
         assertEquals(locationCreateDto.getLocationName(), location.getLocationName());
         assertEquals(locationCreateDto.getLocationDescription(), location.getLocationDescription());
         assertEquals(locationCreateDto.getGoogleMapUrl(), location.getGoogleMapUrl());

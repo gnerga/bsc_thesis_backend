@@ -2,10 +2,16 @@ package com.nerga.travelCreatorApp.trip;
 
 
 import com.nerga.travelCreatorApp.common.response.Response;
+import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
+import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.security.auth.User;
+import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 
+import io.vavr.control.Option;
+import io.vavr.control.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,11 +36,18 @@ public class TripService {
 
     public Response createTrip (TripCreateDto tripCreateDto) {
 
-        Trip trip = modelMapper.map(tripCreateDto, Trip.class);
-
+//        Trip trip = modelMapper.map(tripCreateDto, Trip.class);
+//        return Option.ofOptional(userRepository.findById(tripCreateDto.getCreatorId()))
+//                .;
         return null;
 
     }
+
+    private DateProposition addNewDateProposition(){
+        return null;
+    }
+
+
 
 //    public List<TripDetailsDto> findAllTrips() {
 //        Optional<List<Trip>> optionalTripList = Optional.of(tripRepository.findAll());

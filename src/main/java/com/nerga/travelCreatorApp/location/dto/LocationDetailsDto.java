@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LocationDetailsDto {
 
-    private Long id;
+    private Long locationId;
     private String locationName;
     private String locationDescription;
     private String googleMapUrl;

@@ -14,8 +14,8 @@ public class ApplicationConfig {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-
+//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         Provider<LocalDate> localDateProvider = new AbstractProvider<LocalDate>() {
             @Override
             public LocalDate get() {

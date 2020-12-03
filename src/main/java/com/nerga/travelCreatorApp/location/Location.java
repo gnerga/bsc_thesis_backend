@@ -22,6 +22,7 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long locationId;
+
     private String locationName;
     private String locationDescription;
     private String googleMapUrl;

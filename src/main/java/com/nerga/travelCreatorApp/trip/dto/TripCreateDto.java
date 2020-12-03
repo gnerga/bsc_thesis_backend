@@ -17,5 +17,4 @@ public class TripCreateDto {
     private Long locationId;
     private Long creatorId;
 
-
 }

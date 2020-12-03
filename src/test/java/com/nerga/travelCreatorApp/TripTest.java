@@ -27,7 +27,7 @@ public class TripTest {
     public void beforeTest(){
 
         modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
         Provider<LocalDate> localDateProvider = new AbstractProvider<LocalDate>() {
             @Override
@@ -162,7 +162,7 @@ public class TripTest {
         Trip trip = modelMapper.map(tripCreateDto, Trip.class);
 
         Assert.assertEquals(tripCreateDto.getTripName(), trip.getTripName());
-        Assert.assertEquals(tripCreateDto.getTripDescription(), trip.getTripName());
+        Assert.assertEquals(tripCreateDto.getTripDescription(), trip.getTripDescription());
         Assert.assertEquals(LocalDate.parse(tripCreateDto.getStartDate()), trip.getStartDate());
         Assert.assertEquals(LocalDate.parse(tripCreateDto.getEndDate()), trip.getEndDate());
 
