@@ -89,15 +89,11 @@ public class Trip {
     }
 
     public void addDateProposition(DateProposition dateProposition){
-
         datePropositionMatcher.addDateProposition(dateProposition);
-
     }
 
     public boolean removeDateProposition(DateProposition dateProposition) {
-
         return datePropositionMatcher.removeDateProposition(dateProposition);
-
     }
 
 }

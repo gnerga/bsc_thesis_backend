@@ -3,6 +3,7 @@ package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
+import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.User;
@@ -11,12 +12,17 @@ import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 //@Service("tripService")
@@ -51,16 +57,51 @@ public class TripService {
 //            .flatMap(a -> getB().map(b -> f(a,b)))
 //            .orElse("Not both present")
 
-    private Validation<Error, Long> isUserExists (Long id) {
-        return userRepository.existsById(id) ? Validation.valid(id) : Validation.invalid(Error.badRequest("USER_NOT_EXISTS"));
+    public Response addTrip(TripCreateDto tripCreateDto){
+        return isUserAndLocationExists(tripCreateDto)
+                .map(userEntityAndLocation -> createTrip(userEntityAndLocation, tripCreateDto))
+                .fold(Function.identity(), Success::ok);
+
     }
 
-    private Validation<Error, Long> isLocationExists (Long id) {
-        return locationRepository.existsById(id) ? Validation.valid(id) : Validation.invalid(Error.badRequest("LOCATION_NOT_FOUND"));
+    private Trip createTrip(Tuple2<UserEntity, Location> userAndLocation, TripCreateDto tripCreateDto){
+        Trip trip = modelMapper.map(tripCreateDto, Trip.class);
+        trip.addOrganizer(userAndLocation._1);
+        trip.setLocation(userAndLocation._2);
+        trip.addDateProposition(createDateProposition(tripCreateDto, userAndLocation._1));
+        return trip;
     }
 
-    private DateProposition addNewDateProposition(){
-        return null;
+    private Validation<Error, Tuple2<UserEntity, Location>> isUserAndLocationExists (TripCreateDto tripCreateDto){
+        String errorMessage = "";
+        boolean isNotExist = false;
+
+        UserEntity userEntity = userRepository.findById(tripCreateDto.getCreatorId()).orElse(null);
+        Location location = locationRepository.findById(tripCreateDto.getLocationId()).orElse(null);
+
+        if (userEntity==null){
+            isNotExist = true;
+            errorMessage = "USER_NOT_EXISTS";
+        }
+        if (location==null){
+            isNotExist = true;
+            if(errorMessage.isEmpty()){
+                errorMessage = "LOCATION_NOT_EXISTS";
+            } else {
+                errorMessage = "LOCATION_AND" + errorMessage;
+            }
+        }
+
+        return !isNotExist ? Validation.valid(Tuple.of(userEntity, location)) : Validation.invalid(Error.badRequest(errorMessage));
+
+    }
+
+    private DateProposition createDateProposition(TripCreateDto tripCreateDto, UserEntity userEntity){
+        return new DateProposition(
+                LocalDate.parse(tripCreateDto.getStartDate()),
+                LocalDate.parse(tripCreateDto.getEndDate()),
+                userEntity.getUsername(),
+                userEntity.getId());
     }
 
 //    public List<TripDetailsDto> findAllTrips() {
