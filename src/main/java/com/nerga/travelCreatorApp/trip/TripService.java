@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.trip;
 
 
+import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.location.Location;
@@ -14,6 +15,9 @@ import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
+
+import java.util.stream.Stream;
 
 //@Service("tripService")
 public class TripService {
@@ -34,20 +38,30 @@ public class TripService {
         this.modelMapper = modelMapper;
     }
 
-    public Response createTrip (TripCreateDto tripCreateDto) {
+//    public Response createTrip (TripCreateDto tripCreateDto) {
+//
+////        return Option.ofOptional(isUserExists(tripCreateDto.getCreatorId())
+////                .toEither();
+//
+//        return Stream.of(a)
+//
+//    }
+//
+//        return getA()
+//            .flatMap(a -> getB().map(b -> f(a,b)))
+//            .orElse("Not both present")
 
-//        Trip trip = modelMapper.map(tripCreateDto, Trip.class);
-//        return Option.ofOptional(userRepository.findById(tripCreateDto.getCreatorId()))
-//                .;
-        return null;
+    private Validation<Error, Long> isUserExists (Long id) {
+        return userRepository.existsById(id) ? Validation.valid(id) : Validation.invalid(Error.badRequest("USER_NOT_EXISTS"));
+    }
 
+    private Validation<Error, Long> isLocationExists (Long id) {
+        return locationRepository.existsById(id) ? Validation.valid(id) : Validation.invalid(Error.badRequest("LOCATION_NOT_FOUND"));
     }
 
     private DateProposition addNewDateProposition(){
         return null;
     }
-
-
 
 //    public List<TripDetailsDto> findAllTrips() {
 //        Optional<List<Trip>> optionalTripList = Optional.of(tripRepository.findAll());
