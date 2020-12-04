@@ -18,9 +18,11 @@ import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -47,62 +49,18 @@ public class TripService {
     public Response addTrip(TripCreateDto tripCreateDto){
         return isUserAndLocationExists(tripCreateDto)
                 .map(userEntityAndLocation -> createTrip(userEntityAndLocation, tripCreateDto))
+                .map(tripRepository::save)
                 .fold(Function.identity(), Success::ok);
-
     }
 
-    private Trip createTrip(Tuple2<UserEntity, Location> userAndLocation, TripCreateDto tripCreateDto){
-        Trip trip = modelMapper.map(tripCreateDto, Trip.class);
-        trip.addOrganizer(userAndLocation._1);
-        trip.setLocation(userAndLocation._2);
-        trip.addDateProposition(createDateProposition(tripCreateDto, userAndLocation._1));
-        return trip;
+    public Response getAllTrips(){
+        List<Trip> tripList = tripRepository.findAll();
+        return !tripList.isEmpty() ? Success.ok(tripList) : Error.badRequest("TRIP_LIST_IS_EMPTY");
     }
 
-    private Validation<Error, Tuple2<UserEntity, Location>> isUserAndLocationExists (TripCreateDto tripCreateDto){
-        String errorMessage = "";
-        boolean isNotExist = false;
 
-        Optional<UserEntity> userEntityOptional = userRepository.findById(tripCreateDto.getCreatorId());
-        Optional<Location> locationOptional = locationRepository.findById(tripCreateDto.getLocationId());
 
-        if (userEntityOptional.isEmpty()){
-            isNotExist = true;
-            errorMessage = "USER_NOT_EXISTS";
-        }
-        if (locationOptional.isEmpty()){
-            isNotExist = true;
-            if(errorMessage.isEmpty()){
-                errorMessage = "LOCATION_NOT_EXISTS";
-            } else {
-                errorMessage = "LOCATION_AND" + errorMessage;
-            }
-        }
 
-        return !isNotExist ?
-
-                Validation.valid(Tuple.of(
-                         userEntityOptional.get(),
-                locationOptional.get()
-            )) : Validation.invalid(Error.badRequest(errorMessage));
-
-    }
-
-    private DateProposition createDateProposition(TripCreateDto tripCreateDto, UserEntity userEntity){
-        return new DateProposition(
-                LocalDate.parse(tripCreateDto.getStartDate()),
-                LocalDate.parse(tripCreateDto.getEndDate()),
-                userEntity.getUsername(),
-                userEntity.getId());
-    }
-
-//    public List<TripDetailsDto> findAllTrips() {
-//        Optional<List<Trip>> optionalTripList = Optional.of(tripRepository.findAll());
-//        return optionalTripList.get()
-//                .stream()
-//                .map(this::tripToTripDto)
-//                .collect(Collectors.toList());
-//    }
 //
 //    public TripOutputDto findTripById(Long id){
 //        Optional<Trip> trip = Optional.of(tripRepository.findById(id)).orElseThrow(TripNotFoundException::new);
@@ -204,5 +162,52 @@ public class TripService {
 //                        .map(User::userToUserDetailsDto)
 //                        .collect(Collectors.toList()));
 //    }
+
+    private Trip createTrip(Tuple2<UserEntity, Location> userAndLocationEntities, TripCreateDto tripCreateDto){
+        Trip trip = modelMapper.map(tripCreateDto, Trip.class);
+        trip.addOrganizer(userAndLocationEntities._1);
+        trip.setLocation(userAndLocationEntities._2);
+        trip.addDateProposition(createDateProposition(tripCreateDto, userAndLocationEntities._1));
+        return trip;
+    }
+
+    private Validation<Error, Tuple2<UserEntity, Location>> isUserAndLocationExists (TripCreateDto tripCreateDto){
+
+        String errorMessage = "";
+        boolean isNotExist = false;
+
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(loggedUser);
+        Optional<Location> locationOptional = locationRepository.findById(tripCreateDto.getLocationId());
+
+        if (userEntityOptional.isEmpty()){
+            isNotExist = true;
+            errorMessage = "USER_NOT_EXISTS";
+        }
+        if (locationOptional.isEmpty()){
+            isNotExist = true;
+            if(errorMessage.isEmpty()){
+                errorMessage = "LOCATION_NOT_EXISTS";
+            } else {
+                errorMessage = "LOCATION_AND" + errorMessage;
+            }
+        }
+
+        return !isNotExist ?
+                Validation.valid(Tuple.of(
+                        userEntityOptional.get(),
+                        locationOptional.get()
+                )) : Validation.invalid(Error.badRequest(errorMessage));
+
+    }
+
+    private DateProposition createDateProposition(TripCreateDto tripCreateDto, UserEntity userEntity){
+        return new DateProposition(
+                LocalDate.parse(tripCreateDto.getStartDate()),
+                LocalDate.parse(tripCreateDto.getEndDate()),
+                userEntity.getUsername(),
+                userEntity.getId());
+    }
 
 }

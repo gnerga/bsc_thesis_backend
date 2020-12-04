@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.security.auth.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.configuration.UserRole;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
@@ -44,12 +45,18 @@ public class UserEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "trip_id"))
     private List<Trip> participatedTrips;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_organized_trips",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "trip_id"))
     private List<Trip> organizedTrips;
+
+//    @JsonIgnore
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinTable(nmae=)
+//    private List<Location> createdLocations;
 
     public UserEntity(
             String username,

@@ -13,8 +13,6 @@ public class TripCreateDto {
     private String tripDescription;
     private String startDate;
     private String endDate;
-
     private Long locationId;
-    private Long creatorId;
 
 }

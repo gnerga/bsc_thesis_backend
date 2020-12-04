@@ -1,14 +1,12 @@
 package com.nerga.travelCreatorApp.location;
 
+import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,12 +25,9 @@ public class Location {
     private String locationDescription;
     private String googleMapUrl;
 
-//    public Map<String, String> locationToJson(){
-//        Map<String, String> entity = new HashMap<>();
-//        entity.put("locationId",locationId.toString());
-//        entity.put("locationDescription", locationDescription);
-//        entity.put("googleMapUrl", googleMapUrl);
-//        return entity;
-//    }
+//    @ManyToOne
+//    private UserEntity ownerEntity;
+//
+//    // TODO gnerga dodać holder na zdjęcia
 
 }
