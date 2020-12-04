@@ -44,19 +44,6 @@ public class TripService {
         this.modelMapper = modelMapper;
     }
 
-//    public Response createTrip (TripCreateDto tripCreateDto) {
-//
-////        return Option.ofOptional(isUserExists(tripCreateDto.getCreatorId())
-////                .toEither();
-//
-//        return Stream.of(a)
-//
-//    }
-//
-//        return getA()
-//            .flatMap(a -> getB().map(b -> f(a,b)))
-//            .orElse("Not both present")
-
     public Response addTrip(TripCreateDto tripCreateDto){
         return isUserAndLocationExists(tripCreateDto)
                 .map(userEntityAndLocation -> createTrip(userEntityAndLocation, tripCreateDto))
@@ -76,14 +63,14 @@ public class TripService {
         String errorMessage = "";
         boolean isNotExist = false;
 
-        UserEntity userEntity = userRepository.findById(tripCreateDto.getCreatorId()).orElse(null);
-        Location location = locationRepository.findById(tripCreateDto.getLocationId()).orElse(null);
+        Optional<UserEntity> userEntityOptional = userRepository.findById(tripCreateDto.getCreatorId());
+        Optional<Location> locationOptional = locationRepository.findById(tripCreateDto.getLocationId());
 
-        if (userEntity==null){
+        if (userEntityOptional.isEmpty()){
             isNotExist = true;
             errorMessage = "USER_NOT_EXISTS";
         }
-        if (location==null){
+        if (locationOptional.isEmpty()){
             isNotExist = true;
             if(errorMessage.isEmpty()){
                 errorMessage = "LOCATION_NOT_EXISTS";
@@ -92,7 +79,12 @@ public class TripService {
             }
         }
 
-        return !isNotExist ? Validation.valid(Tuple.of(userEntity, location)) : Validation.invalid(Error.badRequest(errorMessage));
+        return !isNotExist ?
+
+                Validation.valid(Tuple.of(
+                         userEntityOptional.get(),
+                locationOptional.get()
+            )) : Validation.invalid(Error.badRequest(errorMessage));
 
     }
 
