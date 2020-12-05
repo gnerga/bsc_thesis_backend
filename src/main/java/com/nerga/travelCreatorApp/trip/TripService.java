@@ -58,10 +58,6 @@ public class TripService {
         return !tripList.isEmpty() ? Success.ok(tripList) : Error.badRequest("TRIP_LIST_IS_EMPTY");
     }
 
-
-
-
-//
 //    public TripOutputDto findTripById(Long id){
 //        Optional<Trip> trip = Optional.of(tripRepository.findById(id)).orElseThrow(TripNotFoundException::new);
 //        if (trip.isEmpty()){
