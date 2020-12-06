@@ -40,6 +40,10 @@ public class Trip {
 
     @NotNull
     private String tripDescription;
+    @NotNull
+    private boolean isActiveTrip;
+    @NotNull
+    private int maxNumberOfGivenDatePropositions;
 
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -89,6 +93,9 @@ public class Trip {
     }
 
     public void addDateProposition(DateProposition dateProposition){
+        if (datePropositionMatcher == null) {
+            datePropositionMatcher = new DatePropositionMatcher();
+        }
         datePropositionMatcher.addDateProposition(dateProposition);
     }
 
