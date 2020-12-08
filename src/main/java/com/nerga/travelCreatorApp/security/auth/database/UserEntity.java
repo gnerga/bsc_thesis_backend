@@ -157,24 +157,4 @@ public class UserEntity {
         trip.getParticipants().remove(this);
     }
 
-
-
-//    public Map<String, String> toIdJson(){
-//        Map<String, String> entity = new HashMap<>();
-//        entity.put("login", this.username);
-//        entity.put("userId", String.valueOf(this.id));
-//        return entity;
-//    }
-//
-//    public Map<String, String> toDetailsJson(){
-//        Map<String, String> entity = new HashMap<>();
-//        entity.put("login", this.username);
-//        entity.put("userId", String.valueOf(this.id));
-//        entity.put("firstName", this.firstName);
-//        entity.put("lastName", this.lastName);
-//        entity.put("email", this.email);
-//        entity.put("phoneNumber", this.phoneNumber);
-//        return entity;
-//    }
-
 }
