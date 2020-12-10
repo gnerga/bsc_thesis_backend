@@ -1,16 +1,17 @@
-package com.nerga.travelCreatorApp;
+package com.nerga.travelCreatorApp.models;
 
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.modelmapper.*;
 import org.modelmapper.convention.MatchingStrategies;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DatePropositionMatcherTest {
 
@@ -19,7 +20,7 @@ public class DatePropositionMatcherTest {
 
 
 
-    @Before
+    @BeforeEach
     public void beforeTest(){
         datePropositionMatcher = new DatePropositionMatcher();
         modelMapper = new ModelMapper();
@@ -53,10 +54,10 @@ public class DatePropositionMatcherTest {
 
         datePropositionMatcher.addDateProposition(new DateProposition(LocalDate.parse("2020-10-14"),LocalDate.parse("2020-10-21"), "test_user", 1L));
 
-        Assert.assertEquals(LocalDate.parse("2020-10-14"), datePropositionMatcher.getDatePropositionList().get(0).getStartDate());
-        Assert.assertEquals(LocalDate.parse("2020-10-21"), datePropositionMatcher.getDatePropositionList().get(0).getEndDate());
-        Assert.assertEquals("test_user", datePropositionMatcher.getDatePropositionList().get(0).getOwnerUsername());
-        Assert.assertEquals(1L, datePropositionMatcher.getDatePropositionList().get(0).getOwnerId().longValue());
+        assertEquals(LocalDate.parse("2020-10-14"), datePropositionMatcher.getDatePropositionList().get(0).getStartDate());
+        assertEquals(LocalDate.parse("2020-10-21"), datePropositionMatcher.getDatePropositionList().get(0).getEndDate());
+        assertEquals("test_user", datePropositionMatcher.getDatePropositionList().get(0).getOwnerUsername());
+        assertEquals(1L, datePropositionMatcher.getDatePropositionList().get(0).getOwnerId().longValue());
 
     }
 
@@ -70,10 +71,10 @@ public class DatePropositionMatcherTest {
         );
 
         DateProposition dateProposition = modelMapper.map(datePropositionDto, DateProposition.class);
-        Assert.assertEquals(LocalDate.parse(datePropositionDto.getStartDate()), dateProposition.getStartDate());
-        Assert.assertEquals(LocalDate.parse(datePropositionDto.getEndDate()), dateProposition.getEndDate());
-        Assert.assertEquals(datePropositionDto.getOwnerUsername(), dateProposition.getOwnerUsername());
-        Assert.assertEquals(datePropositionDto.getOwnerId(), dateProposition.getOwnerId());
+        assertEquals(LocalDate.parse(datePropositionDto.getStartDate()), dateProposition.getStartDate());
+        assertEquals(LocalDate.parse(datePropositionDto.getEndDate()), dateProposition.getEndDate());
+        assertEquals(datePropositionDto.getOwnerUsername(), dateProposition.getOwnerUsername());
+        assertEquals(datePropositionDto.getOwnerId(), dateProposition.getOwnerId());
 
     }
 

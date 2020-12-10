@@ -1,28 +1,23 @@
-package com.nerga.travelCreatorApp;
+package com.nerga.travelCreatorApp.models;
 
-import com.nerga.travelCreatorApp.location.Location;
-import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
-import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
-import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.security.dto.UserIdDto;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class UserTest {
 
     private ModelMapper modelMapper;
 
-    @Before
+    @BeforeEach
     public void beforeTest(){
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -42,11 +37,11 @@ public class UserTest {
 
         UserEntity userEntity = modelMapper.map(createUserDto, UserEntity.class);
 
-        Assert.assertEquals(createUserDto.getUsername(), userEntity.getUsername());
-        Assert.assertEquals(createUserDto.getFirstName(), userEntity.getFirstName());
-        Assert.assertEquals(createUserDto.getLastName(), userEntity.getLastName());
-        Assert.assertEquals(createUserDto.getEmail(), userEntity.getEmail());
-        Assert.assertEquals(createUserDto.getPhoneNumber(), userEntity.getPhoneNumber());
+        assertEquals(createUserDto.getUsername(), userEntity.getUsername());
+        assertEquals(createUserDto.getFirstName(), userEntity.getFirstName());
+        assertEquals(createUserDto.getLastName(), userEntity.getLastName());
+        assertEquals(createUserDto.getEmail(), userEntity.getEmail());
+        assertEquals(createUserDto.getPhoneNumber(), userEntity.getPhoneNumber());
 
     }
 
@@ -65,12 +60,12 @@ public class UserTest {
 
         UserDetailsDto userDetailsDto = modelMapper.map(userEntity, UserDetailsDto.class);
 
-        Assert.assertEquals(userEntity.getId(), userDetailsDto.getId());
-        Assert.assertEquals(userEntity.getUsername(), userDetailsDto.getUsername());
-        Assert.assertEquals(userEntity.getFirstName(), userDetailsDto.getFirstName());
-        Assert.assertEquals(userEntity.getLastName(), userDetailsDto.getLastName());
-        Assert.assertEquals(userEntity.getEmail(), userDetailsDto.getEmail());
-        Assert.assertEquals(userEntity.getPhoneNumber(), userDetailsDto.getPhoneNumber());
+        assertEquals(userEntity.getId(), userDetailsDto.getId());
+        assertEquals(userEntity.getUsername(), userDetailsDto.getUsername());
+        assertEquals(userEntity.getFirstName(), userDetailsDto.getFirstName());
+        assertEquals(userEntity.getLastName(), userDetailsDto.getLastName());
+        assertEquals(userEntity.getEmail(), userDetailsDto.getEmail());
+        assertEquals(userEntity.getPhoneNumber(), userDetailsDto.getPhoneNumber());
 
     }
 
@@ -89,8 +84,8 @@ public class UserTest {
 
         UserIdDto userIdDto = modelMapper.map(userEntity, UserIdDto.class);
 
-        Assert.assertEquals(userEntity.getId(), userIdDto.getId());
-        Assert.assertEquals(userEntity.getUsername(), userIdDto.getUsername());
+        assertEquals(userEntity.getId(), userIdDto.getId());
+        assertEquals(userEntity.getUsername(), userIdDto.getUsername());
     }
 
     @Test
@@ -107,6 +102,5 @@ public class UserTest {
 
 
     }
-
 
 }

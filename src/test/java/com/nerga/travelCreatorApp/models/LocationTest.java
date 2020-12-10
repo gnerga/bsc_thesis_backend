@@ -1,20 +1,22 @@
-package com.nerga.travelCreatorApp;
+package com.nerga.travelCreatorApp.models;
 
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class LocationTest {
 
     private ModelMapper modelMapper;
 
-    @Before
+    @BeforeEach
     public void beforeTest(){
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);

@@ -1,19 +1,20 @@
-package com.nerga.travelCreatorApp;
+package com.nerga.travelCreatorApp.models;
 
 import com.nerga.travelCreatorApp.location.Location;
-import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.trip.Trip;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.modelmapper.*;
 import org.modelmapper.convention.MatchingStrategies;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TripTest {
 
@@ -23,7 +24,7 @@ public class TripTest {
     Location location;
     Trip trip_2;
 
-    @Before
+    @BeforeEach
     public void beforeTest(){
 
         modelMapper = new ModelMapper();
@@ -96,22 +97,22 @@ public class TripTest {
         trip.setLocation(location);
         trip.addOrganizer(userEntity);
 
-        Assert.assertEquals(userEntity, trip.getOrganizers().get(0));
-        Assert.assertEquals(location, trip.getLocation());
+        assertEquals(userEntity, trip.getOrganizers().get(0));
+        assertEquals(location, trip.getLocation());
 
-        Assert.assertEquals("Wakacje Ekipy", trip.getTripName());
-        Assert.assertEquals("Najlepsze wakacje ever", trip.getTripDescription());
-        Assert.assertEquals(LocalDate.parse("2020-11-24"), trip.getStartDate());
-        Assert.assertEquals(LocalDate.parse("2020-12-04"), trip.getEndDate());
-        Assert.assertEquals(trip, userEntity.getOrganizedTrips().get(0));
+        assertEquals("Wakacje Ekipy", trip.getTripName());
+        assertEquals("Najlepsze wakacje ever", trip.getTripDescription());
+        assertEquals(LocalDate.parse("2020-11-24"), trip.getStartDate());
+        assertEquals(LocalDate.parse("2020-12-04"), trip.getEndDate());
+        assertEquals(trip, userEntity.getOrganizedTrips().get(0));
 
     }
 
     @Test
     public void addNewParticipant(){
         trip_2.addParticipant(userEntity_2);
-        Assert.assertEquals(userEntity_2, trip_2.getParticipants().get(0));
-        Assert.assertEquals(trip_2, userEntity_2.getParticipatedTrips().get(0));
+        assertEquals(userEntity_2, trip_2.getParticipants().get(0));
+        assertEquals(trip_2, userEntity_2.getParticipatedTrips().get(0));
     }
 
     @Test
@@ -128,12 +129,12 @@ public class TripTest {
         trip_2.addParticipant(userEntity_2);
         trip_2.addParticipant(userEntity_3);
 
-        Assert.assertEquals(userEntity_3, trip_2.getParticipants().get(1));
+        assertEquals(userEntity_3, trip_2.getParticipants().get(1));
 
         trip_2.removeParticipant(userEntity_2);
         trip_2.removeParticipant(userEntity_3);
 
-        Assert.assertTrue(trip_2.getParticipants().isEmpty());
+        assertTrue(trip_2.getParticipants().isEmpty());
 
     }
 
@@ -142,9 +143,9 @@ public class TripTest {
 
         trip_2.addParticipant(userEntity_2);
         TripDetailsDto tripDetailsDto = modelMapper.map(trip_2, TripDetailsDto.class);
-        Assert.assertEquals(trip_2.getTripName(), tripDetailsDto.getTripName());
-        Assert.assertEquals(trip_2.getOrganizers().get(0).getUsername(), tripDetailsDto.getOrganizers().get(0).getUsername());
-        Assert.assertEquals(trip_2.getLocation().getLocationName(), tripDetailsDto.getLocation().getLocationName());
+        assertEquals(trip_2.getTripName(), tripDetailsDto.getTripName());
+        assertEquals(trip_2.getOrganizers().get(0).getUsername(), tripDetailsDto.getOrganizers().get(0).getUsername());
+        assertEquals(trip_2.getLocation().getLocationName(), tripDetailsDto.getLocation().getLocationName());
 
     }
 
@@ -156,15 +157,14 @@ public class TripTest {
         tripCreateDto.setTripDescription("Wycieczka");
         tripCreateDto.setStartDate("2020-11-24");
         tripCreateDto.setEndDate("2020-10-24");
-        tripCreateDto.setCreatorId(1L);
         tripCreateDto.setLocationId(1L);
 
         Trip trip = modelMapper.map(tripCreateDto, Trip.class);
 
-        Assert.assertEquals(tripCreateDto.getTripName(), trip.getTripName());
-        Assert.assertEquals(tripCreateDto.getTripDescription(), trip.getTripDescription());
-        Assert.assertEquals(LocalDate.parse(tripCreateDto.getStartDate()), trip.getStartDate());
-        Assert.assertEquals(LocalDate.parse(tripCreateDto.getEndDate()), trip.getEndDate());
+        assertEquals(tripCreateDto.getTripName(), trip.getTripName());
+        assertEquals(tripCreateDto.getTripDescription(), trip.getTripDescription());
+        assertEquals(LocalDate.parse(tripCreateDto.getStartDate()), trip.getStartDate());
+        assertEquals(LocalDate.parse(tripCreateDto.getEndDate()), trip.getEndDate());
 
 
     }
