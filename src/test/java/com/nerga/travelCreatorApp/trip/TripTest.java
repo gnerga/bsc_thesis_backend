@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.models;
+package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;

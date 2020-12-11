@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.models;
+package com.nerga.travelCreatorApp.datematcher;
 
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;

@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.models;
+package com.nerga.travelCreatorApp.user;
 
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
