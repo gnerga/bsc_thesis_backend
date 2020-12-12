@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service("locationService")
@@ -61,8 +64,7 @@ public class LocationService {
 
     public Response findAllWithDescription(String fragmentOfTheDescription){
 
-        List<Location> locationsList = locationRepository.findLocationsByLocationDescriptionContains(fragmentOfTheDescription);
-
+        List<Location> locationsList = findAllLocationWithDescriptionContains(fragmentOfTheDescription);
         return !locationsList.isEmpty() ? Success.ok(returnLocationDtosList(locationsList))
                 : Error.badRequest("LOCATION_WITH_GIVEN_FRAGMENT_NOT_FOUND");
     }
@@ -97,9 +99,21 @@ public class LocationService {
         return location;
     }
 
+
     private String simplyValidatorInputEmptyString(String newInput, String oldInput){
         return newInput.isBlank() ? oldInput : newInput;
     }
+
+    private List<Location> findAllLocationWithDescriptionContains(String fragmentOfDescription){
+        List<Location> listOfAllLocation = locationRepository.findAll();
+        return listOfAllLocation
+                .stream()
+                .filter( (location) -> location.getLocationDescription().toLowerCase(Locale.ROOT)
+                        .contains(fragmentOfDescription.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toList());
+    }
+
+
 
 
 }

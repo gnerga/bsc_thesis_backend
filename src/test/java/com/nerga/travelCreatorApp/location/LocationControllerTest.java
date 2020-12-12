@@ -23,11 +23,6 @@ public class LocationControllerTest {
         location.setLocationDescription("Opis");
         location.setGoogleMapUrl("http://url.com");
 
-
-
-
-
-
     }
 
 
