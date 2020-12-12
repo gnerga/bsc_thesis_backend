@@ -54,14 +54,6 @@ public class LocationService {
 
     }
 
-    private List<LocationDetailsDto> returnLocationDtosList(List<Location> locationList){
-        return locationList
-                .stream()
-                .map(location -> modelMapper
-                        .map(location, LocationDetailsDto.class)
-                ).collect(Collectors.toList());
-    }
-
     public Response findAllWithDescription(String fragmentOfTheDescription){
 
         List<Location> locationsList = findAllLocationWithDescriptionContains(fragmentOfTheDescription);
@@ -71,7 +63,7 @@ public class LocationService {
 
     public Response updateLocationById(Long id, LocationDetailsDto locationDetailsDto) {
         return Option.ofOptional(locationRepository.findById(id))
-                .peek(location -> locationRepository.save(updateLocationEntity(locationDetailsDto, location)))
+                .peek(location -> locationRepository.save(location.updateLocationEntity(locationDetailsDto)))
                 .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_CANNOT_BE_FOUND"))
                 .fold(Function.identity(), Success::ok);
 
@@ -84,26 +76,6 @@ public class LocationService {
                 .fold(Function.identity(), Success::ok);
     }
 
-    private Location updateLocationEntity(LocationDetailsDto locationDetailsDto, Location location) {
-
-        location.setLocationName(simplyValidatorInputEmptyString(
-                locationDetailsDto.getLocationName(),
-                location.getLocationName()));
-        location.setLocationDescription(simplyValidatorInputEmptyString(
-                locationDetailsDto.getLocationDescription(),
-                location.getLocationDescription()));
-        location.setGoogleMapUrl(simplyValidatorInputEmptyString(
-                locationDetailsDto.getGoogleMapUrl(),
-                location.getGoogleMapUrl()));
-
-        return location;
-    }
-
-
-    private String simplyValidatorInputEmptyString(String newInput, String oldInput){
-        return newInput.isBlank() ? oldInput : newInput;
-    }
-
     private List<Location> findAllLocationWithDescriptionContains(String fragmentOfDescription){
         List<Location> listOfAllLocation = locationRepository.findAll();
         return listOfAllLocation
@@ -113,7 +85,13 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
-
+    private List<LocationDetailsDto> returnLocationDtosList(List<Location> locationList){
+        return locationList
+                .stream()
+                .map(location -> modelMapper
+                        .map(location, LocationDetailsDto.class)
+                ).collect(Collectors.toList());
+    }
 
 
 }
