@@ -166,6 +166,65 @@ public class LocationServiceTest {
 
     }
 
+    @Test
+    public void shouldReturnAllLocationsWithNameContainsGivenPhrase(){
+
+        // Given
+        Location location_1 = returnLocation(
+                1L,
+                "Test_1",
+                "Description_1",
+                "urlPath.com");
+
+        LocationDetailsDto locationDetails_1 = returnLocationDetailsDto(
+                1L,
+                "Test_1",
+                "Description_1",
+                "urlPath.com");
+
+
+        Location location_2 = returnLocation(
+                2L,
+                "testing_2",
+                "Description_2",
+                "urlPath.com");
+
+        LocationDetailsDto locationDetails_2 = returnLocationDetailsDto(
+                2L,
+                "testing_2",
+                "Description_2",
+                "urlPath.com");
+
+
+
+        String givenPhrase = "test";
+
+        List<Location> listOfLocation = new ArrayList<>();
+        listOfLocation.add(location_1);
+        listOfLocation.add(location_2);
+
+        List<LocationDetailsDto> locationDetailsDtoList = new ArrayList<>();
+        locationDetailsDtoList.add(locationDetails_1);
+        locationDetailsDtoList.add(locationDetails_2);
+
+        given(locationRepository.findAll()).willReturn(listOfLocation);
+        given(modelMapper.map(location_1, LocationDetailsDto.class)).willReturn(locationDetails_1);
+        given(modelMapper.map(location_2, LocationDetailsDto.class)).willReturn(locationDetails_2);
+        // When
+        Response response = underTest.findAllLocationsWithLocationName(givenPhrase);
+        // Then
+
+        Assertions.assertThat(response
+                .toResponseEntity()
+                .getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Assertions.assertThat(response
+                .toResponseEntity()
+                .getBody()).isEqualToComparingFieldByField(locationDetailsDtoList);
+
+
+    }
+
     private LocationCreateDto returnLocationCreateDto(String name,
                                                       String description,
                                                       String urlPath){

@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service("locationService")
@@ -47,9 +45,9 @@ public class LocationService {
     }
 
     public Response findAllLocationsWithLocationName(String locationName){
-        List<Location> locationsList = locationRepository.findLocationsByLocationNameContains(locationName);
+        List<Location> locationsList = findAllLocationWithLocationNameContainsGivenTextFragment(locationName);
 
-        return !locationsList.isEmpty() ? Success.ok(returnLocationDtosList(locationsList))
+        return !locationsList.isEmpty() ? Success.ok(returnLocationDTOSList(locationsList))
                 : Error.badRequest("LOCATIONS_WITH_GIVEN_LOCATION_NAME_NOT_FOUND");
 
     }
@@ -57,16 +55,8 @@ public class LocationService {
     public Response findAllWithDescription(String fragmentOfTheDescription){
 
         List<Location> locationsList = findAllLocationWithDescriptionContains(fragmentOfTheDescription);
-        return !locationsList.isEmpty() ? Success.ok(returnLocationDtosList(locationsList))
+        return !locationsList.isEmpty() ? Success.ok(returnLocationDTOSList(locationsList))
                 : Error.badRequest("LOCATION_WITH_GIVEN_FRAGMENT_NOT_FOUND");
-    }
-
-    public Response updateLocationById(Long id, LocationDetailsDto locationDetailsDto) {
-        return Option.ofOptional(locationRepository.findById(id))
-                .peek(location -> locationRepository.save(location.updateLocationEntity(locationDetailsDto)))
-                .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_CANNOT_BE_FOUND"))
-                .fold(Function.identity(), Success::ok);
-
     }
 
     public Response deleteUserById(Long id){
@@ -85,13 +75,23 @@ public class LocationService {
                 .collect(Collectors.toList());
     }
 
-    private List<LocationDetailsDto> returnLocationDtosList(List<Location> locationList){
+    private List<Location> findAllLocationWithLocationNameContainsGivenTextFragment(String fragmentOfName) {
+        List<Location> listOfAllLocation = locationRepository.findAll();
+        return listOfAllLocation.stream()
+                .filter(location -> location.getLocationName().toLowerCase(Locale.ROOT)
+                .contains(fragmentOfName.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toList());
+    }
+
+    private List<LocationDetailsDto> returnLocationDTOSList(List<Location> locationList){
         return locationList
                 .stream()
                 .map(location -> modelMapper
                         .map(location, LocationDetailsDto.class)
                 ).collect(Collectors.toList());
     }
+
+
 
 
 }
