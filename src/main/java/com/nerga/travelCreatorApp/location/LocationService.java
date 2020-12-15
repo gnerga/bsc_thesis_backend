@@ -59,6 +59,14 @@ public class LocationService {
                 : Error.badRequest("LOCATION_WITH_GIVEN_FRAGMENT_NOT_FOUND");
     }
 
+    public Response updateLocationById(Long id, LocationDetailsDto locationDetailsDto) {
+        return Option.ofOptional(locationRepository.findById(id))
+                .peek(location -> locationRepository.save(location.updateLocationEntity(locationDetailsDto)))
+                .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_CANNOT_BE_FOUND"))
+                .fold(Function.identity(), Success::ok);
+
+    }
+
     public Response deleteUserById(Long id){
         return Option.ofOptional(locationRepository.findById(id))
                 .peek(locationRepository::delete)

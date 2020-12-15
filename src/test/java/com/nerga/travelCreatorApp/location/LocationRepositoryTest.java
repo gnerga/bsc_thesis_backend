@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.location;
 
+import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,6 +44,40 @@ public class LocationRepositoryTest {
                         .hasValueSatisfying(
                                 location1 -> {
                                         assertThat(location1).isEqualToComparingFieldByField(locationReturned);
+                                }
+                        );
+        }
+
+        @Test
+        void itShouldFindByIdAndUpdateDescription() {
+
+                // Given
+
+                String newDescription = "New description";
+
+                Location location = new Location();
+                location.setLocationName("Test");
+                location.setLocationDescription("Description");
+                location.setGoogleMapUrl("urlAddress");
+                Location locationReturned = underTest.save(location);
+
+                // When
+
+                Optional<Location> optionalFoundLocation = underTest.findById(locationReturned.getLocationId());
+                Location foundLocation = optionalFoundLocation.orElse(new Location());
+
+                foundLocation.setLocationDescription(newDescription);
+
+                Location updatedLocation = underTest.save(foundLocation);
+
+                //Then
+                Optional<Location> optionalLocation = underTest.findById(updatedLocation.getLocationId());
+                assertThat(optionalLocation)
+                        .isPresent()
+                        .hasValueSatisfying(
+                                location1 -> {
+                                        assertEquals(locationReturned.getLocationId(), location1.getLocationId());
+                                        assertEquals(newDescription,  location1.getLocationDescription());
                                 }
                         );
         }
@@ -112,11 +147,6 @@ public class LocationRepositoryTest {
 
                 Assertions.assertEquals(expectedResult, foundLocation.size());
         }
-
-        void shouldReturnLocationContainsWordInLocationName(){
-
-        }
-
 
 
 }
