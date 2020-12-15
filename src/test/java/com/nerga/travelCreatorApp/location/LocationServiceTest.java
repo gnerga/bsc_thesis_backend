@@ -196,7 +196,6 @@ public class LocationServiceTest {
                 "urlPath.com");
 
 
-
         String givenPhrase = "test";
 
         List<Location> listOfLocation = new ArrayList<>();
