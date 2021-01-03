@@ -10,6 +10,7 @@ public class LocationDetailsDto {
     private Long locationId;
     private String locationName;
     private String locationDescription;
+    private String locationAddress;
     private String googleMapUrl;
 
 }

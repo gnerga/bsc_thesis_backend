@@ -27,6 +27,7 @@ public class LocationTest {
         Location location = new Location();
         location.setLocationName("Super Spot");
         location.setGoogleMapUrl("htttp/222/222");
+//        location.setLocationAddress("Warszawa, ul Podolska 90-156");
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
 
@@ -35,6 +36,7 @@ public class LocationTest {
         assertEquals(location.getGoogleMapUrl(), locationDetailsDto.getGoogleMapUrl());
         assertEquals(location.getLocationName(), locationDetailsDto.getLocationName());
         assertEquals(location.getLocationDescription(), locationDetailsDto.getLocationDescription());
+//        assertEquals(location.getLocationAddress(), locationDetailsDto.getLocationAddress());
         assertEquals(location.getLocationId(), locationDetailsDto.getLocationId());
 
     }
@@ -45,14 +47,27 @@ public class LocationTest {
         LocationCreateDto locationCreateDto = new LocationCreateDto();
         locationCreateDto.setLocationName("Super Spot");
         locationCreateDto.setLocationDescription("Uber opis ziomek");
+        locationCreateDto.setLocationAddress("Warszawa, ul Podolska 90-156");
         locationCreateDto.setGoogleMapUrl("url/url");
 
         Location location = modelMapper.map(locationCreateDto, Location.class);
         assertEquals(locationCreateDto.getLocationName(), location.getLocationName());
         assertEquals(locationCreateDto.getLocationDescription(), location.getLocationDescription());
+//        assertEquals(locationCreateDto.getLocationAddress(), location.getLocationAddress());
         assertEquals(locationCreateDto.getGoogleMapUrl(), location.getGoogleMapUrl());
 
     }
 
+    private LocationAddress locationAddress(){
+        return  new LocationAddress(
+                1L,
+                "Poland",
+                "Lodz",
+                "Tunelowa",
+                1,
+                "m. 1",
+                "90-156"
+        );
+    }
 
 }

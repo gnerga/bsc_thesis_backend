@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-
+import static org.mockito.Mockito.verify;
 
 
 public class LocationServiceTest {
@@ -220,6 +220,8 @@ public class LocationServiceTest {
         Assertions.assertThat(response
                 .toResponseEntity()
                 .getBody()).isEqualToComparingFieldByField(locationDetailsDtoList);
+
+
 
 
     }

@@ -21,12 +21,14 @@ public class Location {
 
     private String locationName;
     private String locationDescription;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="location_address_id", referencedColumnName = "id")
+    private LocationAddress locationAddress;
     private String googleMapUrl;
+    @ManyToOne
+    private UserEntity ownerEntity;
 
-//    @ManyToOne
-//    private UserEntity ownerEntity;
-//
-//    // TODO gnerga dodać holder na zdjęcia
+
 
     public Location updateLocationEntity(LocationDetailsDto locationDetailsDto) {
 
