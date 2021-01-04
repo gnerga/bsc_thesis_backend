@@ -1,9 +1,12 @@
 package com.nerga.travelCreatorApp.location;
 
 import com.nerga.travelCreatorApp.common.response.Response;
-import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.security.GeneralUserService;
+import com.nerga.travelCreatorApp.security.auth.User;
+import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
+import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,16 +19,22 @@ import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 public class LocationServiceTest {
 
     @Mock
     private LocationRepository locationRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Mock
     private ModelMapper modelMapper;
@@ -39,13 +48,27 @@ public class LocationServiceTest {
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        underTest = new LocationService(locationRepository, modelMapper);
+        underTest = new LocationService(
+                locationRepository,
+                userRepository,
+                modelMapper);
     }
 
     @Test
     public void itShouldSaveNewLocation(){
 
         // Given
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(1L);
+        userEntity.setUsername("test_user");
+        userEntity.setPassword("password_1");
+        userEntity.setFirstName("Jan");
+        userEntity.setLastName("Nowak");
+        userEntity.setEmail("test@mail.com");
+        userEntity.setPhoneNumber("1234516");
+        userEntity.setOrganizedTrips(null);
+        userEntity.setParticipatedTrips(null);
+
 
         LocationCreateDto locationCreateDto = new LocationCreateDto();
         locationCreateDto.setLocationName("Test_1");
@@ -58,6 +81,7 @@ public class LocationServiceTest {
         location_1.setGoogleMapUrl("urlAddress_1");
 
         given(modelMapper.map(locationCreateDto, Location.class)).willReturn(location_1);
+        when(userRepository.findById(locationCreateDto.getOwner().getId())).thenReturn(Optional.of(userEntity));
 
         // When
 
@@ -74,6 +98,17 @@ public class LocationServiceTest {
     @Test
     public void itShouldRequestCode200(){
 
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(1L);
+        userEntity.setUsername("test_user");
+        userEntity.setPassword("password_1");
+        userEntity.setFirstName("Jan");
+        userEntity.setLastName("Nowak");
+        userEntity.setEmail("test@mail.com");
+        userEntity.setPhoneNumber("1234516");
+        userEntity.setOrganizedTrips(null);
+        userEntity.setParticipatedTrips(null);
+
         LocationCreateDto locationCreateDto = returnLocationCreateDto(
                 "Test_1",
                 "Description_1",
@@ -89,6 +124,7 @@ public class LocationServiceTest {
 
         given(modelMapper.map(locationCreateDto, Location.class)).willReturn(location_1);
         given(locationRepository.save(location_1)).willReturn(location_1);
+        when(userRepository.findById(locationCreateDto.getOwner().getId())).thenReturn(Optional.of(userEntity));
 
         // When
 
@@ -162,7 +198,6 @@ public class LocationServiceTest {
         Assertions.assertThat(response
                 .toResponseEntity()
                 .getBody()).isEqualToComparingFieldByField(locationDetailsDtoList);
-
 
     }
 

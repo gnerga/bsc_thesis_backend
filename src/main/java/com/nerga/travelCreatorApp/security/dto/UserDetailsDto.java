@@ -18,15 +18,4 @@ public class UserDetailsDto {
     private String email;
     private String phoneNumber;
 
-//    public Map<String, String> userDetailsDtoToJsonFormat(){
-//        Map<String, String> entity = new HashMap<>();
-//        entity.put("username", this.username);
-//        entity.put("firstName", this.firstName);
-//        entity.put("lastName", this.lastName);
-//        entity.put("email", this.email);
-//        entity.put("phoneNumber", this.phoneNumber);
-//        return entity;
-//    }
-
-
 }

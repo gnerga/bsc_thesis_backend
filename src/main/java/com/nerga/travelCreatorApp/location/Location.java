@@ -5,8 +5,6 @@ import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 @Data
@@ -18,7 +16,6 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long locationId;
-
     private String locationName;
     private String locationDescription;
     @OneToOne(cascade = CascadeType.ALL)
@@ -27,8 +24,7 @@ public class Location {
     private String googleMapUrl;
     @ManyToOne
     private UserEntity ownerEntity;
-
-
+    private boolean isPrivate;
 
     public Location updateLocationEntity(LocationDetailsDto locationDetailsDto) {
 
@@ -41,6 +37,9 @@ public class Location {
         this.setGoogleMapUrl(simplyValidatorInputEmptyString(
                 locationDetailsDto.getGoogleMapUrl(),
                 this.getGoogleMapUrl()));
+        this.setPrivate(locationDetailsDto.getIsPrivate());
+        this.setLocationAddress(
+                locationAddress.updateLocationEntity(locationDetailsDto.getLocationAddress()));
 
         return this;
     }

@@ -1,6 +1,8 @@
 package com.nerga.travelCreatorApp.location;
 
 import com.nerga.travelCreatorApp.location.dto.LocationAddressCreateDto;
+import com.nerga.travelCreatorApp.location.dto.LocationAddressDetailsDto;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +58,23 @@ public class LocationAddressTest {
         LocationAddress locationAddress = modelMapper.map(locationAddressCreateDto, LocationAddress.class);
 
         assertEquals(locationAddressCreateDto.getCityName(), locationAddress.getCityName());
+    }
+
+    @Test
+    void shouldConvertLocationAddressToLocationDetailsDto(){
+        LocationAddress locationAddress = new LocationAddress(
+                1L,
+                "Poland",
+                "Lodz",
+                "Tunelowa",
+                1,
+                "m. 1",
+                "90-156"
+        );
+        LocationAddressDetailsDto locationAddressDetailsDto = modelMapper
+                .map(locationAddress, LocationAddressDetailsDto.class);
+
+        assertEquals(locationAddress.getLocationAddressId(), locationAddressDetailsDto.getLocationAddressId());
     }
 
 }

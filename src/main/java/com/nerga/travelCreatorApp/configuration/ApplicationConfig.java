@@ -1,5 +1,9 @@
 package com.nerga.travelCreatorApp.configuration;
 
+import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import org.modelmapper.*;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +34,8 @@ public class ApplicationConfig {
                 return LocalDate.parse(source, format);
             }
         };
+
+
 
 
         modelMapper.createTypeMap(String.class, LocalDate.class);

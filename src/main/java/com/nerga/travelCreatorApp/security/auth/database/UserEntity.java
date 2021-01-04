@@ -53,10 +53,9 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "trip_id"))
     private List<Trip> organizedTrips;
 
-//    @JsonIgnore
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinTable(nmae=)
-//    private List<Location> createdLocations;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Location> createdLocations;
 
     public UserEntity(
             String username,

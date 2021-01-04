@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.location.dto;
 
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,8 @@ public class LocationCreateDto {
 
     private String locationName;
     private String locationDescription;
-    private String locationAddress;
+    private LocationAddressCreateDto locationAddress;
+    private UserDetailsDto owner;
     private String googleMapUrl;
 
 }
