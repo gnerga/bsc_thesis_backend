@@ -18,6 +18,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 
@@ -30,7 +31,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 public class LocationServiceTest {
 
@@ -251,6 +251,58 @@ public class LocationServiceTest {
 
     }
 
+    @Test
+    void shouldReturnErrorWhenNotFoundLocationWithGivenId(){
+
+        // When
+        long tLocationId = 2;
+
+        Location location = getTestLocation();
+        LocationDetailsDto locationDetailsDto= getLocationDetailsDto();
+
+        when(locationRepository.findById(tLocationId)).thenReturn(Optional.empty());
+     // Then
+        Response response = underTest.findById(tLocationId);
+
+        // Assert
+        Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+    }
+
+    @Test
+    void shouldUpdateLocationAndReturnSuccess(){
+        long tLocationId = 1;
+
+        LocationDetailsDto tLocationDetailsDto = getLocationDetailsDto();
+        Location tLocation = getTestLocation();
+        Location tUpdatedLocation = getUpdatedTestLocation();
+
+
+        when(locationRepository.findById(tLocationId))
+                .thenReturn(Optional.of(tLocation));
+
+
+        when(locationRepository.save(tUpdatedLocation))
+                .thenReturn(tUpdatedLocation);
+
+        Response response = underTest.updateLocationById(tLocationId, tLocationDetailsDto);
+
+        //Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK);
+        //Assertions.assertThat(response.toResponseEntity().getBody()).isEqualToComparingFieldByField(tUpdatedLocation);
+
+
+    }
+
+    @Test
+    void shouldRemoveLocationWithGivenId(){
+        long tLocationId = 1;
+        Location tLocation = getTestLocation();
+        when(locationRepository.findById(tLocationId)).thenReturn(Optional.of(tLocation));
+        Response response = underTest.deleteLocationById(tLocationId);
+        Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK);
+
+    }
+
     private LocationCreateDto returnLocationCreateDto(String name,
                                                       String description,
                                                       String urlPath){
@@ -363,6 +415,25 @@ public class LocationServiceTest {
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
         location.setIsPrivate(false);
+        return location;
+    }
+
+    private LocationAddressDetailsDto getLocationAddressDetailsDto(){
+        return new LocationAddressDetailsDto();
+    }
+
+    private UserDetailsDto getUserDetailsDto(){
+        return new UserDetailsDto();
+    }
+
+    private Location getUpdatedTestLocation(){
+        Location location = new Location();
+        location.setLocationName("Mazury 2k21");
+        location.setGoogleMapUrl("htttp/222/222");
+        location.setLocationAddress(getTestLocationAddress());
+        location.setOwnerEntity(getTestUserEntity());
+        location.setLocationDescription("Super miejscówa, ziom");
+        location.setLocationId(1L);
         return location;
     }
 

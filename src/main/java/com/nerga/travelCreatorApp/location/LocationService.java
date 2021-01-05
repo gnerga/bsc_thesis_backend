@@ -23,6 +23,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service("locationService")
+
 public class LocationService {
 
     private final LocationRepository locationRepository;
@@ -34,6 +35,7 @@ public class LocationService {
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.modelMapper.addMappings(ApplicationPropertyMaps.userEntityFieldMapping());
         this.modelMapper.addMappings(ApplicationPropertyMaps.userEntityFieldMapping());
     }
 
@@ -89,7 +91,7 @@ public class LocationService {
                 : Error.badRequest("LOCATION_WITH_GIVEN_FRAGMENT_NOT_FOUND");
     }
 
-    public Response deleteUserById(Long id){
+    public Response deleteLocationById(Long id){
         return Option.ofOptional(locationRepository.findById(id))
                 .peek(locationRepository::delete)
                 .toEither(Error.badRequest("LOCATION_NOT_FOUND"))

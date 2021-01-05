@@ -51,7 +51,7 @@ public class LocationController {
 
     @DeleteMapping(path="deleteById/{id}")
     public ResponseEntity deleteById(@PathVariable("id")Long id){
-        return locationService.deleteUserById(id).toResponseEntity();
+        return locationService.deleteLocationById(id).toResponseEntity();
     }
 
 
