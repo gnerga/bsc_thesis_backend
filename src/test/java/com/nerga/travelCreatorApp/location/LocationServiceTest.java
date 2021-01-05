@@ -287,8 +287,8 @@ public class LocationServiceTest {
 
         Response response = underTest.updateLocationById(tLocationId, tLocationDetailsDto);
 
-        //Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK);
-        //Assertions.assertThat(response.toResponseEntity().getBody()).isEqualToComparingFieldByField(tUpdatedLocation);
+        Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(response.toResponseEntity().getBody()).isEqualToComparingFieldByField(tUpdatedLocation);
 
 
     }
@@ -402,7 +402,7 @@ public class LocationServiceTest {
                 "Tunelowa",
                 1,
                 "m. 1",
-                "90-156"
+                "90-222"
         );
     }
 
@@ -410,8 +410,8 @@ public class LocationServiceTest {
         LocationDetailsDto location = new LocationDetailsDto();
         location.setLocationName("Mazury 2k21");
         location.setGoogleMapUrl("htttp/222/222");
-        location.setLocationAddress(modelMapper.map(getTestLocationAddress(), LocationAddressDetailsDto.class));
-        location.setOwner(modelMapper.map(getTestUserEntity(), UserDetailsDto.class));
+        location.setLocationAddress(getLocationAddressDetailsDto());
+        location.setOwner(getUserDetailsDto());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
         location.setIsPrivate(false);
@@ -419,11 +419,26 @@ public class LocationServiceTest {
     }
 
     private LocationAddressDetailsDto getLocationAddressDetailsDto(){
-        return new LocationAddressDetailsDto();
+        return new LocationAddressDetailsDto(
+                1L,
+                "Poland",
+                "Lodz",
+                "Tunelowa",
+                1,
+                "m. 1",
+                "90-222"
+        );
     }
 
     private UserDetailsDto getUserDetailsDto(){
-        return new UserDetailsDto();
+        return new UserDetailsDto(
+                1L,
+                "test",
+                "grzegorz",
+                "grunt",
+                "greg@greg.com",
+                "66622255"
+        );
     }
 
     private Location getUpdatedTestLocation(){
