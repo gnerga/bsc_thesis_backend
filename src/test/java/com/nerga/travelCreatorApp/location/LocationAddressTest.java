@@ -2,12 +2,9 @@ package com.nerga.travelCreatorApp.location;
 
 import com.nerga.travelCreatorApp.location.dto.LocationAddressCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationAddressDetailsDto;
-import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
-import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 

@@ -47,7 +47,6 @@ public class LocationService {
             return Error.badRequest("USER_NOT_FOUND");
         }
 
-
         Location location = modelMapper.map(locationCreateDto, Location.class);
         location.setOwnerEntity(owner);
 
@@ -69,7 +68,7 @@ public class LocationService {
     }
 
     public Response findById(Long id){
-        return Option.of(locationRepository.findById(id))
+        return Option.ofOptional(locationRepository.findById(id))
                 .map(locationEntity -> modelMapper.map(locationEntity, LocationDetailsDto.class))
                 .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);

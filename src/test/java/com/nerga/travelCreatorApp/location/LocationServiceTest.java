@@ -215,6 +215,8 @@ public class LocationServiceTest {
         Response response = underTest.findAllLocationsWithLocationName(givenPhrase);
         // Then
 
+        System.out.println(response.toResponseEntity().getBody());
+
         Assertions.assertThat(response
                 .toResponseEntity()
                 .getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -225,6 +227,27 @@ public class LocationServiceTest {
 
 
 
+
+    }
+
+    @Test
+    void shouldReturnLocationWithGivenId(){
+
+        // When
+        long tLocationId = 1;
+
+        Location location = getTestLocation();
+        LocationDetailsDto locationDetailsDto= getLocationDetailsDto();
+
+        when(locationRepository.findById(tLocationId)).thenReturn(Optional.of(location));
+        when(modelMapper.map(location, LocationDetailsDto.class)).thenReturn(locationDetailsDto);
+
+        // Then
+        Response response = underTest.findById(tLocationId);
+
+        // Assert
+        Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(response.toResponseEntity().getBody()).isEqualToComparingFieldByField(locationDetailsDto);
 
     }
 
