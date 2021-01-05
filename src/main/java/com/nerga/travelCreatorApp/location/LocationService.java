@@ -8,6 +8,8 @@ import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
+import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
+import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -36,14 +38,20 @@ public class LocationService {
     }
 
     public Response createNewLocation (LocationCreateDto locationCreateDto) {
+        UserEntity owner;
 
-        Optional<UserEntity> owner = userRepository.findById(locationCreateDto.getOwner().getId());
-        if (owner.isEmpty()) {
+        try{
+            owner = Option.ofOptional(userRepository.findById(locationCreateDto.getOwner().getId()))
+                    .getOrElseThrow(()-> new MyUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
             return Error.badRequest("USER_NOT_FOUND");
         }
 
-        Location location = locationRepository.save(modelMapper.map(locationCreateDto, Location.class));
-        location.setOwnerEntity(owner.get());
+
+        Location location = modelMapper.map(locationCreateDto, Location.class);
+        location.setOwnerEntity(owner);
+
+        location = locationRepository.save(location);
 
         return Success.accepted(location);
     }

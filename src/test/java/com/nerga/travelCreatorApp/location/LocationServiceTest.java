@@ -1,12 +1,16 @@
 package com.nerga.travelCreatorApp.location;
 
+import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
 import com.nerga.travelCreatorApp.common.response.Response;
+import com.nerga.travelCreatorApp.location.dto.LocationAddressCreateDto;
+import com.nerga.travelCreatorApp.location.dto.LocationAddressDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.GeneralUserService;
 import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +52,7 @@ public class LocationServiceTest {
     @BeforeEach
     public void setUp(){
         MockitoAnnotations.initMocks(this);
+        modelMapper.addMappings(ApplicationPropertyMaps.userEntityFieldMapping());
         underTest = new LocationService(
                 locationRepository,
                 userRepository,
@@ -58,29 +63,11 @@ public class LocationServiceTest {
     public void itShouldSaveNewLocation(){
 
         // Given
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
-        userEntity.setUsername("test_user");
-        userEntity.setPassword("password_1");
-        userEntity.setFirstName("Jan");
-        userEntity.setLastName("Nowak");
-        userEntity.setEmail("test@mail.com");
-        userEntity.setPhoneNumber("1234516");
-        userEntity.setOrganizedTrips(null);
-        userEntity.setParticipatedTrips(null);
+        UserEntity userEntity = getTestUserEntity();
+        LocationCreateDto locationCreateDto = returnLocationCreateDto("test", "desc", "url");
+        Location location_1 = getTestLocation();
 
-
-        LocationCreateDto locationCreateDto = new LocationCreateDto();
-        locationCreateDto.setLocationName("Test_1");
-        locationCreateDto.setLocationDescription("Description_1");
-        locationCreateDto.setGoogleMapUrl("urlAddress_1");
-
-        Location location_1 = new Location();
-        location_1.setLocationName("Test_1");
-        location_1.setLocationDescription("Description_1");
-        location_1.setGoogleMapUrl("urlAddress_1");
-
-        given(modelMapper.map(locationCreateDto, Location.class)).willReturn(location_1);
+        when(modelMapper.map(locationCreateDto, Location.class)).thenReturn(location_1);
         when(userRepository.findById(locationCreateDto.getOwner().getId())).thenReturn(Optional.of(userEntity));
 
         // When
@@ -98,33 +85,13 @@ public class LocationServiceTest {
     @Test
     public void itShouldRequestCode200(){
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
-        userEntity.setUsername("test_user");
-        userEntity.setPassword("password_1");
-        userEntity.setFirstName("Jan");
-        userEntity.setLastName("Nowak");
-        userEntity.setEmail("test@mail.com");
-        userEntity.setPhoneNumber("1234516");
-        userEntity.setOrganizedTrips(null);
-        userEntity.setParticipatedTrips(null);
+        UserEntity userEntity = getTestUserEntity();
+        LocationCreateDto locationCreateDto = returnLocationCreateDto("test", "desc", "url");
+        Location location_1 = getTestLocation();
 
-        LocationCreateDto locationCreateDto = returnLocationCreateDto(
-                "Test_1",
-                "Description_1",
-                "urlAddress_1"
-        );
-
-        Location location_1 = returnLocation(
-                1L,
-                "Test_1",
-                "Description_1",
-                "urlAddress_1"
-        );
-
-        given(modelMapper.map(locationCreateDto, Location.class)).willReturn(location_1);
-        given(locationRepository.save(location_1)).willReturn(location_1);
+        when(modelMapper.map(locationCreateDto, Location.class)).thenReturn(location_1);
         when(userRepository.findById(locationCreateDto.getOwner().getId())).thenReturn(Optional.of(userEntity));
+        when(locationRepository.save(location_1)).thenReturn(location_1);
 
         // When
 
@@ -269,9 +236,21 @@ public class LocationServiceTest {
         locationCreateDto.setLocationName(name);
         locationCreateDto.setLocationDescription(description);
         locationCreateDto.setGoogleMapUrl(urlPath);
+        locationCreateDto.setLocationAddress(getTestLocationAddressCreateDto());
+        locationCreateDto.setOwner(getTestUserDetailsDto());
 
         return locationCreateDto;
 
+    }
+
+    private UserDetailsDto getTestUserDetailsDto(){
+        return new UserDetailsDto(
+                1L,
+        "test_user",
+        "Jan",
+        "Nowak",
+        "test@mail.com",
+        "1234516");
     }
 
     private Location returnLocation(
@@ -303,6 +282,65 @@ public class LocationServiceTest {
         locationDetailsDto.setLocationDescription(description);
         locationDetailsDto.setGoogleMapUrl(urlPath);
         return locationDetailsDto;
+    }
+
+
+    private UserEntity getTestUserEntity(){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(1L);
+        userEntity.setUsername("test_user");
+        userEntity.setPassword("password_1");
+        userEntity.setFirstName("Jan");
+        userEntity.setLastName("Nowak");
+        userEntity.setEmail("test@mail.com");
+        userEntity.setPhoneNumber("1234516");
+        return userEntity;
+    }
+
+    private Location getTestLocation(){
+        Location location = new Location();
+        location.setLocationName("Super Spot");
+        location.setGoogleMapUrl("htttp/222/222");
+        location.setLocationAddress(getTestLocationAddress());
+        location.setOwnerEntity(getTestUserEntity());
+        location.setLocationDescription("Super miejscówa, ziom");
+        location.setLocationId(1L);
+        return location;
+    }
+
+    private LocationAddressCreateDto getTestLocationAddressCreateDto(){
+        return new LocationAddressCreateDto(
+                "Poland",
+                "Lodz",
+                "Tunelowa",
+                1,
+                "m. 1",
+                "90-156"
+        );
+    }
+
+    private LocationAddress getTestLocationAddress(){
+        return  new LocationAddress(
+                1L,
+                "Poland",
+                "Lodz",
+                "Tunelowa",
+                1,
+                "m. 1",
+                "90-156"
+        );
+    }
+
+    private LocationDetailsDto getLocationDetailsDto(){
+        LocationDetailsDto location = new LocationDetailsDto();
+        location.setLocationName("Mazury 2k21");
+        location.setGoogleMapUrl("htttp/222/222");
+        location.setLocationAddress(modelMapper.map(getTestLocationAddress(), LocationAddressDetailsDto.class));
+        location.setOwner(modelMapper.map(getTestUserEntity(), UserDetailsDto.class));
+        location.setLocationDescription("Super miejscówa, ziom");
+        location.setLocationId(1L);
+        location.setIsPrivate(false);
+        return location;
     }
 
 }

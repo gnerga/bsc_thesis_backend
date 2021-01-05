@@ -132,6 +132,7 @@ public class LocationTest {
         location.setOwner(modelMapper.map(getTestUserEntity(), UserDetailsDto.class));
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
+        location.setIsPrivate(false);
         return location;
     }
 
