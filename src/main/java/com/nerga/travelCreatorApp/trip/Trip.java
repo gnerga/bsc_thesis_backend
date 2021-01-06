@@ -56,6 +56,35 @@ public class Trip {
     @JoinColumn(name = "datePropositionMatcher_id", referencedColumnName = "id")
     private DatePropositionMatcher datePropositionMatcher;
 
+    public Trip(
+            Long tripId,
+                String tripName,
+                Location location,
+                String tripDescription,
+                boolean isActiveTrip,
+                int maxNumberOfGivenDatePropositions,
+                LocalDate startDate,
+                LocalDate endDate,
+                LocalDate deadLine) {
+
+        this.tripId = tripId;
+        this.tripName = tripName;
+        this.location = location;
+        this.tripDescription = tripDescription;
+        this.isActiveTrip = isActiveTrip;
+        this.maxNumberOfGivenDatePropositions = maxNumberOfGivenDatePropositions;
+        this.startDate = startDate;
+        this.endDate = endDate;
+
+        this.datePropositionMatcher = new DatePropositionMatcher(
+                maxNumberOfGivenDatePropositions,
+                deadLine
+                );
+        this.organizers = new ArrayList<>();
+        this.participants = new ArrayList<>();
+
+    }
+
     @JsonManagedReference
     @ManyToMany(mappedBy = "organizedTrips")
 //    @Singular
@@ -65,6 +94,8 @@ public class Trip {
     @ManyToMany(mappedBy = "participatedTrips")
 //    @Singular
     private List<UserEntity> participants;
+
+
 
     public void addOrganizer(UserEntity user) {
         if (organizers == null) {
@@ -93,10 +124,7 @@ public class Trip {
     }
 
     public void addDateProposition(DateProposition dateProposition){
-        if (datePropositionMatcher == null) {
-            datePropositionMatcher = new DatePropositionMatcher();
-        }
-        datePropositionMatcher.addDateProposition(dateProposition);
+           datePropositionMatcher.addDateProposition(dateProposition);
     }
 
     public boolean removeDateProposition(DateProposition dateProposition) {

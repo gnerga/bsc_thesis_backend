@@ -22,7 +22,7 @@ public class DatePropositionMatcherTest {
 
     @BeforeEach
     public void beforeTest(){
-        datePropositionMatcher = new DatePropositionMatcher();
+        datePropositionMatcher = new DatePropositionMatcher(7, LocalDate.parse("2020-10-14"));
         modelMapper = new ModelMapper();
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);

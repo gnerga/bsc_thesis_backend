@@ -1,4 +1,4 @@
 package com.nerga.travelCreatorApp.costallocation;
 
-public class CostAllocationRepository {
+public interface CostAllocationRepository {
 }

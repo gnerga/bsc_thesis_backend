@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.datepropositionmatcher;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +31,17 @@ public class DatePropositionMatcher {
 
     private int planedTripLength;
 
-    public DatePropositionMatcher(){
+    private boolean isAddNewPropositionIsAvailable;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate addPropositionDeadline;
+
+    public DatePropositionMatcher(
+            int planedTripLength,
+            LocalDate deadline
+    ){
+        this.isAddNewPropositionIsAvailable = true;
+        this.planedTripLength = planedTripLength;
+        this.addPropositionDeadline = deadline;
         this.datePropositionList = new ArrayList<>();
     }
 

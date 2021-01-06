@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.user;
 
 import com.nerga.travelCreatorApp.security.GeneralUserService;
+import com.nerga.travelCreatorApp.security.auth.UserDaoInterface;
 import com.nerga.travelCreatorApp.security.auth.UserService;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
@@ -15,7 +16,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserServiceTest {
 
+    @Mock
+    UserDaoInterface userDaoInterface;
 
+    UserService useCase;
+
+    @BeforeEach
+    void setUp(){
+        MockitoAnnotations.initMocks(this);
+        useCase = new UserService(userDaoInterface);
+    }
 
     private UserEntity getTestUserEntity(){
         UserEntity userEntity = new UserEntity();
