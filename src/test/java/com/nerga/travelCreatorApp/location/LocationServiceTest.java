@@ -397,7 +397,7 @@ public class LocationServiceTest {
         locationDetailsDto.setGoogleMapUrl("htttp/222/222");
         locationDetailsDto.setLocationAddress(getLocationAddressDetailsDto());
         locationDetailsDto.setOwner(getTestUserDetailsDto());
-
+        locationDetailsDto.setIsPrivate(false);
         return locationDetailsDto;
     }
 
@@ -409,6 +409,7 @@ public class LocationServiceTest {
         location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
+        location.setPrivate(false);
         return location;
     }
 
@@ -469,6 +470,7 @@ public class LocationServiceTest {
         location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
+        location.setPrivate(false);
         return location;
     }
 

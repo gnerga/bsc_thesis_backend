@@ -62,6 +62,7 @@ public class GeneralUserService {
     public Response updateUserById(Long id, UserDetailsDto userDetailsDto) {
         return Option.ofOptional(userRepository.findById(id))
                 .map(userEntity -> userRepository.save(updateUserEntity(userDetailsDto, userEntity)))
+                .map(userEntity -> modelMapper.map(userEntity, UserIdDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
@@ -76,6 +77,7 @@ public class GeneralUserService {
     public Response updateUserPasswordByUsername(String username, UserCredentialsDto userCredentialsDto){
         return Option.ofOptional(userRepository.findByUsername(username))
                 .peek(userEntity -> userEntity.setPassword(passwordEncoder.encode(userCredentialsDto.getPassword())))
+                .map(userEntity -> modelMapper.map(userEntity, UserIdDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
