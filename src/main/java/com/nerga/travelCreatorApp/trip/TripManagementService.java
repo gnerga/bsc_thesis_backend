@@ -58,25 +58,43 @@ public class TripManagementService {
         return !tripList.isEmpty() ? Success.ok(tripList) : Error.badRequest("TRIP_LIST_IS_EMPTY");
     }
 
-    public Response addNewOrganizer(){
+    public Response addNewOrganizerById(){
         return null;
     }
 
-    public Response removeOrganizer(){
+    public Response addNewOrganizerByUsername(){
         return null;
     }
 
-    public Response addNewParticipant(){
+    public Response removeOrganizerById(){
         return null;
     }
 
-    public Response removeParticipant(){
+    public Response removeOrganizerByUsername(){
         return null;
     }
 
-    public Response modifyTrip(){
+    public Response addNewParticipantById(){
         return null;
     }
+
+    public Response addNewParticipantByUsername(){
+        return null;
+    }
+
+    public Response removeParticipantById(){
+        return null;
+    }
+
+    public Response removeParticipantByUsername(){
+        return null;
+    }
+
+    public Response updateTrip(){
+        return null;
+    }
+
+    public Response triggerAlgorithm() {return null;}
 
     public Response deleteTripByLoggedUser(){
         return null;

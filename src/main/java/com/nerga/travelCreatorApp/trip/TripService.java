@@ -48,6 +48,8 @@ public class TripService {
         return null;
     }
 
+    public Response leaveTripWithGivenId(){ return null; }
+
     public Response findAllLoggedInUserDatePropositions(){
         return null;
     }
