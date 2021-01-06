@@ -95,7 +95,7 @@ public class LocationTest {
         location.setLocationName("Super Spot");
         location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(getTestLocationAddress());
-        location.setOwnerEntity(getTestUserEntity());
+        location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
         return location;

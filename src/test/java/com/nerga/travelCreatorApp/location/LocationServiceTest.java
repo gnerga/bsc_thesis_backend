@@ -6,8 +6,6 @@ import com.nerga.travelCreatorApp.location.dto.LocationAddressCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationAddressDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
-import com.nerga.travelCreatorApp.security.GeneralUserService;
-import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
@@ -18,7 +16,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 
@@ -64,7 +61,7 @@ public class LocationServiceTest {
 
         // Given
         UserEntity userEntity = getTestUserEntity();
-        LocationCreateDto locationCreateDto = returnLocationCreateDto("test", "desc", "url");
+        LocationCreateDto locationCreateDto = getLocationCreateDtoWithArguments("test", "desc", "url");
         Location location_1 = getTestLocation();
 
         when(modelMapper.map(locationCreateDto, Location.class)).thenReturn(location_1);
@@ -86,10 +83,12 @@ public class LocationServiceTest {
     public void itShouldRequestCode200(){
 
         UserEntity userEntity = getTestUserEntity();
-        LocationCreateDto locationCreateDto = returnLocationCreateDto("test", "desc", "url");
+        LocationCreateDto locationCreateDto = getLocationCreateDto();
         Location location_1 = getTestLocation();
+        LocationDetailsDto locationDetailsDto = getLocationDetailsDto();
 
         when(modelMapper.map(locationCreateDto, Location.class)).thenReturn(location_1);
+        when(modelMapper.map(location_1, LocationDetailsDto.class)).thenReturn(locationDetailsDto);
         when(userRepository.findById(locationCreateDto.getOwner().getId())).thenReturn(Optional.of(userEntity));
         when(locationRepository.save(location_1)).thenReturn(location_1);
 
@@ -105,7 +104,7 @@ public class LocationServiceTest {
 
         Assertions.assertThat(response
                 .toResponseEntity()
-                .getBody()).isEqualToComparingFieldByField(location_1);
+                .getBody()).isEqualToComparingFieldByField(locationDetailsDto);
 
 
     }
@@ -114,26 +113,26 @@ public class LocationServiceTest {
     public void shouldReturnAllLocationsWithDescriptionsContainsGivenPhrase(){
 
         // Given
-        Location location_1 = returnLocation(
+        Location location_1 = getTestLocationWithGivenArgument(
                 1L,
                 "Test_1",
                 "Description_1",
                 "urlPath.com");
 
-        LocationDetailsDto locationDetails_1 = returnLocationDetailsDto(
+        LocationDetailsDto locationDetails_1 = getLocationDetailsDtoWithArguments(
                 1L,
                 "Test_1",
                 "Description_1",
                 "urlPath.com");
 
 
-        Location location_2 = returnLocation(
+        Location location_2 = getTestLocationWithGivenArgument(
                 2L,
                 "Test_2",
                 "Description_2",
                 "urlPath.com");
 
-        LocationDetailsDto locationDetails_2 = returnLocationDetailsDto(
+        LocationDetailsDto locationDetails_2 = getLocationDetailsDtoWithArguments(
                 2L,
                 "Test_2",
                 "Description_2",
@@ -172,26 +171,26 @@ public class LocationServiceTest {
     public void shouldReturnAllLocationsWithNameContainsGivenPhrase(){
 
         // Given
-        Location location_1 = returnLocation(
+        Location location_1 = getTestLocationWithGivenArgument(
                 1L,
                 "Test_1",
                 "Description_1",
                 "urlPath.com");
 
-        LocationDetailsDto locationDetails_1 = returnLocationDetailsDto(
+        LocationDetailsDto locationDetails_1 = getLocationDetailsDtoWithArguments(
                 1L,
                 "Test_1",
                 "Description_1",
                 "urlPath.com");
 
 
-        Location location_2 = returnLocation(
+        Location location_2 = getTestLocationWithGivenArgument(
                 2L,
                 "testing_2",
                 "Description_2",
                 "urlPath.com");
 
-        LocationDetailsDto locationDetails_2 = returnLocationDetailsDto(
+        LocationDetailsDto locationDetails_2 = getLocationDetailsDtoWithArguments(
                 2L,
                 "testing_2",
                 "Description_2",
@@ -273,7 +272,7 @@ public class LocationServiceTest {
     void shouldUpdateLocationAndReturnSuccess(){
         long tLocationId = 1;
 
-        LocationDetailsDto tLocationDetailsDto = getLocationDetailsDto();
+        LocationDetailsDto tLocationDetailsDto = getUpdatedLocationDetailsDto();
         Location tLocation = getTestLocation();
         Location tUpdatedLocation = getUpdatedTestLocation();
 
@@ -281,6 +280,8 @@ public class LocationServiceTest {
         when(locationRepository.findById(tLocationId))
                 .thenReturn(Optional.of(tLocation));
 
+        when(modelMapper.map(tUpdatedLocation, LocationDetailsDto.class))
+                .thenReturn(tLocationDetailsDto);
 
         when(locationRepository.save(tUpdatedLocation))
                 .thenReturn(tUpdatedLocation);
@@ -288,7 +289,7 @@ public class LocationServiceTest {
         Response response = underTest.updateLocationById(tLocationId, tLocationDetailsDto);
 
         Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(response.toResponseEntity().getBody()).isEqualToComparingFieldByField(tUpdatedLocation);
+        Assertions.assertThat(response.toResponseEntity().getBody()).isEqualToComparingFieldByField(tLocationDetailsDto);
 
 
     }
@@ -303,7 +304,7 @@ public class LocationServiceTest {
 
     }
 
-    private LocationCreateDto returnLocationCreateDto(String name,
+    private LocationCreateDto getLocationCreateDtoWithArguments(String name,
                                                       String description,
                                                       String urlPath){
 
@@ -318,17 +319,20 @@ public class LocationServiceTest {
 
     }
 
-    private UserDetailsDto getTestUserDetailsDto(){
-        return new UserDetailsDto(
-                1L,
-        "test_user",
-        "Jan",
-        "Nowak",
-        "test@mail.com",
-        "1234516");
+    private LocationCreateDto getLocationCreateDto(){
+
+        LocationCreateDto locationCreateDto = new LocationCreateDto();
+        locationCreateDto.setLocationName("Super Spot");
+        locationCreateDto.setLocationDescription("Super miejscówa, ziom");
+        locationCreateDto.setGoogleMapUrl("htttp/222/222");
+        locationCreateDto.setLocationAddress(getTestLocationAddressCreateDto());
+        locationCreateDto.setOwner(getTestUserDetailsDto());
+
+        return locationCreateDto;
+
     }
 
-    private Location returnLocation(
+    private Location getTestLocationWithGivenArgument(
                                         Long id,
                                         String name,
                                         String description,
@@ -345,7 +349,7 @@ public class LocationServiceTest {
 
     }
 
-    private LocationDetailsDto returnLocationDetailsDto(
+    private LocationDetailsDto getLocationDetailsDtoWithArguments(
             Long id,
             String name,
             String description,
@@ -356,9 +360,22 @@ public class LocationServiceTest {
         locationDetailsDto.setLocationName(name);
         locationDetailsDto.setLocationDescription(description);
         locationDetailsDto.setGoogleMapUrl(urlPath);
+        locationDetailsDto.setLocationAddress(getLocationAddressDetailsDto());
+        locationDetailsDto.setOwner(getTestUserDetailsDto());
         return locationDetailsDto;
     }
 
+
+
+    private UserDetailsDto getTestUserDetailsDto(){
+        return new UserDetailsDto(
+                1L,
+                "test_user",
+                "Jan",
+                "Nowak",
+                "test@mail.com",
+                "1234516");
+    }
 
     private UserEntity getTestUserEntity(){
         UserEntity userEntity = new UserEntity();
@@ -372,12 +389,24 @@ public class LocationServiceTest {
         return userEntity;
     }
 
+    private LocationDetailsDto getLocationDetailsDto(){
+        LocationDetailsDto locationDetailsDto = new LocationDetailsDto();
+        locationDetailsDto.setLocationId(1L);
+        locationDetailsDto.setLocationName("Super Spot");
+        locationDetailsDto.setLocationDescription("Super miejscówa, ziom");
+        locationDetailsDto.setGoogleMapUrl("htttp/222/222");
+        locationDetailsDto.setLocationAddress(getLocationAddressDetailsDto());
+        locationDetailsDto.setOwner(getTestUserDetailsDto());
+
+        return locationDetailsDto;
+    }
+
     private Location getTestLocation(){
         Location location = new Location();
         location.setLocationName("Super Spot");
         location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(getTestLocationAddress());
-        location.setOwnerEntity(getTestUserEntity());
+        location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
         return location;
@@ -406,12 +435,12 @@ public class LocationServiceTest {
         );
     }
 
-    private LocationDetailsDto getLocationDetailsDto(){
+    private LocationDetailsDto getUpdatedLocationDetailsDto(){
         LocationDetailsDto location = new LocationDetailsDto();
         location.setLocationName("Mazury 2k21");
         location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(getLocationAddressDetailsDto());
-        location.setOwner(getUserDetailsDto());
+        location.setOwner(getTestUserDetailsDto());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
         location.setIsPrivate(false);
@@ -430,23 +459,14 @@ public class LocationServiceTest {
         );
     }
 
-    private UserDetailsDto getUserDetailsDto(){
-        return new UserDetailsDto(
-                1L,
-                "test",
-                "grzegorz",
-                "grunt",
-                "greg@greg.com",
-                "66622255"
-        );
-    }
+
 
     private Location getUpdatedTestLocation(){
         Location location = new Location();
         location.setLocationName("Mazury 2k21");
         location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(getTestLocationAddress());
-        location.setOwnerEntity(getTestUserEntity());
+        location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
         return location;

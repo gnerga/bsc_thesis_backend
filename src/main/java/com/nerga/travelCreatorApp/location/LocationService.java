@@ -36,7 +36,7 @@ public class LocationService {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.modelMapper.addMappings(ApplicationPropertyMaps.userEntityFieldMapping());
-        this.modelMapper.addMappings(ApplicationPropertyMaps.userEntityFieldMapping());
+
     }
 
     public Response createNewLocation (LocationCreateDto locationCreateDto) {
@@ -50,23 +50,27 @@ public class LocationService {
         }
 
         Location location = modelMapper.map(locationCreateDto, Location.class);
-        location.setOwnerEntity(owner);
+        location.setOwner(owner);
 
         location = locationRepository.save(location);
 
-        return Success.accepted(location);
+        LocationDetailsDto locationDetailsDto = modelMapper.map(location, LocationDetailsDto.class);
+
+        return Success.accepted(locationDetailsDto);
     }
 
     public Response updateLocationById(Long id, LocationDetailsDto locationDetailsDto) {
         return Option.ofOptional(locationRepository.findById(id))
-                .peek(location -> locationRepository.save(location.updateLocationEntity(locationDetailsDto)))
+                .map(location -> locationRepository.save(location.updateLocationEntity(locationDetailsDto)))
+                .map(locationUpdated -> modelMapper.map(locationUpdated, LocationDetailsDto.class))
                 .toEither(Error.badRequest("LOCATION_WITH_GIVEN_ID_CANNOT_BE_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
 
     public Response findAllLocations(){
         List<Location> locationList = locationRepository.findAll();
-        return !locationList.isEmpty() ? Success.ok(locationList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+        List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
+        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
 
     public Response findById(Long id){

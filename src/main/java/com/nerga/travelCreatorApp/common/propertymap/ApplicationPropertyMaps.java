@@ -10,12 +10,12 @@ public class ApplicationPropertyMaps {
         return new PropertyMap<Location, LocationDetailsDto>() {
             @Override
             protected void configure() {
-                map().getOwner().setId(source.getOwnerEntity().getId());
-                map().getOwner().setUsername(source.getOwnerEntity().getUsername());
-                map().getOwner().setFirstName(source.getOwnerEntity().getFirstName());
-                map().getOwner().setLastName(source.getOwnerEntity().getLastName());
-                map().getOwner().setEmail(source.getOwnerEntity().getEmail());
-                map().getOwner().setPhoneNumber(source.getOwnerEntity().getPhoneNumber());
+                map().getOwner().setId(source.getOwner().getId());
+                map().getOwner().setUsername(source.getOwner().getUsername());
+                map().getOwner().setFirstName(source.getOwner().getFirstName());
+                map().getOwner().setLastName(source.getOwner().getLastName());
+                map().getOwner().setEmail(source.getOwner().getEmail());
+                map().getOwner().setPhoneNumber(source.getOwner().getPhoneNumber());
             }
         };
     }

@@ -23,7 +23,7 @@ public class Location {
     private LocationAddress locationAddress;
     private String googleMapUrl;
     @ManyToOne
-    private UserEntity ownerEntity;
+    private UserEntity owner;
     private boolean isPrivate;
 
     public Location updateLocationEntity(LocationDetailsDto locationDetailsDto) {
