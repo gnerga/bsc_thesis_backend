@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.user;
 
 import com.nerga.travelCreatorApp.security.GeneralUserService;
+import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.UserDaoInterface;
 import com.nerga.travelCreatorApp.security.auth.UserService;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
@@ -12,7 +13,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
 
@@ -27,9 +34,23 @@ public class UserServiceTest {
         useCase = new UserService(userDaoInterface);
     }
 
-    private UserEntity getTestUserEntity(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
+    @Test
+    void shouldReturnUserDetails(){
+        // given
+            String tUsername = "test_user";
+            User tUser = getTestUser();
+        // when
+            when(userDaoInterface
+                    .selectApplicationUserByUserName(tUsername))
+                    .thenReturn(Optional.of(tUser));
+        //then
+            var result = useCase.loadUserByUsername(tUsername);
+            assertEquals(result.getClass(), User.class);
+    }
+
+    private User getTestUser(){
+        User userEntity = new User();
+
         userEntity.setUsername("test_user");
         userEntity.setPassword("password_1");
         userEntity.setFirstName("Jan");

@@ -1,16 +1,22 @@
 package com.nerga.travelCreatorApp.user;
 
+import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.security.GeneralUserService;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
+import com.nerga.travelCreatorApp.security.dto.UserIdDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static org.mockito.Mockito.when;
 
 public class GeneralUserServiceTest {
 
@@ -31,6 +37,46 @@ public class GeneralUserServiceTest {
 
     @Test
     void shouldCreateUserAndReturnUserDetailsDtoAndAcceptedStatus(){
+        // give
+        CreateUserDto tCreateUserDto = getTestCreateUserDto();
+        UserEntity tUserEntity = getTestUserEntity();
+        UserIdDto tUserIdDto = getTestUserIdDto();
+        // when
+        when(userRepository.existsByUsername(tCreateUserDto.getUsername())).thenReturn(false);
+        when(passwordEncoder.encode(tCreateUserDto.getPassword())).thenReturn("asdasdasd");
+        when(userRepository.save(tUserEntity)).thenReturn(tUserEntity);
+        when(modelMapper.map(tUserEntity, UserIdDto.class)).thenReturn(tUserIdDto);
+
+        // then
+
+        var response = useCase.createUser(tCreateUserDto);
+
+        // assert
+
+    Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+        Assertions.assertThat(response.toResponseEntity().getBody()).isEqualToComparingFieldByField(tUserIdDto);
+
+    }
+
+    @Test
+    void shouldReturnErrorWhenUserNameIsAlreadyInUsage(){
+        // give
+        CreateUserDto tCreateUserDto = getTestCreateUserDto();
+        UserEntity tUserEntity = getTestUserEntity();
+        UserIdDto tUserIdDto = getTestUserIdDto();
+        Error tError = Error.badRequest("USERNAME_ALREADY_IN_USE");
+        // when
+        when(userRepository.existsByUsername(tCreateUserDto.getUsername())).thenReturn(true);
+
+        // then
+
+        var response = useCase.createUser(tCreateUserDto);
+
+        // assert
+
+        Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        Assertions.assertThat(response.toResponseEntity().getBody()).isEqualTo(tError.getCode());
+
 
     }
 
@@ -79,7 +125,13 @@ public class GeneralUserServiceTest {
 
     }
 
+    private UserIdDto getTestUserIdDto() {
 
+        UserIdDto userIdDto = new UserIdDto();
+        userIdDto.setUsername("test_user");
+        userIdDto.setId(1L);
+        return userIdDto;
+    }
 
     private UserEntity getTestUserEntity(){
         UserEntity userEntity = new UserEntity();
