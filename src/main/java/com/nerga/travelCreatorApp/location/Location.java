@@ -21,6 +21,7 @@ public class Location {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="location_address_id", referencedColumnName = "id")
     private LocationAddress locationAddress;
+    private LocationMark locationMark;
     private String googleMapUrl;
     @ManyToOne
     private UserEntity owner;
