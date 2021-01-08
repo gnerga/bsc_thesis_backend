@@ -16,7 +16,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class GeneralUserService {
@@ -26,7 +30,9 @@ public class GeneralUserService {
     private ModelMapper modelMapper;
 
     @Autowired
-    public GeneralUserService(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public GeneralUserService(UserRepository userRepository,
+                              PasswordEncoder passwordEncoder,
+                              ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
@@ -43,6 +49,12 @@ public class GeneralUserService {
                 .map(userEntity -> modelMapper.map(userEntity, UserDetailsDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
+    }
+
+    public Response findAllUsers(){
+        List<UserDetailsDto> userDetailsDtoList =
+                returnListOfUserDetailsDto(userRepository.findAll());
+        return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
     }
 
     public Response findUserDetailsById(Long id) {
@@ -62,7 +74,7 @@ public class GeneralUserService {
     public Response updateUserById(Long id, UserDetailsDto userDetailsDto) {
         return Option.ofOptional(userRepository.findById(id))
                 .map(userEntity -> userRepository.save(updateUserEntity(userDetailsDto, userEntity)))
-                .map(userEntity -> modelMapper.map(userEntity, UserIdDto.class))
+                .map(userEntity -> modelMapper.map(userEntity, UserDetailsDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
@@ -70,6 +82,7 @@ public class GeneralUserService {
     public Response updateUserByUsername(String username, UserDetailsDto userDetailsDto) {
         return Option.ofOptional(userRepository.findByUsername(username))
                 .map(userEntity -> userRepository.save(updateUserEntity(userDetailsDto, userEntity)))
+                .map(userEntity -> modelMapper.map(userEntity, UserDetailsDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
@@ -85,6 +98,7 @@ public class GeneralUserService {
     public Response updateUserPasswordById(Long id, UserCredentialsDto userCredentialsDto){
         return Option.ofOptional(userRepository.findById(id))
                 .peek(userEntity -> userEntity.setPassword(passwordEncoder.encode(userCredentialsDto.getPassword())))
+                .map(userEntity -> modelMapper.map(userEntity, UserIdDto.class))
                 .toEither(Error.badRequest("USER_NOT_FOUND"))
                 .fold(Function.identity(), Success::ok);
     }
@@ -142,6 +156,12 @@ public class GeneralUserService {
 
     private String simpleValidatorEmptyInputString(String inputNewValue, String inputOldValue){
         return inputNewValue.isBlank() ? inputOldValue : inputNewValue;
+    }
+
+    private List<UserDetailsDto> returnListOfUserDetailsDto(List<UserEntity> entities) {
+        return entities.stream()
+                .map(userEntity -> modelMapper.map(userEntity, UserDetailsDto.class))
+                .collect(Collectors.toList());
     }
 
 }

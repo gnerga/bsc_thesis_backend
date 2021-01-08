@@ -295,7 +295,7 @@ public class LocationServiceTest {
     }
 
     @Test
-    void shouldRemoveLocationWithGivenId(){
+    void shouldDeleteLocationWithGivenId(){
         long tLocationId = 1;
         Location tLocation = getTestLocation();
         when(locationRepository.findById(tLocationId)).thenReturn(Optional.of(tLocation));
