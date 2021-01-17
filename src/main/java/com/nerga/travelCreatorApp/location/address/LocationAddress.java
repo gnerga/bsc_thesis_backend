@@ -1,7 +1,6 @@
-package com.nerga.travelCreatorApp.location;
+package com.nerga.travelCreatorApp.location.address;
 
-import com.nerga.travelCreatorApp.location.dto.LocationAddressDetailsDto;
-import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

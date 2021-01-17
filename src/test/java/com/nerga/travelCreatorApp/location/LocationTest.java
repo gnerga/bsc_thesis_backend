@@ -1,9 +1,9 @@
 package com.nerga.travelCreatorApp.location;
 
 import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
-import com.nerga.travelCreatorApp.location.Location;
-import com.nerga.travelCreatorApp.location.dto.LocationAddressCreateDto;
-import com.nerga.travelCreatorApp.location.dto.LocationAddressDetailsDto;
+import com.nerga.travelCreatorApp.location.address.LocationAddress;
+import com.nerga.travelCreatorApp.location.address.dto.LocationAddressCreateDto;
+import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 
@@ -12,8 +12,6 @@ import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.convention.MatchingStrategies;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

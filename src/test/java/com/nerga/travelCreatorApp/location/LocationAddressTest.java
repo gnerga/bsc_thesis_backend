@@ -1,7 +1,8 @@
 package com.nerga.travelCreatorApp.location;
 
-import com.nerga.travelCreatorApp.location.dto.LocationAddressCreateDto;
-import com.nerga.travelCreatorApp.location.dto.LocationAddressDetailsDto;
+import com.nerga.travelCreatorApp.location.address.LocationAddress;
+import com.nerga.travelCreatorApp.location.address.dto.LocationAddressCreateDto;
+import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.location;
 
+import com.nerga.travelCreatorApp.location.address.LocationAddress;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import lombok.*;
@@ -21,8 +22,8 @@ public class Location {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="location_address_id", referencedColumnName = "id")
     private LocationAddress locationAddress;
-    private LocationMark locationMark;
-    private String googleMapUrl;
+//    private LocationMark locationMark;
+//    private String googleMapUrl;
     @ManyToOne
     private UserEntity owner;
     private boolean isPrivate;
@@ -35,9 +36,9 @@ public class Location {
         this.setLocationDescription(simplyValidatorInputEmptyString(
                 locationDetailsDto.getLocationDescription(),
                 this.getLocationDescription()));
-        this.setGoogleMapUrl(simplyValidatorInputEmptyString(
-                locationDetailsDto.getGoogleMapUrl(),
-                this.getGoogleMapUrl()));
+//        this.setGoogleMapUrl(simplyValidatorInputEmptyString(
+//                locationDetailsDto.getGoogleMapUrl(),
+//                this.getGoogleMapUrl()));
         this.setPrivate(locationDetailsDto.getIsPrivate());
         this.setLocationAddress(
                 locationAddress.updateLocationEntity(locationDetailsDto.getLocationAddress()));

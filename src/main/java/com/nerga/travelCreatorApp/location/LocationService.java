@@ -1,9 +1,9 @@
 package com.nerga.travelCreatorApp.location;
 
 import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
+import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
-import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
@@ -12,13 +12,11 @@ import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundExcepti
 import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

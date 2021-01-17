@@ -1,4 +1,4 @@
-package com.nerga.travelCreatorApp.location.dto;
+package com.nerga.travelCreatorApp.location.address.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationAddressDetailsDto {
-    private Long locationAddressId;
+public class LocationAddressCreateDto {
     private String countryName;
     private String cityName;
     private String street;

@@ -2,8 +2,9 @@ package com.nerga.travelCreatorApp.location;
 
 import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
 import com.nerga.travelCreatorApp.common.response.Response;
-import com.nerga.travelCreatorApp.location.dto.LocationAddressCreateDto;
-import com.nerga.travelCreatorApp.location.dto.LocationAddressDetailsDto;
+import com.nerga.travelCreatorApp.location.address.LocationAddress;
+import com.nerga.travelCreatorApp.location.address.dto.LocationAddressCreateDto;
+import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
