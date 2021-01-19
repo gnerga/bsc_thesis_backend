@@ -8,6 +8,7 @@ public class Comment {
 
     long commentId;
     UserEntity author;
+    String content;
     LocalDateTime timeStamp;
 
 }
