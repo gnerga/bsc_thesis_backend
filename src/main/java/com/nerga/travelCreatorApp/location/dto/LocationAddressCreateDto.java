@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class LocationAddressCreateDto {
     private String countryName;
     private String cityName;
-    private String street;
-    private int number;
-    private String numberExtension;
+    private String streetNameAndNumber;
     private String zipCode;
+    private double longitude;
+    private double latitude;
 }
