@@ -10,10 +10,10 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class LocationDetailsDto {
+
     private Long locationId;
     private String locationName;
     private String locationDescription;
-    private String googleMapUrl;
     private LocationAddressDetailsDto locationAddress;
     private UserDetailsDto owner;
     private Boolean isPrivate;

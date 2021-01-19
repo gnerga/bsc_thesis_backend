@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LocationAddressDetailsDto {
+    private Long   locationAddressId;
     private String countryName;
     private String cityName;
     private String streetNameAndNumber;

@@ -13,6 +13,6 @@ public class LocationCreateDto {
     private String locationDescription;
     private LocationAddressCreateDto locationAddress;
     private UserDetailsDto owner;
-    private String googleMapUrl;
+    private boolean isPrivate;
 
 }

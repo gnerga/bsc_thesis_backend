@@ -20,20 +20,21 @@ public class LocationAddress {
     private Long locationAddressId;
     private String countryName;
     private String cityName;
-    private String street;
-    private int number;
-    private String numberExtension;
+    private String streetNameAndNumber;
     private String zipCode;
+    private double latitude;
+    private double longitude;
 
     public LocationAddress updateLocationEntity(LocationAddressDetailsDto locationDetailsDto) {
 
 //        this.locationAddressId = locationDetailsDto.getLocationAddressId();
         this.countryName = simplyValidatorInputEmptyString(locationDetailsDto.getCountryName(), this.countryName);
         this.cityName = simplyValidatorInputEmptyString(locationDetailsDto.getCityName(), this.getCityName());
-        this.street = simplyValidatorInputEmptyString(locationDetailsDto.getStreet(), this.getStreet());
-        this.number = locationDetailsDto.getNumber();
-        this.numberExtension = simplyValidatorInputEmptyString(locationDetailsDto.getNumberExtension(), this.numberExtension);
+        this.streetNameAndNumber = simplyValidatorInputEmptyString(locationDetailsDto.getStreetNameAndNumber(),
+                this.getStreetNameAndNumber());
         this.zipCode = simplyValidatorInputEmptyString(locationDetailsDto.getZipCode(), this.zipCode);
+        this.latitude = locationDetailsDto.getLatitude();
+        this.longitude = locationDetailsDto.getLongitude();
         return this;
     }
 

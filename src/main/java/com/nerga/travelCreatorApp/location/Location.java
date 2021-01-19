@@ -22,8 +22,6 @@ public class Location {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="location_address_id", referencedColumnName = "id")
     private LocationAddress locationAddress;
-//    private LocationMark locationMark;
-//    private String googleMapUrl;
     @ManyToOne
     private UserEntity owner;
     private boolean isPrivate;
@@ -36,9 +34,6 @@ public class Location {
         this.setLocationDescription(simplyValidatorInputEmptyString(
                 locationDetailsDto.getLocationDescription(),
                 this.getLocationDescription()));
-//        this.setGoogleMapUrl(simplyValidatorInputEmptyString(
-//                locationDetailsDto.getGoogleMapUrl(),
-//                this.getGoogleMapUrl()));
         this.setPrivate(locationDetailsDto.getIsPrivate());
         this.setLocationAddress(
                 locationAddress.updateLocationEntity(locationDetailsDto.getLocationAddress()));
