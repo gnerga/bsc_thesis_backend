@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TripCreateDto {
-
     private String tripName;
     private String tripDescription;
     private boolean isActiveTrip = true;
@@ -16,5 +15,4 @@ public class TripCreateDto {
     private String startDate;
     private String endDate;
     private Long locationId;
-
 }
