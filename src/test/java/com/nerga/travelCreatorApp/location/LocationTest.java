@@ -38,7 +38,6 @@ public class LocationTest {
         LocationDetailsDto locationDetailsDto = modelMapper.map(location, LocationDetailsDto.class);
         UserDetailsDto userDetailsDto = modelMapper.map(userEntity, UserDetailsDto.class);
 
-        assertEquals(location.getGoogleMapUrl(), locationDetailsDto.getGoogleMapUrl());
         assertEquals(location.getLocationName(), locationDetailsDto.getLocationName());
         assertEquals(location.getLocationDescription(), locationDetailsDto.getLocationDescription());
         assertEquals(location.getLocationAddress().getLocationAddressId(), locationDetailsDto.getLocationAddress().getLocationAddressId());
@@ -57,13 +56,13 @@ public class LocationTest {
         locationCreateDto.setLocationName("Super Spot");
         locationCreateDto.setLocationDescription("Uber opis ziomek");
         locationCreateDto.setLocationAddress(locationAddressCreateDto);
-        locationCreateDto.setGoogleMapUrl("url/url");
+
 
         Location location = modelMapper.map(locationCreateDto, Location.class);
         assertEquals(locationCreateDto.getLocationName(), location.getLocationName());
         assertEquals(locationCreateDto.getLocationDescription(), location.getLocationDescription());
         assertEquals(locationCreateDto.getLocationAddress().getCityName(), location.getLocationAddress().getCityName());
-        assertEquals(locationCreateDto.getGoogleMapUrl(), location.getGoogleMapUrl());
+
     }
 
     @Test
@@ -91,7 +90,6 @@ public class LocationTest {
     private Location getTestLocation(){
         Location location = new Location();
         location.setLocationName("Super Spot");
-        location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(getTestLocationAddress());
         location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
@@ -103,10 +101,10 @@ public class LocationTest {
         return new LocationAddressCreateDto(
                 "Poland",
                 "Lodz",
-                "Tunelowa",
-                1,
-                "m. 1",
-                "90-156"
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
         );
     }
 
@@ -115,17 +113,16 @@ public class LocationTest {
                 1L,
                 "Poland",
                 "Lodz",
-                "Tunelowa",
-                1,
-                "m. 1",
-                "90-156"
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
         );
     }
 
     private LocationDetailsDto getLocationDetailsDto(){
         LocationDetailsDto location = new LocationDetailsDto();
         location.setLocationName("Mazury 2k21");
-        location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(modelMapper.map(getTestLocationAddress(), LocationAddressDetailsDto.class));
         location.setOwner(modelMapper.map(getTestUserEntity(), UserDetailsDto.class));
         location.setLocationDescription("Super miejscówa, ziom");

@@ -71,7 +71,7 @@ public class TripTest {
 
         location = new Location();
         location.setLocationName("Super Spot");
-        location.setGoogleMapUrl("htttp/222/222");
+
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
 

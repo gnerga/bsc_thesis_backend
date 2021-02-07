@@ -32,7 +32,7 @@ public class LocationRepositoryTest {
                 Location location = new Location();
                 location.setLocationName("Test");
                 location.setLocationDescription("Description");
-                location.setGoogleMapUrl("urlAddress");
+
 
                 // When
                 Location locationReturned = underTest.save(location);
@@ -58,7 +58,7 @@ public class LocationRepositoryTest {
                 Location location = new Location();
                 location.setLocationName("Test");
                 location.setLocationDescription("Description");
-                location.setGoogleMapUrl("urlAddress");
+
                 Location locationReturned = underTest.save(location);
 
                 // When
@@ -89,12 +89,12 @@ public class LocationRepositoryTest {
                 Location location_1 = new Location();
                 location_1.setLocationName("Test_1");
                 location_1.setLocationDescription("Description_1");
-                location_1.setGoogleMapUrl("urlAddress_1");
+
 
                 Location location_2 = new Location();
                 location_2.setLocationName("Test_2");
                 location_2.setLocationDescription("Description_2");
-                location_2.setGoogleMapUrl("urlAddress_2");
+
 
                 // When
 
@@ -128,12 +128,12 @@ public class LocationRepositoryTest {
                 Location location_1 = new Location();
                 location_1.setLocationName("Test_1");
                 location_1.setLocationDescription(description_1);
-                location_1.setGoogleMapUrl("urlAddress_1");
+
 
                 Location location_2 = new Location();
                 location_2.setLocationName("Test_2");
                 location_2.setLocationDescription(description_2);
-                location_2.setGoogleMapUrl("urlAddress_2");
+
 
                 underTest.save(location_1);
                 underTest.save(location_2);

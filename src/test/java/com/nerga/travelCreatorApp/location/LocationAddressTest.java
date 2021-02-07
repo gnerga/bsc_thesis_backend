@@ -27,17 +27,14 @@ public class LocationAddressTest {
                 1L,
                 "Poland",
                 "Lodz",
-                "Tunelowa",
-                1,
-                "m. 1",
-                "90-156"
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
         );
         assertEquals(1L, locationAddress.getLocationAddressId());
         assertEquals("Poland", locationAddress.getCountryName());
         assertEquals("Lodz", locationAddress.getCityName());
-        assertEquals("Tunelowa", locationAddress.getStreet());
-        assertEquals(1, locationAddress.getNumber());
-        assertEquals("m. 1", locationAddress.getNumberExtension());
         assertEquals("90-156", locationAddress.getZipCode());
     }
 
@@ -47,10 +44,10 @@ public class LocationAddressTest {
                 new LocationAddressCreateDto(
                         "Poland",
                         "Lodz",
-                        "Tunelowa",
-                        1,
-                        "",
-                        "90-156"
+                        "Tunelowa 1",
+                        "90-156",
+                        40.40,
+                        30.40
                 );
 
         LocationAddress locationAddress = modelMapper.map(locationAddressCreateDto, LocationAddress.class);
@@ -64,10 +61,10 @@ public class LocationAddressTest {
                 1L,
                 "Poland",
                 "Lodz",
-                "Tunelowa",
-                1,
-                "m. 1",
-                "90-156"
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
         );
         LocationAddressDetailsDto locationAddressDetailsDto = modelMapper
                 .map(locationAddress, LocationAddressDetailsDto.class);

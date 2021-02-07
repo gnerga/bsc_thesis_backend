@@ -15,13 +15,13 @@ public class LocationControllerTest {
         LocationCreateDto locationCreateDto = new LocationCreateDto();
         locationCreateDto.setLocationName("Test");
         locationCreateDto.setLocationDescription("Opis");
-        locationCreateDto.setGoogleMapUrl("http://url.com");
+
 
         Location location = new Location();
         location.setLocationId(1L);
         location.setLocationName("Test");
         location.setLocationDescription("Opis");
-        location.setGoogleMapUrl("http://url.com");
+
 
     }
 

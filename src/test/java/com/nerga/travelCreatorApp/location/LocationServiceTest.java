@@ -312,7 +312,6 @@ public class LocationServiceTest {
         LocationCreateDto locationCreateDto = new LocationCreateDto();
         locationCreateDto.setLocationName(name);
         locationCreateDto.setLocationDescription(description);
-        locationCreateDto.setGoogleMapUrl(urlPath);
         locationCreateDto.setLocationAddress(getTestLocationAddressCreateDto());
         locationCreateDto.setOwner(getTestUserDetailsDto());
 
@@ -325,7 +324,6 @@ public class LocationServiceTest {
         LocationCreateDto locationCreateDto = new LocationCreateDto();
         locationCreateDto.setLocationName("Super Spot");
         locationCreateDto.setLocationDescription("Super miejscówa, ziom");
-        locationCreateDto.setGoogleMapUrl("htttp/222/222");
         locationCreateDto.setLocationAddress(getTestLocationAddressCreateDto());
         locationCreateDto.setOwner(getTestUserDetailsDto());
 
@@ -344,7 +342,6 @@ public class LocationServiceTest {
         location.setLocationId(id);
         location.setLocationName(name);
         location.setLocationDescription(description);
-        location.setGoogleMapUrl(urlPath);
 
         return location;
 
@@ -360,7 +357,6 @@ public class LocationServiceTest {
         locationDetailsDto.setLocationId(id);
         locationDetailsDto.setLocationName(name);
         locationDetailsDto.setLocationDescription(description);
-        locationDetailsDto.setGoogleMapUrl(urlPath);
         locationDetailsDto.setLocationAddress(getLocationAddressDetailsDto());
         locationDetailsDto.setOwner(getTestUserDetailsDto());
         return locationDetailsDto;
@@ -395,7 +391,6 @@ public class LocationServiceTest {
         locationDetailsDto.setLocationId(1L);
         locationDetailsDto.setLocationName("Super Spot");
         locationDetailsDto.setLocationDescription("Super miejscówa, ziom");
-        locationDetailsDto.setGoogleMapUrl("htttp/222/222");
         locationDetailsDto.setLocationAddress(getLocationAddressDetailsDto());
         locationDetailsDto.setOwner(getTestUserDetailsDto());
         locationDetailsDto.setIsPrivate(false);
@@ -405,7 +400,6 @@ public class LocationServiceTest {
     private Location getTestLocation(){
         Location location = new Location();
         location.setLocationName("Super Spot");
-        location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(getTestLocationAddress());
         location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
@@ -418,11 +412,10 @@ public class LocationServiceTest {
         return new LocationAddressCreateDto(
                 "Poland",
                 "Lodz",
-                "Tunelowa",
-                1,
-                "m. 1",
-                "90-156"
-        );
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40);
     }
 
     private LocationAddress getTestLocationAddress(){
@@ -430,17 +423,16 @@ public class LocationServiceTest {
                 1L,
                 "Poland",
                 "Lodz",
-                "Tunelowa",
-                1,
-                "m. 1",
-                "90-222"
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
         );
     }
 
     private LocationDetailsDto getUpdatedLocationDetailsDto(){
         LocationDetailsDto location = new LocationDetailsDto();
         location.setLocationName("Mazury 2k21");
-        location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(getLocationAddressDetailsDto());
         location.setOwner(getTestUserDetailsDto());
         location.setLocationDescription("Super miejscówa, ziom");
@@ -454,10 +446,10 @@ public class LocationServiceTest {
                 1L,
                 "Poland",
                 "Lodz",
-                "Tunelowa",
-                1,
-                "m. 1",
-                "90-222"
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
         );
     }
 
@@ -466,7 +458,6 @@ public class LocationServiceTest {
     private Location getUpdatedTestLocation(){
         Location location = new Location();
         location.setLocationName("Mazury 2k21");
-        location.setGoogleMapUrl("htttp/222/222");
         location.setLocationAddress(getTestLocationAddress());
         location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
