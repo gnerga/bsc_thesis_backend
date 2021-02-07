@@ -2,11 +2,9 @@ package com.nerga.travelCreatorApp.trip;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
-import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.sun.istack.NotNull;
@@ -43,7 +41,7 @@ public class Trip {
     @NotNull
     private boolean isActiveTrip;
     @NotNull
-    private int maxNumberOfGivenDatePropositions;
+    private int tripLength;
 
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -72,7 +70,7 @@ public class Trip {
         this.location = location;
         this.tripDescription = tripDescription;
         this.isActiveTrip = isActiveTrip;
-        this.maxNumberOfGivenDatePropositions = maxNumberOfGivenDatePropositions;
+        this.tripLength = maxNumberOfGivenDatePropositions;
         this.startDate = startDate;
         this.endDate = endDate;
 

@@ -9,5 +9,6 @@ public class ExpensesRegister {
     Long expensesRegisterId;
     List<ExpensesRecord> tripExpenses;
     Trip trip;
+    double overall;
 
 }
