@@ -4,10 +4,10 @@ import com.nerga.travelCreatorApp.trip.Trip;
 
 import java.util.List;
 
-public class ExpensesRegister {
+public class ExpensesManager {
 
-    Long expensesRegisterId;
-    List<ExpensesRecord> tripExpenses;
+    Long expensesManagerId;
+    List<Expenses> tripExpenses;
     Trip trip;
     double overall;
 

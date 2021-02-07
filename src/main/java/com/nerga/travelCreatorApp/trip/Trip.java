@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
+import com.nerga.travelCreatorApp.expensesregister.ExpensesManager;
+import com.nerga.travelCreatorApp.expensesregister.ExpensesService;
 import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.post.PostManager;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.sun.istack.NotNull;
 import lombok.*;
@@ -54,13 +57,16 @@ public class Trip {
     @JoinColumn(name = "datePropositionMatcher_id", referencedColumnName = "id")
     private DatePropositionMatcher datePropositionMatcher;
 
+    private ExpensesManager expenseManager;
+    private PostManager postManager;
+
     public Trip(
             Long tripId,
                 String tripName,
                 Location location,
                 String tripDescription,
                 boolean isActiveTrip,
-                int maxNumberOfGivenDatePropositions,
+                int tripLength,
                 LocalDate startDate,
                 LocalDate endDate,
                 LocalDate deadLine) {
@@ -70,14 +76,16 @@ public class Trip {
         this.location = location;
         this.tripDescription = tripDescription;
         this.isActiveTrip = isActiveTrip;
-        this.tripLength = maxNumberOfGivenDatePropositions;
+        this.tripLength = tripLength;
         this.startDate = startDate;
         this.endDate = endDate;
 
         this.datePropositionMatcher = new DatePropositionMatcher(
-                maxNumberOfGivenDatePropositions,
+                tripLength,
                 deadLine
                 );
+        this.expenseManager = new ExpensesManager();
+        this.postManager = new PostManager();
         this.organizers = new ArrayList<>();
         this.participants = new ArrayList<>();
 

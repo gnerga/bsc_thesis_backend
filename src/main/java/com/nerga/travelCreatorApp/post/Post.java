@@ -14,8 +14,6 @@ public class Post {
     UserEntity author;
     int like;
     int dislike;
-    List<Comment> comments;
     boolean isSendNotification;
-    // todo dodać zdjęcie
 
 }
