@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.location.address.LocationAddress;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.trip.Trip;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
@@ -69,20 +70,18 @@ public class TripTest {
         userEntity_2.setEmail("test2@mail.com");
         userEntity_2.setPhoneNumber("2234516");
 
-        location = new Location();
-        location.setLocationName("Super Spot");
-
-        location.setLocationDescription("Super miejscówa, ziom");
-        location.setLocationId(1L);
+        location = getTestLocation();
 
         trip_2 = new Trip();
-
+        trip_2.setTripId(1L);
         trip_2.setTripName("Wakacje Ekipy");
         trip_2.setTripDescription("Najlepsze wakacje ever");
         trip_2.setStartDate(LocalDate.parse("2020-11-24"));
         trip_2.setEndDate(LocalDate.parse("2020-12-04"));
         trip_2.setLocation(location);
         trip_2.addOrganizer(userEntity);
+        trip_2.setActiveTrip(true);
+        trip_2.getLocation().setPrivate(true);
 
     }
 
@@ -144,8 +143,11 @@ public class TripTest {
         trip_2.addParticipant(userEntity_2);
         TripDetailsDto tripDetailsDto = modelMapper.map(trip_2, TripDetailsDto.class);
         assertEquals(trip_2.getTripName(), tripDetailsDto.getTripName());
+        assertEquals(trip_2.getTripDescription(), tripDetailsDto.getTripDescription());
         assertEquals(trip_2.getOrganizers().get(0).getUsername(), tripDetailsDto.getOrganizers().get(0).getUsername());
         assertEquals(trip_2.getLocation().getLocationName(), tripDetailsDto.getLocation().getLocationName());
+        assertEquals(trip_2.getLocation().isPrivate(), tripDetailsDto.getLocation().isPrivate());
+
 
     }
 
@@ -167,6 +169,41 @@ public class TripTest {
         assertEquals(LocalDate.parse(tripCreateDto.getEndDate()), trip.getEndDate());
 
 
+    }
+
+    private Location getTestLocation(){
+        Location location = new Location();
+        location.setLocationName("Super Spot");
+        location.setLocationAddress(getTestLocationAddress());
+        location.setOwner(getTestUserEntity());
+        location.setLocationDescription("Super miejscówa, ziom");
+        location.setLocationId(1L);
+        location.setPrivate(false);
+        return location;
+    }
+
+    private UserEntity getTestUserEntity(){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(1L);
+        userEntity.setUsername("test_user");
+        userEntity.setPassword("password_1");
+        userEntity.setFirstName("Jan");
+        userEntity.setLastName("Nowak");
+        userEntity.setEmail("test@mail.com");
+        userEntity.setPhoneNumber("1234516");
+        return userEntity;
+    }
+
+    private LocationAddress getTestLocationAddress(){
+        return  new LocationAddress(
+                1L,
+                "Poland",
+                "Lodz",
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
+        );
     }
 
 }

@@ -34,7 +34,7 @@ public class Location {
         this.setLocationDescription(simplyValidatorInputEmptyString(
                 locationDetailsDto.getLocationDescription(),
                 this.getLocationDescription()));
-        this.setPrivate(locationDetailsDto.getIsPrivate());
+        this.setPrivate(locationDetailsDto.isPrivate());
         this.setLocationAddress(
                 locationAddress.updateLocationEntity(locationDetailsDto.getLocationAddress()));
 

@@ -12,6 +12,7 @@ import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 
+import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.control.Option;
@@ -50,6 +51,8 @@ public class TripManagementService {
         return isUserAndLocationExists(tripCreateDto)
                 .map(userEntityAndLocation -> createTrip(userEntityAndLocation, tripCreateDto))
                 .map(tripRepository::save)
+                .map(returnedTrip -> modelMapper.map(returnedTrip, TripDetailsDto.class))
+                .toEither(Error.badRequest("TRIP_CANNOT_BE_CREATED"))
                 .fold(Function.identity(), Success::ok);
     }
 

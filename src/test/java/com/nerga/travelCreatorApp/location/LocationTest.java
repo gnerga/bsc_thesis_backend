@@ -94,6 +94,7 @@ public class LocationTest {
         location.setOwner(getTestUserEntity());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
+        location.setPrivate(true);
         return location;
     }
 
@@ -127,7 +128,7 @@ public class LocationTest {
         location.setOwner(modelMapper.map(getTestUserEntity(), UserDetailsDto.class));
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
-        location.setIsPrivate(false);
+        location.setPrivate(false);
         return location;
     }
 

@@ -393,7 +393,7 @@ public class LocationServiceTest {
         locationDetailsDto.setLocationDescription("Super miejscówa, ziom");
         locationDetailsDto.setLocationAddress(getLocationAddressDetailsDto());
         locationDetailsDto.setOwner(getTestUserDetailsDto());
-        locationDetailsDto.setIsPrivate(false);
+        locationDetailsDto.setPrivate(false);;
         return locationDetailsDto;
     }
 
@@ -437,7 +437,7 @@ public class LocationServiceTest {
         location.setOwner(getTestUserDetailsDto());
         location.setLocationDescription("Super miejscówa, ziom");
         location.setLocationId(1L);
-        location.setIsPrivate(false);
+        location.setPrivate(false);
         return location;
     }
 

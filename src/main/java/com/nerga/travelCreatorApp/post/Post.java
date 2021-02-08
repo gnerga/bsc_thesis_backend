@@ -35,11 +35,11 @@ public class Post {
     int numberOfLikes;
     int numberOfDislikes;
 
-    @OneToMany
-    List<Like> likes;
+    @ElementCollection
+    List<Long> likes;
 
-    @OneToMany
-    List<Dislike> dislike;
+    @ElementCollection
+    List<Long> dislike;
 
     public Post(String title, String content, LocalDateTime timeStamp, UserEntity author) {
 
@@ -60,19 +60,14 @@ public class Post {
 
     }
 
-    public void addLike(Like like){
+    public void addLike(Long like){
         likes.add(like);
     }
-
-    public void removeLike(Like like){
+    public void removeLike(Long like){
         likes.remove(like);
     }
+    public void addDislike(Long dislike) {likes.add(dislike);}
+    public void removeDislike(Long dislike) {likes.remove(dislike);}
 
-    public Like findLike(int likeId){
-        return likes
-                .stream()
-                .filter(element -> element.getLikeId() == likeId)
-                .findFirst().orElse(null);
-    }
 
 }

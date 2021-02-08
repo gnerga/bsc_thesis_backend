@@ -30,6 +30,6 @@ public class TripDetailsDto {
 
 
     private List<UserDetailsDto> organizers;
-    private List<UserDetailsDto> members;
+    private List<UserDetailsDto> participants;
 
 }
