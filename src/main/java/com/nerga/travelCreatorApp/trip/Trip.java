@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.expensesregister.ExpensesManager;
-import com.nerga.travelCreatorApp.expensesregister.ExpensesService;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.post.PostManager;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
@@ -57,8 +56,23 @@ public class Trip {
     @JoinColumn(name = "datePropositionMatcher_id", referencedColumnName = "id")
     private DatePropositionMatcher datePropositionMatcher;
 
+    @OneToOne
+    @JoinColumn(name = "expensesManager_id", referencedColumnName = "expensesManagerId")
     private ExpensesManager expenseManager;
+
+    @OneToOne
+    @JoinColumn(name = "postManager_id", referencedColumnName = "postManagerId")
     private PostManager postManager;
+
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "organizedTrips")
+//    @Singular
+    private List<UserEntity> organizers;
+
+    //@JsonManagedReference
+    @ManyToMany(mappedBy = "participatedTrips")
+//    @Singular
+    private List<UserEntity> participants;
 
     public Trip(
             Long tripId,
@@ -91,15 +105,7 @@ public class Trip {
 
     }
 
-    @JsonManagedReference
-    @ManyToMany(mappedBy = "organizedTrips")
-//    @Singular
-    private List<UserEntity> organizers;
 
-    //@JsonManagedReference
-    @ManyToMany(mappedBy = "participatedTrips")
-//    @Singular
-    private List<UserEntity> participants;
 
 
 
