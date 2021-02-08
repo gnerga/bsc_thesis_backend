@@ -24,15 +24,15 @@ public class PostManager {
         postList = new ArrayList<>();
     }
 
-    public void addExpenses(Post post){
+    public void addPost(Post post){
         postList.add(post);
     }
 
-    public void removeExpenses(Post post){
+    public void removePost(Post post){
         postList.remove(post);
     }
 
-    public Post findExpenses(int expenseId){
+    public Post findPost(int expenseId){
         return postList
                 .stream()
                 .filter(element -> element.postId == expenseId)

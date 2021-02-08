@@ -56,6 +56,23 @@ public class Post {
 
     }
 
+    public Post() {
 
+    }
+
+    public void addLike(Like like){
+        likes.add(like);
+    }
+
+    public void removeLike(Like like){
+        likes.remove(like);
+    }
+
+    public Like findLike(int likeId){
+        return likes
+                .stream()
+                .filter(element -> element.getLikeId() == likeId)
+                .findFirst().orElse(null);
+    }
 
 }
