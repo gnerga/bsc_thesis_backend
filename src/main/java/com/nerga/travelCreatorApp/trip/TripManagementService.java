@@ -62,15 +62,7 @@ public class TripManagementService {
         return null;
     }
 
-    public Response addNewOrganizerByUsername(){
-        return null;
-    }
-
     public Response removeOrganizerById(){
-        return null;
-    }
-
-    public Response removeOrganizerByUsername(){
         return null;
     }
 
@@ -78,15 +70,7 @@ public class TripManagementService {
         return null;
     }
 
-    public Response addNewParticipantByUsername(){
-        return null;
-    }
-
     public Response removeParticipantById(){
-        return null;
-    }
-
-    public Response removeParticipantByUsername(){
         return null;
     }
 
@@ -96,13 +80,7 @@ public class TripManagementService {
 
     public Response triggerDatePropositionMatcher() {return null;}
 
-    public Response clearDatePropositionList() {return null;}
-
     public Response changeAddNewStatePropositionState() {return null;}
-
-    public Response deleteTripByLoggedUser(){
-        return null;
-    }
 
     private Trip createTrip(Tuple2<UserEntity, Location> userAndLocationEntities, TripCreateDto tripCreateDto){
         Trip trip = modelMapper.map(tripCreateDto, Trip.class);

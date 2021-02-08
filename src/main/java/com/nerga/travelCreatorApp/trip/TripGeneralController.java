@@ -1,4 +1,4 @@
 package com.nerga.travelCreatorApp.trip;
 
-public class TripController {
+public class TripGeneralController {
 }

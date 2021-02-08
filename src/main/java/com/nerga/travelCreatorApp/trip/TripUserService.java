@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TripService {
+public class TripUserService {
 
     TripRepository tripRepository;
     LocationRepository locationRepository;
@@ -17,41 +17,26 @@ public class TripService {
     ModelMapper modelMapper;
 
     @Autowired
-    public TripService(TripRepository tripRepository, LocationRepository locationRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public TripUserService(TripRepository tripRepository, LocationRepository locationRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.tripRepository = tripRepository;
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
-    public Response findAllOrganizedTripsByLoggedInUser(){
-        return null;
-    }
-
-    public Response findAllParticipatedTripsByLoggedInUser(){
-        return null;
-    }
-
-    public Response findAllOrganizedTripsByUserId(){
-        return null;
-    }
-
-    public Response findAllParticipatedTripsByUserId(){
-        return null;
-    }
-
+    public Response addUserToExpenseById(){return null;}
+    public Response addUsersListToExpenseById(){return null;}
+    public Response createExpense(){return null;}
+    public Response updateAmount(){return null;}
+    public Response updateExpenseById(){return null;}
     public Response addNewDateProposition(){
         return null;
     }
-
-    public Response removeDateProposition(){
-        return null;
-    }
-
     public Response leaveTripWithGivenId(){ return null; }
+    public Response addPost(){return null;}
+    public Response handUp(){return null;}
+    public Response handDown(){return null;}
 
-    public Response findAllLoggedInUserDatePropositions(){
-        return null;
-    }
+
 
 }

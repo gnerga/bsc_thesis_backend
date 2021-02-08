@@ -105,10 +105,6 @@ public class Trip {
 
     }
 
-
-
-
-
     public void addOrganizer(UserEntity user) {
         if (organizers == null) {
             organizers = new ArrayList<>();
