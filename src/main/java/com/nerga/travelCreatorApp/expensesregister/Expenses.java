@@ -13,7 +13,7 @@ public class Expenses {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long expensesRecordId;
+    long expensesId;
 
     String title;
     String description;
