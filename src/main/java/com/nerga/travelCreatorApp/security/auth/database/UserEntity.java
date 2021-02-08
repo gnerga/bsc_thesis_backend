@@ -15,7 +15,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-@Data
+@Getter
+@Setter
 //@Builder(access= AccessLevel.PUBLIC)
 public class UserEntity {
 
@@ -41,16 +42,16 @@ public class UserEntity {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_participated_trips",
+    @JoinTable(name = "participatedTrips",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "trip_id"))
+            inverseJoinColumns = @JoinColumn(name = "trip_tripId"))
     private List<Trip> participatedTrips;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_organized_trips",
+    @JoinTable(name = "organizedTrips",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "trip_id"))
+            inverseJoinColumns = @JoinColumn(name = "trip_tripId"))
     private List<Trip> organizedTrips;
 
     @JsonIgnore

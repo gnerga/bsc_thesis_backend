@@ -23,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -117,9 +118,18 @@ public class TripManagementServiceTest {
         when(userRepository.findByUsername(any())).thenReturn(Optional.of(userEntity));
         when(locationRepository.findById(1L)).thenReturn(Optional.of(location));
         when(modelMapper.map(tripCreateDto, Trip.class)).thenReturn(testTrip);
+        when(tripRepository.save(testTrip)).thenReturn(testTrip);
+        when(modelMapper.map(testTrip, TripDetailsDto.class)).thenReturn(tripTestDetailsDto);
         // When
-        underTest.addTrip(tripCreateDto);
+        Response response = underTest.addTrip(tripCreateDto);
         // Then
+        Assertions.assertThat(
+                response.toResponseEntity()
+                .getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(tripTestDetailsDto);
     }
 
     private UserEntity getTestUserEntity(){

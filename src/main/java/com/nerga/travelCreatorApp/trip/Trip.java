@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -64,12 +65,12 @@ public class Trip {
     @JoinColumn(name = "postManager_id", referencedColumnName = "postManagerId")
     private PostManager postManager;
 
-    @JsonManagedReference
+//    @JsonManagedReference
     @ManyToMany(mappedBy = "organizedTrips")
 //    @Singular
     private List<UserEntity> organizers;
 
-    //@JsonManagedReference
+//    @JsonManagedReference
     @ManyToMany(mappedBy = "participatedTrips")
 //    @Singular
     private List<UserEntity> participants;

@@ -94,16 +94,15 @@ public class TripTest {
         trip.setStartDate(LocalDate.parse("2020-11-24"));
         trip.setEndDate(LocalDate.parse("2020-12-04"));
         trip.setLocation(location);
-        trip.addOrganizer(userEntity);
+        trip.addOrganizer(userEntity_2);
 
-        assertEquals(userEntity, trip.getOrganizers().get(0));
+        assertEquals(userEntity_2, trip.getOrganizers().get(0));
         assertEquals(location, trip.getLocation());
-
         assertEquals("Wakacje Ekipy", trip.getTripName());
         assertEquals("Najlepsze wakacje ever", trip.getTripDescription());
         assertEquals(LocalDate.parse("2020-11-24"), trip.getStartDate());
         assertEquals(LocalDate.parse("2020-12-04"), trip.getEndDate());
-        assertEquals(trip, userEntity.getOrganizedTrips().get(0));
+        assertEquals(trip, userEntity_2.getOrganizedTrips().get(0));
 
     }
 
