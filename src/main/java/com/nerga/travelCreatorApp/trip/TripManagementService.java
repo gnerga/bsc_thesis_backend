@@ -127,10 +127,10 @@ public class TripManagementService {
 
     public Response addNewParticipantById(Long tripId, Long userId){
         Trip trip;
-        UserEntity newOrganizer;
+        UserEntity newParticipant;
 
         try {
-            newOrganizer = Option.ofOptional(userRepository.findById(userId))
+            newParticipant = Option.ofOptional(userRepository.findById(userId))
                     .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
@@ -143,9 +143,9 @@ public class TripManagementService {
             return Error.notFound("TRIP_NOT_FOUND");
         }
 
-        trip.addParticipant(newOrganizer);
+        trip.addParticipant(newParticipant);
         trip = tripRepository.save(trip);
-        newOrganizer = userRepository.save(newOrganizer);
+        newParticipant = userRepository.save(newParticipant);
 
         TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
 
@@ -154,10 +154,10 @@ public class TripManagementService {
 
     public Response removeParticipantById(Long tripId, Long userId){
         Trip trip;
-        UserEntity newOrganizer;
+        UserEntity participant;
 
         try {
-            newOrganizer = Option.ofOptional(userRepository.findById(userId))
+            participant = Option.ofOptional(userRepository.findById(userId))
                     .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
@@ -170,10 +170,17 @@ public class TripManagementService {
             return Error.notFound("TRIP_NOT_FOUND");
         }
 
-        trip.removeParticipant(newOrganizer);
+        if (trip.getParticipants().contains(participant)) {
+            trip.removeParticipant(participant);
+        } else if (trip.getOrganizers().contains(participant)) {
+
+            trip.removeOrganizer(participant);
+        } else {
+            return Error.notFound("USER_NOT_PARTICIPATED_IN_TRIP");
+        }
 
         trip = tripRepository.save(trip);
-        newOrganizer = userRepository.save(newOrganizer);
+        participant = userRepository.save(participant);
 
         TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
 

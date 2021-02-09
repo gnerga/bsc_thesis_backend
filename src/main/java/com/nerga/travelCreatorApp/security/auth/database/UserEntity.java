@@ -157,4 +157,19 @@ public class UserEntity {
         trip.getParticipants().remove(this);
     }
 
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj)
+            return true;
+        if(id == null || obj == null || getClass() != obj.getClass())
+            return false;
+
+        UserEntity that = (UserEntity) obj;
+        return id.equals(that.id);
+    }
 }

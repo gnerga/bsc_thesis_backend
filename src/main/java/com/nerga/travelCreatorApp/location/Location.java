@@ -46,4 +46,19 @@ public class Location {
         return newInput.isBlank() ? oldInput : newInput;
     }
 
+    @Override
+    public int hashCode() {
+        return locationId == null ? 0 : locationId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (locationId == null || obj == null || getClass() != obj.getClass())
+            return false;
+
+        Location that = (Location) obj;
+        return locationId.equals(that.locationId);
+    }
 }

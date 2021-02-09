@@ -36,8 +36,7 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class TripManagementServiceTest {
@@ -317,7 +316,7 @@ public class TripManagementServiceTest {
     }
 
     @Test
-    public void itShouldRemoveOrganizerAndAddToParticipantsAndReturnConfirmation(){
+    public void itShouldDowngradeOrganizerAndAddToParticipantsAndReturnConfirmation(){
         // Given
         Long userId = 2L;
         Long tripId = 1L;
@@ -366,17 +365,146 @@ public class TripManagementServiceTest {
     }
 
     @Test
-    public void itShouldTryRemoveOrganizerAndReturnError(){
+    public void itShouldTryDowngradeOrganizerAndReturnError(){
+        Long userId = 2L;
+        Long tripId = 1L;
 
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When
+
+        Response response = underTest.addNewParticipantById(tripId, userId);
+
+        // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
     public void itShouldRemoveParticipantAndReturnConfirmation(){
 
+        // Given
+
+        Trip testTrip = getTestTrip();
+        Trip updatedTrip = getTestTrip();
+        UserEntity organizer = getTestUserEntity();
+        UserEntity updatedOrganizer = getTestUserEntity();
+        UserEntity updatedParticipant = getTestUserEntity2();
+        UserEntity participant = getTestUserEntity2();
+        TripDetailsDto returnedDto = getTestTripDetailsDto();
+
+        updatedTrip.addOrganizer(updatedOrganizer);
+        testTrip.addOrganizer(organizer);
+        testTrip.addParticipant(participant);
+
+        Long tripId = 1L;
+        Long userId = 2L;
+
+        when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(participant));
+
+        when(tripRepository.save(updatedTrip)).thenReturn(updatedTrip);
+        when(userRepository.save(updatedParticipant)).thenReturn(updatedParticipant);
+        when(modelMapper.map(updatedTrip, TripDetailsDto.class)).thenReturn(returnedDto);
+
+        // When
+
+        Response response = underTest.removeParticipantById(1L, 2L);
+
+        // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(returnedDto);
+
+    }
+
+    @Test
+    public void itShouldRemoveOrganizerAndReturnConfirmation(){
+
+        // Given
+
+        Trip testTrip = getTestTrip();
+        Trip updatedTrip = getTestTrip();
+        UserEntity organizer = getTestUserEntity();
+        UserEntity updatedOrganizer = getTestUserEntity();
+        UserEntity updatedOrganizer_2= getTestUserEntity2();
+        UserEntity organizer_2 = getTestUserEntity2();
+
+        TripDetailsDto returnedDto = getTestTripDetailsDto();
+
+        testTrip.addOrganizer(organizer);
+        updatedTrip.addOrganizer(updatedOrganizer);
+
+        testTrip.addOrganizer(organizer_2);
+
+
+        Long tripId = 1L;
+        Long userId = 2L;
+
+        when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(organizer_2));
+
+        when(tripRepository.save(updatedTrip)).thenReturn(updatedTrip);
+        when(userRepository.save(updatedOrganizer_2)).thenReturn(organizer_2);
+
+        when(modelMapper.map(updatedTrip, TripDetailsDto.class)).thenReturn(returnedDto);
+
+        // When
+
+        Response response = underTest.removeParticipantById(1L, 2L);
+
+        // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(returnedDto);
+
+
+
     }
 
     @Test
     public void itShouldTryRemoveParticipantAndReturnError(){
+        // Given
+
+        Trip testTrip = getTestTrip();
+        UserEntity organizer = getTestUserEntity();
+        UserEntity testParticipant = getTestUserEntity2();
+
+
+
+        TripDetailsDto returnedDto = getTestTripDetailsDto();
+
+        testTrip.addOrganizer(organizer);
+
+        Long tripId = 1L;
+        Long userId = 2L;
+
+        when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(testParticipant));
+
+        // When
+
+        Response response = underTest.removeParticipantById(1L, 2L);
+
+        // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 
     }
 
