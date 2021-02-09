@@ -542,6 +542,18 @@ public class TripManagementServiceTest {
 
     }
 
+    @Test
+    public void shouldTriggerDateCalculation(){
+
+    }
+
+    @Test
+    public void shouldUpdateTripDateBasedOnBestTripProposition(){
+
+    }
+
+    // ------------------------------------------------
+
     private UserEntity getTestUserEntity(){
         UserEntity userEntity = new UserEntity();
         userEntity.setId(1L);

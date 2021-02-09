@@ -71,6 +71,7 @@ public class DatePropositionMatcherTest {
         );
 
         DateProposition dateProposition = modelMapper.map(datePropositionDto, DateProposition.class);
+
         assertEquals(LocalDate.parse(datePropositionDto.getStartDate()), dateProposition.getStartDate());
         assertEquals(LocalDate.parse(datePropositionDto.getEndDate()), dateProposition.getEndDate());
         assertEquals(datePropositionDto.getOwnerUsername(), dateProposition.getOwnerUsername());

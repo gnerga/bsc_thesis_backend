@@ -1,6 +1,9 @@
 package com.nerga.travelCreatorApp.datepropositionmatcher;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +14,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +49,31 @@ public class DatePropositionMatcher {
         this.planedTripLength = planedTripLength;
         this.addPropositionDeadline = deadline;
         this.datePropositionList = new ArrayList<>();
+    }
+
+    public int findNumberOfAddedPropositions(int ownerId){
+        int counter = 0;
+        for(DateProposition it: this.datePropositionList){
+            if(ownerId == it.getOwnerId()) {
+                counter ++;
+            }
+        }
+        return counter;
+    }
+
+    public DatePropositionReturnedListDto getDateMatcherReport(){
+
+        List<DatePropositionReturnDto> listOfDateProposition = new ArrayList<>();
+
+        for (DateProposition it: this.analyzedDatePropositionList) {
+            listOfDateProposition.add(new DatePropositionReturnDto(it.datePropositionToString(), it.getAccuracy()));
+        }
+
+        return new DatePropositionReturnedListDto(
+                analyzedDatePropositionList.get(0).getStartDate().toString(),
+                analyzedDatePropositionList.get(0).getEndDate().toString(),
+                listOfDateProposition
+        );
     }
 
     public void addDateProposition(DateProposition newDateProposition){

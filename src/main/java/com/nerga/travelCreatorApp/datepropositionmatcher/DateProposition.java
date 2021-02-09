@@ -38,6 +38,17 @@ public class DateProposition implements Comparable<DateProposition> {
     private double accuracy;
     private int numberOfIdenticalProposition = 0;
 
+    public String datePropositionToString(){
+        return "From: "
+                + startDate.getDayOfMonth() + ' '
+                + startDate.getMonth().toString() + ' '
+                + startDate.getYear()+'\n'
+                + " To: "
+                + endDate.getDayOfMonth() + ' '
+                + endDate.getMonth().toString() + ' '
+                + endDate.getYear();
+    }
+
     public boolean isTheSameObject(DateProposition otherProposition) {
         return this == otherProposition;
     }
