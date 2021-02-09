@@ -18,4 +18,15 @@ public class LocationUpdateDto {
     private LocationAddressDetailsDto locationAddress;
     private boolean isPrivate;
 
+    public LocationDetailsDto toLocationDetailsDto(){
+        return new LocationDetailsDto(
+                this.locationId,
+                this.locationName,
+                this.locationDescription,
+                this.locationAddress,
+                null,
+                this.isPrivate
+        );
+    }
+
 }

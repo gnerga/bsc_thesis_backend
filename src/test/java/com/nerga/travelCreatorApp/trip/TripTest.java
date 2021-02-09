@@ -2,10 +2,13 @@ package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
+import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.trip.Trip;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
+import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.*;
@@ -167,6 +170,68 @@ public class TripTest {
         assertEquals(LocalDate.parse(tripCreateDto.getStartDate()), trip.getStartDate());
         assertEquals(LocalDate.parse(tripCreateDto.getEndDate()), trip.getEndDate());
 
+    }
+
+    @Test
+    void itShouldUpdateTripEntity(){
+
+        Trip trip = new Trip();
+        trip.setTripName("Wakacje Ekipy");
+        trip.setTripDescription("Najlepsze wakacje ever");
+        trip.setStartDate(LocalDate.parse("2020-11-24"));
+        trip.setEndDate(LocalDate.parse("2020-12-04"));
+        trip.setLocation(location);
+
+        LocationAddressDetailsDto newLocationAddress =
+                new LocationAddressDetailsDto(
+                        1L,
+                        "Poland",
+                        "Lodz",
+                        "Tunelowa 1",
+                        "90-156",
+                        40.50,
+                        30.40
+                );
+
+        LocationDetailsDto newLocationDetails = new LocationDetailsDto(
+                1L,
+                "Nowy spot druzyny",
+                "Miejscowa taty i mamy",
+                newLocationAddress,
+                null,
+                false
+        );
+
+        TripUpdateDto tripUpdateDto = new TripUpdateDto(
+                1L,
+                "Ekipowe wakacje",
+                "Wakacje: relaks i odpoczynek",
+                "2021-11-24",
+                "2021-11-27",
+                newLocationDetails
+
+        );
+
+        Trip updatedTrip = trip.updateTripFromTripUpdateDto(tripUpdateDto);
+
+        assertEquals(updatedTrip.getTripName(), tripUpdateDto.getTripName());
+        assertEquals(updatedTrip.getTripDescription(), tripUpdateDto.getTripDescription());
+        assertEquals(updatedTrip.getStartDate(), LocalDate.parse(tripUpdateDto.getStartDate()));
+        assertEquals(updatedTrip.getEndDate(), LocalDate.parse(tripUpdateDto.getEndDate()));
+
+        Location updatedLocation = updatedTrip.getLocation();
+
+        assertEquals(updatedLocation.getLocationName(), newLocationDetails.getLocationName());
+        assertEquals(updatedLocation.getLocationDescription(), newLocationDetails.getLocationDescription());
+
+        LocationAddress updateAddress = updatedTrip.getLocation().getLocationAddress();
+
+        assertEquals(updateAddress.getCountryName(), newLocationAddress.getCountryName());
+        assertEquals(updateAddress.getCityName(), newLocationAddress.getCityName());
+        assertEquals(updateAddress.getStreetNameAndNumber(), newLocationAddress.getStreetNameAndNumber());
+        assertEquals(updateAddress.getZipCode(), newLocationAddress.getZipCode());
+        assertEquals(updateAddress.getLatitude(), newLocationAddress.getLatitude());
+        assertEquals(updateAddress.getLongitude(), newLocationAddress.getLongitude());
 
     }
 

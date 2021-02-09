@@ -685,18 +685,20 @@ public class TripManagementServiceTest {
                 1L,
                 "Holidays 2021",
                 "Friends meet after months",
-                LocalDate.parse("2022-05-12"),
-                LocalDate.parse("2022-05-19"),
+                "2022-05-12",
+                "2022-05-19",
                 getTestChangedLocationDetailsDto());
     }
 
-    private LocationUpdateDto getTestChangedLocationDetailsDto(){
-        return new LocationUpdateDto(
+    private LocationDetailsDto getTestChangedLocationDetailsDto(){
+        return new LocationDetailsDto(
                 1L,
                 "Fajny Spot",
                 "Spoko miejscówa",
                 getTestAddressDetailsDto(),
+                null,
                 true
+
         );
     }
 

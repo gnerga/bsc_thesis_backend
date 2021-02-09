@@ -20,5 +20,4 @@ public class LocationDetailsDto {
     private UserDetailsDto owner;
     private boolean isPrivate;
 
-
 }

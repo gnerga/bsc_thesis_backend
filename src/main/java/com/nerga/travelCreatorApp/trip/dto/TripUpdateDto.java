@@ -21,10 +21,11 @@ public class TripUpdateDto {
     @NotNull
     private String tripDescription;
     @NotNull
-    private LocalDate startDate;
+    private String startDate;
     @NotNull
-    private LocalDate endDate;
+    private String endDate;
     @NotNull
-    private LocationUpdateDto location;
+    private LocationDetailsDto location;
+
 
 }

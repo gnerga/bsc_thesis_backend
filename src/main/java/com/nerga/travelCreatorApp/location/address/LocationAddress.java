@@ -27,7 +27,6 @@ public class LocationAddress {
 
     public LocationAddress updateLocationEntity(LocationAddressDetailsDto locationDetailsDto) {
 
-//        this.locationAddressId = locationDetailsDto.getLocationAddressId();
         this.countryName = simplyValidatorInputEmptyString(locationDetailsDto.getCountryName(), this.countryName);
         this.cityName = simplyValidatorInputEmptyString(locationDetailsDto.getCityName(), this.getCityName());
         this.streetNameAndNumber = simplyValidatorInputEmptyString(locationDetailsDto.getStreetNameAndNumber(),

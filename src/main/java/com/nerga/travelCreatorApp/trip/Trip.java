@@ -142,6 +142,13 @@ public class Trip {
     }
 
     public Trip updateTripFromTripUpdateDto(TripUpdateDto updatedTripDetails){
+
+        this.tripName = updatedTripDetails.getTripName();
+        this.tripDescription = updatedTripDetails.getTripDescription();
+        this.startDate = LocalDate.parse(updatedTripDetails.getStartDate());
+        this.endDate = LocalDate.parse(updatedTripDetails.getEndDate());
+        this.location.updateLocationEntity(updatedTripDetails.getLocation());
+
         return  this;
     }
 

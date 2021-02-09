@@ -15,6 +15,7 @@ import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
+import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
 import com.nerga.travelCreatorApp.trip.exceptions.TripException;
 import com.nerga.travelCreatorApp.trip.exceptions.TripNotFoundException;
 import io.vavr.Tuple;
@@ -187,7 +188,9 @@ public class TripManagementService {
         return Success.ok(tripDetailsDto);
     }
 
-    public Response updateTrip(){
+    public Response updateTrip(TripUpdateDto update){
+
+
         return null;
     }
 
