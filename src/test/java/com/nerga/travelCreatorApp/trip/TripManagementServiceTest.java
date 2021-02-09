@@ -517,8 +517,8 @@ public class TripManagementServiceTest {
 
         TripUpdateDto tripUpdateDto = getTestTripUpdateDto();
         Trip testTrip = getTestTrip();
-        Trip updatedTrip = null;
-        TripDetailsDto updatedTripDetailsDto = null;
+        Trip updatedTrip = getUpdatedTestTrip();
+        TripDetailsDto updatedTripDetailsDto = getUpdatedTestTripDetailsDto2();
 
         when(tripRepository.findById(tripUpdateDto.getTripId()))
                 .thenReturn(Optional.of(testTrip));
@@ -530,6 +530,15 @@ public class TripManagementServiceTest {
         Response response = underTest.updateTrip(tripUpdateDto);
 
         // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(updatedTripDetailsDto);
 
     }
 
@@ -688,6 +697,70 @@ public class TripManagementServiceTest {
                 "2022-05-12",
                 "2022-05-19",
                 getTestChangedLocationDetailsDto());
+    }
+
+    private Trip getUpdatedTestTrip(){
+
+        return new Trip(
+                1L,
+                "Holidays 2021",
+                getTestLocation(),
+                "Friends meet after months",
+                true,
+                7,
+                LocalDate.parse("2022-05-12"),
+                LocalDate.parse("2022-05-19"),
+                LocalDate.parse("2021-05-19")
+        );
+    }
+
+    private TripDetailsDto getUpdatedTestTripDetailsDto2(){
+        return new TripDetailsDto(
+                1L,
+                "Holidays 2021",
+                "Friends meet after months",
+                LocalDate.parse("2022-05-12"),
+                LocalDate.parse("2022-05-19"),
+                getTestLocationDetailsDto(),
+                getTestOrganizersList(),
+                getTestParticipantsList()
+        );
+    }
+
+    private Location getUpdatedTestLocation(){
+        Location location = new Location();
+        location.setLocationName("Fajny Spot");
+        location.setLocationAddress(getUpdatedTestLocationAddress());
+        location.setOwner(getTestUserEntity());
+        location.setLocationDescription("Spoko miejscówa");
+        location.setLocationId(1L);
+        location.setPrivate(false);
+        return location;
+    }
+
+    private LocationAddress getUpdatedTestLocationAddress(){
+        return  new LocationAddress(
+                1L,
+                "Poland",
+                "Lodz",
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
+        );
+    }
+
+    private TripDetailsDto getUpdatedTestTripDetailsDto(){
+        return new TripDetailsDto(
+                1L,
+                "Holidays 2020",
+                "Friends meet after years",
+                LocalDate.parse("2021-05-12"),
+                LocalDate.parse("2021-05-19"),
+                getTestLocationDetailsDto(),
+                getTestOrganizersList(),
+                getTestParticipantsList()
+        );
     }
 
     private LocationDetailsDto getTestChangedLocationDetailsDto(){

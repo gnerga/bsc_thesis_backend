@@ -190,8 +190,22 @@ public class TripManagementService {
 
     public Response updateTrip(TripUpdateDto update){
 
+        Trip trip;
 
-        return null;
+        try {
+            trip = Option.ofOptional(tripRepository.findById(update.getTripId()))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        trip.updateTripFromTripUpdateDto(update);
+
+        trip = tripRepository.save(trip);
+
+        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+
+        return Success.ok(tripDetailsDto);
     }
 
     public Response triggerDatePropositionMatcher() {return null;}
