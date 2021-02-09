@@ -44,6 +44,7 @@ public class LocationService {
             owner = Option.ofOptional(userRepository.findById(locationCreateDto.getOwner().getId()))
                     .getOrElseThrow(()-> new MyUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
+            // todo tu poprawic
             return Error.badRequest("USER_NOT_FOUND");
         }
 

@@ -9,10 +9,14 @@ import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
+import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
+import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
+import com.nerga.travelCreatorApp.trip.exceptions.TripException;
+import com.nerga.travelCreatorApp.trip.exceptions.TripNotFoundException;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.control.Option;
@@ -63,8 +67,30 @@ public class TripManagementService {
     }
 
     public Response addNewOrganizerById(Long tripId, Long userId){
+        Trip trip;
+        UserEntity newOrganizer;
 
-        return null;
+        try {
+            newOrganizer = Option.ofOptional(userRepository.findById(userId))
+                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        trip.addOrganizer(newOrganizer);
+        trip = tripRepository.save(trip);
+        newOrganizer = userRepository.save(newOrganizer);
+
+        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+
+        return Success.ok(tripDetailsDto);
 
     }
 
@@ -130,6 +156,8 @@ public class TripManagementService {
                 )) : Validation.invalid(Error.badRequest(errorMessage));
 
     }
+
+
 
     private DateProposition createDateProposition(TripCreateDto tripCreateDto, UserEntity userEntity){
         return new DateProposition(

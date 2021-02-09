@@ -230,6 +230,7 @@ public class TripManagementServiceTest {
         Assertions.assertThat(
                 response.toResponseEntity()
                         .getStatusCode()).isEqualTo(HttpStatus.OK);
+
         Assertions.assertThat(
                 response.toResponseEntity()
                         .getBody())
