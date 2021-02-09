@@ -140,4 +140,19 @@ public class Trip {
         return datePropositionMatcher.removeDateProposition(dateProposition);
     }
 
+    @Override
+    public int hashCode() {
+        return tripId == null ? 0 : tripId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+        if( tripId == null || obj == null || getClass() != obj.getClass())
+            return false;
+
+        Trip that = (Trip)  obj;
+        return tripId.equals(that.tripId);
+     }
 }

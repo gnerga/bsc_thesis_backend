@@ -116,8 +116,9 @@ public class TripManagementService {
         trip.removeOrganizer(newOrganizer);
         trip.addParticipant(newOrganizer);
 
-        trip = tripRepository.save(trip);
         newOrganizer = userRepository.save(newOrganizer);
+        trip = tripRepository.save(trip);
+
 
         TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
 
