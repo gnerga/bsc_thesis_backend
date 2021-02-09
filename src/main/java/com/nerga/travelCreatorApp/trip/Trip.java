@@ -9,6 +9,7 @@ import com.nerga.travelCreatorApp.expensesregister.ExpensesManager;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.post.PostManager;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
+import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
 import com.sun.istack.NotNull;
 import lombok.*;
 
@@ -138,6 +139,10 @@ public class Trip {
 
     public boolean removeDateProposition(DateProposition dateProposition) {
         return datePropositionMatcher.removeDateProposition(dateProposition);
+    }
+
+    public Trip updateTripFromTripUpdateDto(TripUpdateDto updatedTripDetails){
+        return  this;
     }
 
     @Override

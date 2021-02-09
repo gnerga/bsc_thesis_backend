@@ -513,7 +513,23 @@ public class TripManagementServiceTest {
     @Test
     public void itShouldUpdateTripAndReturnUpdatedVersion(){
 
+        // Given
 
+        TripUpdateDto tripUpdateDto = getTestTripUpdateDto();
+        Trip testTrip = getTestTrip();
+        Trip updatedTrip = null;
+        TripDetailsDto updatedTripDetailsDto = null;
+
+        when(tripRepository.findById(tripUpdateDto.getTripId()))
+                .thenReturn(Optional.of(testTrip));
+        when(tripRepository.save(updatedTrip)).thenReturn(updatedTrip);
+        when(modelMapper.map(updatedTrip, TripDetailsDto.class)).thenReturn(updatedTripDetailsDto);
+
+        // When
+
+        Response response = underTest.updateTrip(tripUpdateDto);
+
+        // Then
 
     }
 
