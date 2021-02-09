@@ -85,6 +85,7 @@ public class TripManagementService {
         }
 
         trip.addOrganizer(newOrganizer);
+        trip.removeParticipant(newOrganizer);
         trip = tripRepository.save(trip);
         newOrganizer = userRepository.save(newOrganizer);
 
@@ -94,16 +95,88 @@ public class TripManagementService {
 
     }
 
-    public Response removeOrganizerById(){
-        return null;
+    public Response removeOrganizerById(Long tripId, Long userId){
+        Trip trip;
+        UserEntity newOrganizer;
+
+        try {
+            newOrganizer = Option.ofOptional(userRepository.findById(userId))
+                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        trip.removeOrganizer(newOrganizer);
+        trip.addParticipant(newOrganizer);
+
+        trip = tripRepository.save(trip);
+        newOrganizer = userRepository.save(newOrganizer);
+
+        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+
+        return Success.ok(tripDetailsDto);
     }
 
-    public Response addNewParticipantById(){
-        return null;
+    public Response addNewParticipantById(Long tripId, Long userId){
+        Trip trip;
+        UserEntity newOrganizer;
+
+        try {
+            newOrganizer = Option.ofOptional(userRepository.findById(userId))
+                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        trip.addParticipant(newOrganizer);
+        trip = tripRepository.save(trip);
+        newOrganizer = userRepository.save(newOrganizer);
+
+        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+
+        return Success.ok(tripDetailsDto);
     }
 
-    public Response removeParticipantById(){
-        return null;
+    public Response removeParticipantById(Long tripId, Long userId){
+        Trip trip;
+        UserEntity newOrganizer;
+
+        try {
+            newOrganizer = Option.ofOptional(userRepository.findById(userId))
+                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        trip.removeParticipant(newOrganizer);
+
+        trip = tripRepository.save(trip);
+        newOrganizer = userRepository.save(newOrganizer);
+
+        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+
+        return Success.ok(tripDetailsDto);
     }
 
     public Response updateTrip(){

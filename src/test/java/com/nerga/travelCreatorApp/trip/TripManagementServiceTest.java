@@ -203,7 +203,6 @@ public class TripManagementServiceTest {
     public void itShouldAddNewOrganizerById(){
 
         // Given
-
         Long userId = 2L;
         Long tripId = 1L;
 
@@ -237,6 +236,47 @@ public class TripManagementServiceTest {
                 .isEqualToComparingFieldByField(tripDto);
 
     }
+
+    @Test
+    public void itShouldTryAddNewOrganizerAndReturnUserNotFound(){
+        // Given
+        Long userId = 2L;
+        Long tripId = 1L;
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When
+
+        Response response = underTest.addNewOrganizerById(tripId, userId);
+
+        // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+    }
+
+    @Test
+    public void itShouldTryAddNewOrganizerAndReturnTripNotFound(){
+        // Given
+        Long userId = 2L;
+        Long tripId = 1L;
+
+        when(tripRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When
+
+        Response response = underTest.addNewOrganizerById(tripId, userId);
+
+        // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+    }
+
 
     private UserEntity getTestUserEntity(){
         UserEntity userEntity = new UserEntity();
