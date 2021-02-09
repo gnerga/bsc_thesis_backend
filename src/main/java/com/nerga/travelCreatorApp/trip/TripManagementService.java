@@ -23,9 +23,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 //@Service("tripService")
@@ -52,17 +54,18 @@ public class TripManagementService {
                 .map(userEntityAndLocation -> createTrip(userEntityAndLocation, tripCreateDto))
                 .map(tripRepository::save)
                 .map(returnedTrip -> modelMapper.map(returnedTrip, TripDetailsDto.class))
-                .toEither(Error.badRequest("TRIP_CANNOT_BE_CREATED"))
                 .fold(Function.identity(), Success::ok);
     }
 
     public Response findAllTrips(){
         List<Trip> tripList = tripRepository.findAll();
-        return !tripList.isEmpty() ? Success.ok(tripList) : Error.badRequest("TRIP_LIST_IS_EMPTY");
+           return !tripList.isEmpty() ? Success.ok(convertListDetailsDto(tripList)) : Success.ok(new ArrayList<TripDetailsDto>());
     }
 
-    public Response addNewOrganizerById(){
+    public Response addNewOrganizerById(Long tripId, Long userId){
+
         return null;
+
     }
 
     public Response removeOrganizerById(){
@@ -84,6 +87,10 @@ public class TripManagementService {
     public Response triggerDatePropositionMatcher() {return null;}
 
     public Response changeAddNewStatePropositionState() {return null;}
+
+    private List<TripDetailsDto> convertListDetailsDto(List<Trip> trips){
+        return trips.stream().map(trip -> modelMapper.map(trip, TripDetailsDto.class)).collect(Collectors.toList());
+    }
 
     private Trip createTrip(Tuple2<UserEntity, Location> userAndLocationEntities, TripCreateDto tripCreateDto){
         Trip trip = modelMapper.map(tripCreateDto, Trip.class);

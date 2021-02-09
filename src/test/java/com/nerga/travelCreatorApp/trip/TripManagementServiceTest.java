@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
+import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.location.Location;
@@ -32,6 +33,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.time.LocalDate;
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -132,6 +134,109 @@ public class TripManagementServiceTest {
                 .isEqualToComparingFieldByField(tripTestDetailsDto);
     }
 
+    @Test
+    public void itShouldReturnError(){
+        //Given
+        TripCreateDto tripCreateDto = getTripCreateDto();
+
+        Map<String, Object> details = new HashMap<String, Object>();
+        details.put("user_name", "test");
+
+        when(userRepository.findByUsername(any())).thenReturn(Optional.empty());
+
+        // When
+        Response response = underTest.addTrip(tripCreateDto);
+        // Then
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void itShouldReturnListOfAllTripsAndCode200(){
+        // Given
+        Trip testTrip = getTestTrip();
+        List<Trip> testTripList = new ArrayList<>();
+        testTripList.add(testTrip);
+        TripDetailsDto testTripDto = getTestTripDetailsDto();
+        List<TripDetailsDto> testTripListDto = new ArrayList<>();
+        testTripListDto.add(getTestTripDetailsDto());
+
+        when(tripRepository.findAll()).thenReturn(testTripList);
+        when(modelMapper.map(testTrip,TripDetailsDto.class)).thenReturn(testTripDto);
+
+        // When
+        Response response = underTest.findAllTrips();
+        // Then
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(testTripListDto);
+    }
+
+    @Test
+    public void itShouldReturnEmptyListOfAllTrips(){
+        // Given
+
+        List<Trip> testTripList = new ArrayList<>();
+        List<TripDetailsDto> testTripListDto = new ArrayList<>();
+
+
+        when(tripRepository.findAll()).thenReturn(testTripList);
+
+        // When
+        Response response = underTest.findAllTrips();
+        // Then
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(testTripListDto);
+    }
+
+    @Test
+    public void itShouldAddNewOrganizerById(){
+
+        // Given
+
+        Long userId = 2L;
+        Long tripId = 1L;
+
+        Trip trip = getTestTrip();
+        UserEntity testUser = getTestUserEntity2();
+        List<UserEntity> testUserList;
+        List<UserDetailsDto> testUserDetailsDto = new ArrayList<>();
+        UserDetailsDto userDetailsDto = getTestUserDetailsDto2();
+        testUserDetailsDto.add(userDetailsDto);
+        TripDetailsDto tripDto = getTestTripDetailsDtoWithNewOrganizer();
+
+        when(tripRepository.findById(tripId)).thenReturn(Optional.of(trip));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
+        when(tripRepository.save(trip)).thenReturn(trip);
+        when(userRepository.save(userEntity)).thenReturn(testUser);
+        when(modelMapper.map(trip, TripDetailsDto.class)).thenReturn(tripDto);
+
+        // When
+
+        Response response = underTest.addNewOrganizerById(tripId, userId);
+
+        // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(tripDto);
+
+    }
+
     private UserEntity getTestUserEntity(){
         UserEntity userEntity = new UserEntity();
         userEntity.setId(1L);
@@ -142,6 +247,30 @@ public class TripManagementServiceTest {
         userEntity.setEmail("test@mail.com");
         userEntity.setPhoneNumber("1234516");
         return userEntity;
+    }
+
+    private UserEntity getTestUserEntity2(){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(2L);
+        userEntity.setUsername("test_user_2");
+        userEntity.setPassword("password_2");
+        userEntity.setFirstName("Adam");
+        userEntity.setLastName("Paciorek");
+        userEntity.setEmail("test2@mail.com");
+        userEntity.setPhoneNumber("2234516");
+        return userEntity;
+    }
+
+    private UserDetailsDto getTestUserDetailsDto2(){
+        return new UserDetailsDto(
+                2L,
+                "test_user_2",
+                "Adam",
+                "Paciorek",
+                "test2@gmail.com",
+                "2234516"
+
+        );
     }
 
     private TripCreateDto getTripCreateDto(){
@@ -229,10 +358,29 @@ public class TripManagementServiceTest {
                 getTestParticipantsList()
         );
     }
+    private TripDetailsDto getTestTripDetailsDtoWithNewOrganizer(){
+        return new TripDetailsDto(
+                1L,
+                "Holidays 2020",
+                "Friends meet after years",
+                LocalDate.parse("2021-05-12"),
+                LocalDate.parse("2021-05-19"),
+                getTestLocationDetailsDto(),
+                getTestNewOrganizersList(),
+                getTestParticipantsList()
+        );
+    }
+
 
     private List<UserDetailsDto> getTestOrganizersList(){
         List<UserDetailsDto> list = new ArrayList<>();
         list.add(getTestUserDetailsDto());
+        return list;
+    }
+
+    private List<UserDetailsDto> getTestNewOrganizersList(){
+        List<UserDetailsDto> list = getTestOrganizersList();
+        list.add(getTestUserDetailsDto2());
         return list;
     }
 
