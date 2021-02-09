@@ -9,11 +9,13 @@ import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
 import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.location.dto.LocationUpdateDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
+import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -508,7 +510,12 @@ public class TripManagementServiceTest {
 
     }
 
+    @Test
+    public void itShouldUpdateTripAndReturnUpdatedVersion(){
 
+
+
+    }
 
     private UserEntity getTestUserEntity(){
         UserEntity userEntity = new UserEntity();
@@ -657,8 +664,25 @@ public class TripManagementServiceTest {
         );
     }
 
+    private TripUpdateDto getTestTripUpdateDto() {
+        return new TripUpdateDto(
+                1L,
+                "Holidays 2021",
+                "Friends meet after months",
+                LocalDate.parse("2022-05-12"),
+                LocalDate.parse("2022-05-19"),
+                getTestChangedLocationDetailsDto());
+    }
 
-
+    private LocationUpdateDto getTestChangedLocationDetailsDto(){
+        return new LocationUpdateDto(
+                1L,
+                "Fajny Spot",
+                "Spoko miejscówa",
+                getTestAddressDetailsDto(),
+                true
+        );
+    }
 
     private List<UserDetailsDto> getTestOrganizersList(){
         List<UserDetailsDto> list = new ArrayList<>();
