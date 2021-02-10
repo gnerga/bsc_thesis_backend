@@ -101,6 +101,44 @@ public class TripUserServiceTest {
     }
 
     @Test
+    void shouldTryCreateNewExpenseAndReturnThatTripNotFound(){
+        ExpensesCreateDto expensesCreateDto = getTestExpenseCreateDto();
+        when(tripRepository.findById(any(Long.class))).thenReturn(Optional.empty());
+        Response response = underTest.createExpense(expensesCreateDto);
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField("TRIP_NOT_FOUND");
+
+    }
+
+    @Test
+    void shouldTryCreateNewExpenseAndReturnThatUserNotFound(){
+
+        Trip trip = getTestTrip();
+
+        ExpensesCreateDto expensesCreateDto = getTestExpenseCreateDto();
+
+        when(tripRepository.findById(any(Long.class))).thenReturn(Optional.of(trip));
+        when(userRepository.existsById(any(Long.class))).thenReturn(false);
+
+        Response response = underTest.createExpense(expensesCreateDto);
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField("USER_NOT_FOUND");
+
+    }
+
+    @Test
     void shouldCreateExpenseByTripId(){
         // Given
 

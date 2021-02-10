@@ -11,6 +11,7 @@ import com.nerga.travelCreatorApp.expensesregister.Expenses;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordCreateDto;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
+import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TripUserService {
@@ -48,11 +50,17 @@ public class TripUserService {
             return Error.notFound("TRIP_NOT_FOUND");
         }
 
-       if(!checkIfAllUserExists(newExpenses.getShareHolders())){
-           Error.notFound("USERS_NOT_FOUND");
+       if(checkIfAllUserExists(newExpenses.getShareHolders())){
+           return Error.notFound("USER_NOT_FOUND");
        }
 
-        return null;
+       Expenses expense = mapExpensesCreateDto(newExpenses);
+
+       trip.getExpenseManager().addExpenses(expense);
+
+       trip = tripRepository.save(trip);
+
+        return Success.ok(null);
     }
 
 
@@ -112,21 +120,36 @@ public class TripUserService {
     private boolean checkIfAllUserExists(List<ExpenseRecordCreateDto> records){
         for (ExpenseRecordCreateDto it : records) {
             if (!userRepository.existsById(it.getUserId())){;
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private Expenses mapExpensesCreateDto(ExpensesCreateDto newExpenses){
 
         List<ExpenseRecord> records = new ArrayList<>();
+        Optional<UserEntity> optional;
 
         for (ExpenseRecordCreateDto it : newExpenses.getShareHolders()) {
 
+            optional = userRepository.findById(it.getUserId());
+
+            if(optional.isEmpty()){
+                return null;
+            }
+
+            records.add(new ExpenseRecord(optional.get(), it.getAmount()));
         }
 
-        return null;
+        Expenses expenses = new Expenses(
+                newExpenses.getDescription(),
+                newExpenses.getDescription(),
+                newExpenses.getCost(),
+                records
+        );
+
+        return expenses;
     }
 
 }
