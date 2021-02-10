@@ -89,7 +89,7 @@ public class TripManagementService {
         trip.addOrganizer(newOrganizer);
         trip.removeParticipant(newOrganizer);
         trip = tripRepository.save(trip);
-        newOrganizer = userRepository.save(newOrganizer);
+        userRepository.save(newOrganizer);
 
         TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
 

@@ -1,7 +1,6 @@
 package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
-import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.location.Location;
@@ -9,7 +8,6 @@ import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
 import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
-import com.nerga.travelCreatorApp.location.dto.LocationUpdateDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;

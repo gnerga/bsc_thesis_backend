@@ -2,7 +2,6 @@ package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.location.LocationRepository;
-import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +23,21 @@ public class TripUserService {
         this.modelMapper = modelMapper;
     }
 
-    public Response addUserToExpenseById(){return null;}
-    public Response addUsersListToExpenseById(){return null;}
-    public Response createExpense(){return null;}
-    public Response updateAmount(){return null;}
+    public Response createExpenseByTripId(){return null;}
+
+    public Response addUserToExpenseByUserIdAndTripId(){return null;}
+
+    public Response addUsersListToExpenseByUserIdAndTripIdAndExpenseId(){return null;}
+
+    public Response updateAmountByTripAndExpenseIdAndUserId(){return null;}
     public Response updateExpenseById(){return null;}
+
     public Response addNewDateProposition(){
         return null;
     }
     public Response leaveTripWithGivenId(){ return null; }
-    public Response addPost(){return null;}
-    public Response handUp(){return null;}
-    public Response handDown(){return null;}
-
-
+    public Response addPostByTripId(){return null;}
+    public Response handUpByTripAndPostId(){return null;}
+    public Response handDownByTripAndPostId(){return null;}
 
 }
