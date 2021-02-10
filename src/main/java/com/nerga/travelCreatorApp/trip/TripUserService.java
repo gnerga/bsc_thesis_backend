@@ -9,12 +9,15 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionRetu
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
 import com.nerga.travelCreatorApp.expensesregister.Expenses;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordCreateDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +63,7 @@ public class TripUserService {
 
        trip = tripRepository.save(trip);
 
-        return Success.ok(null);
+       return Success.ok(mapExpensesToExpensesDetailsDto(expense));
     }
 
 
@@ -117,6 +120,24 @@ public class TripUserService {
 
     }
 
+    private ExpensesDetailsDto mapExpensesToExpensesDetailsDto(Expenses expenses){
+        List<ExpenseRecordDetailsDto> list = new ArrayList<>();
+
+        for (ExpenseRecord it: expenses.getShareholders()){
+            UserDetailsDto user = modelMapper.map(it.getUserEntity(), UserDetailsDto.class);
+            list.add(new ExpenseRecordDetailsDto(it.getExpenseRecordId(), user, it.getAmount()));
+        }
+
+        return new ExpensesDetailsDto(
+                expenses.getExpensesId(),
+                expenses.getTitle(),
+                expenses.getDescription(),
+                expenses.getCost(),
+                list
+        );
+
+    }
+
     private boolean checkIfAllUserExists(List<ExpenseRecordCreateDto> records){
         for (ExpenseRecordCreateDto it : records) {
             if (!userRepository.existsById(it.getUserId())){;
@@ -143,7 +164,7 @@ public class TripUserService {
         }
 
         Expenses expenses = new Expenses(
-                newExpenses.getDescription(),
+                newExpenses.getTitle(),
                 newExpenses.getDescription(),
                 newExpenses.getCost(),
                 records
