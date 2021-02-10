@@ -13,6 +13,7 @@ import lombok.Setter;
 
 public class ExpensesRecordDetailsDto {
 
+    Long expenseRecordId;
     UserDetailsDto user;
     float amount;
 

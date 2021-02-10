@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ExpensesDetailsDto {
 
+    Long expenseId;
     String title;
     String description;
     float cost;
