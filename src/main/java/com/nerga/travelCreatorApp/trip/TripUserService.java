@@ -51,27 +51,7 @@ public class TripUserService {
         return null;
     }
 
-    public Response addNewDateProposition(DatePropositionDto datePropositionDto, Long tripId) {
 
-        Trip trip;
-        try {
-            trip = Option.ofOptional(tripRepository.findById(tripId))
-                    .getOrElseThrow(() -> new MyUserNotFoundException("USER_NOT_FOUND"));
-        } catch (UserException e) {
-            return Error.notFound("USER_NOT_FOUND");
-        }
-
-        DateProposition proposition = modelMapper.map(datePropositionDto, DateProposition.class);
-
-        trip.addDateProposition(proposition);
-        trip.getDatePropositionMatcher().runAnalysis();
-        DatePropositionReturnedListDto report = trip.getDatePropositionMatcher().getDateMatcherReport();
-
-        tripRepository.save(trip);
-
-        return Success.ok(report);
-
-    }
 
     public Response leaveTripWithGivenId() {
         return null;
@@ -87,6 +67,29 @@ public class TripUserService {
 
     public Response handDownByTripAndPostId() {
         return null;
+    }
+
+    public Response addNewDateProposition(DatePropositionDto datePropositionDto, Long tripId) {
+
+        Trip trip;
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(() -> new MyUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        DateProposition proposition = modelMapper.map(datePropositionDto, DateProposition.class);
+
+        trip.addDateProposition(proposition);
+        trip.getDatePropositionMatcher().runAnalysis();
+
+        DatePropositionReturnedListDto report = trip.getDatePropositionMatcher().getDateMatcherReport();
+
+        tripRepository.save(trip);
+
+        return Success.ok(report);
+
     }
 
 }

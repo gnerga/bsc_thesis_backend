@@ -17,6 +17,6 @@ public class ExpensesCreateDto {
     String title;
     String description;
     float cost;
-    List<ExpensesRecordCreateDto> shareHolders;
+    List<ExpenseRecordCreateDto> shareHolders;
 
 }

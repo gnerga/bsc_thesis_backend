@@ -1,5 +1,9 @@
 package com.nerga.travelCreatorApp.common.propertymap;
 
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
+import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import org.modelmapper.PropertyMap;
@@ -18,6 +22,14 @@ public class ApplicationPropertyMaps {
                 map().getOwner().setPhoneNumber(source.getOwner().getPhoneNumber());
             }
         };
+    }
+
+    public static PropertyMap<Expenses, ExpensesDetailsDto> expensesRecordFieldMapping(){
+        return null;
+    }
+
+    public static PropertyMap<ExpenseRecord, ExpenseRecordDetailsDto> expensesRecordUserEntityFieldMapping(){
+        return  null;
     }
 
 }
