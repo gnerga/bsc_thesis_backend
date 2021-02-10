@@ -171,7 +171,6 @@ public class DatePropositionMatcherTest {
                 "2020-10-16",
                 "2020-10-22",
                 list
-
         );
 
         datePropositionMatcher.addDateProposition(proposition1);

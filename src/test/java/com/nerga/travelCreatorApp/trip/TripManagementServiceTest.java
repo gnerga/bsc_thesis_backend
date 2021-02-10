@@ -577,18 +577,6 @@ public class TripManagementServiceTest {
 
     // ------------------------------------------------
 
-    private UserEntity getTestUserEntity(){
-        UserEntity userEntity = new UserEntity();
-        userEntity.setId(1L);
-        userEntity.setUsername("test_user");
-        userEntity.setPassword("password_1");
-        userEntity.setFirstName("Jan");
-        userEntity.setLastName("Nowak");
-        userEntity.setEmail("test@mail.com");
-        userEntity.setPhoneNumber("1234516");
-        return userEntity;
-    }
-
     private UserEntity getTestUserEntity2(){
         UserEntity userEntity = new UserEntity();
         userEntity.setId(2L);
@@ -625,6 +613,18 @@ public class TripManagementServiceTest {
         );
     }
 
+    private UserEntity getTestUserEntity(){
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(1L);
+        userEntity.setUsername("test_user");
+        userEntity.setPassword("password_1");
+        userEntity.setFirstName("Jan");
+        userEntity.setLastName("Nowak");
+        userEntity.setEmail("test@mail.com");
+        userEntity.setPhoneNumber("1234516");
+        return userEntity;
+    }
+
     private Location getTestLocation(){
         Location location = new Location();
         location.setLocationName("Super Spot");
@@ -648,18 +648,6 @@ public class TripManagementServiceTest {
         );
     }
 
-    private LocationAddressDetailsDto getTestAddressDetailsDto(){
-        return new LocationAddressDetailsDto(
-                1L,
-                "Poland",
-                "Lodz",
-                "Tunelowa 1",
-                "90-156",
-                40.40,
-                30.40
-        );
-    }
-
     private Trip getTestTrip(){
 
         return new Trip(
@@ -672,6 +660,18 @@ public class TripManagementServiceTest {
                 LocalDate.parse("2021-05-12"),
                 LocalDate.parse("2021-05-19"),
                 LocalDate.parse("2021-05-19")
+        );
+    }
+
+    private LocationAddressDetailsDto getTestAddressDetailsDto(){
+        return new LocationAddressDetailsDto(
+                1L,
+                "Poland",
+                "Lodz",
+                "Tunelowa 1",
+                "90-156",
+                40.40,
+                30.40
         );
     }
 
