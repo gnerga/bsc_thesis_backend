@@ -543,11 +543,6 @@ public class TripManagementServiceTest {
     }
 
     @Test
-    public void shouldTriggerDateCalculation(){
-
-    }
-
-    @Test
     public void shouldUpdateTripDateBasedOnBestTripProposition(){
 
     }

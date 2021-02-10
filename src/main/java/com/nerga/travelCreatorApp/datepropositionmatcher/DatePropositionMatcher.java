@@ -5,9 +5,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.trip.Trip;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -18,7 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @Entity
 @Table(name = "DatePropositionMatcher")
@@ -51,10 +50,10 @@ public class DatePropositionMatcher {
         this.datePropositionList = new ArrayList<>();
     }
 
-    public int findNumberOfAddedPropositions(int ownerId){
+    public int findNumberOfAddPropositions(Long ownerId){
         int counter = 0;
         for(DateProposition it: this.datePropositionList){
-            if(ownerId == it.getOwnerId()) {
+            if(ownerId.equals(it.getOwnerId())) {
                 counter ++;
             }
         }
@@ -78,6 +77,7 @@ public class DatePropositionMatcher {
 
     public void addDateProposition(DateProposition newDateProposition){
         if (newDateProposition!=null){
+            newDateProposition.setDatePropositionMatcher(this);
             datePropositionList.add(newDateProposition);
         }
     }
@@ -95,12 +95,17 @@ public class DatePropositionMatcher {
     }
 
     public void displayDateProposition(){
-        this.datePropositionList
+        this.analyzedDatePropositionList
                 .forEach(System.out::println);
     }
 
-    public List<DateProposition> analyze(int planedTripLength){
-        examineAccuracy(planedTripLength);
+    public void runAnalysis(){
+        analyze();
+        sortBtAccuracy();
+    }
+
+    public List<DateProposition> analyze(){
+        examineAccuracy(this.planedTripLength);
         return removeDuplicatedPropositions();
     }
 
