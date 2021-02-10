@@ -107,6 +107,12 @@ public class Trip {
 
     }
 
+    public Trip updateDateBasedOnBestMatch(){
+        this.setStartDate(this.datePropositionMatcher.getAnalyzedDatePropositionList().get(0).getStartDate());
+        this.setEndDate(this.datePropositionMatcher.getAnalyzedDatePropositionList().get(0).getEndDate());
+        return this;
+    }
+
     public void addOrganizer(UserEntity user) {
         if (organizers == null) {
             organizers = new ArrayList<>();

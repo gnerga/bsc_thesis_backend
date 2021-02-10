@@ -6,6 +6,7 @@ import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
@@ -208,8 +209,25 @@ public class TripManagementService {
         return Success.ok(tripDetailsDto);
     }
 
+    public Response changeTripDate(Long tripId) {
+        Trip trip;
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
 
-    public Response changeAddNewStatePropositionState() {return null;}
+        trip.getDatePropositionMatcher().runAnalysis();
+        trip = trip.updateDateBasedOnBestMatch();
+
+        trip = tripRepository.save(trip);
+
+        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+
+        return Success.ok(tripDetailsDto);
+
+    }
 
     private List<TripDetailsDto> convertListDetailsDto(List<Trip> trips){
         return trips.stream().map(trip -> modelMapper.map(trip, TripDetailsDto.class)).collect(Collectors.toList());
@@ -253,8 +271,6 @@ public class TripManagementService {
                 )) : Validation.invalid(Error.badRequest(errorMessage));
 
     }
-
-
 
     private DateProposition createDateProposition(TripCreateDto tripCreateDto, UserEntity userEntity){
         return new DateProposition(

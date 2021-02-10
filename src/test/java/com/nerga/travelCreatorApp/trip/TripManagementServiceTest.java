@@ -545,6 +545,36 @@ public class TripManagementServiceTest {
     @Test
     public void shouldUpdateTripDateBasedOnBestTripProposition(){
 
+        // Given
+
+        Long tripId = 1L;
+        Trip testTrip = getTestTrip();
+        List<DateProposition> propositionList = getTestDatePropositionList();
+        Trip updatedTrip = getTestTripWithNewDate();
+        TripDetailsDto updatedTripDetail = getTestTripDetailsDtoDateMatcher();
+
+        testTrip.getDatePropositionMatcher().addDateProposition(propositionList.get(0));
+        testTrip.getDatePropositionMatcher().addDateProposition(propositionList.get(1));
+        testTrip.getDatePropositionMatcher().addDateProposition(propositionList.get(2));
+
+        when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
+        when(tripRepository.save(testTrip)).thenReturn(updatedTrip);
+        when(modelMapper.map(updatedTrip, TripDetailsDto.class)).thenReturn(updatedTripDetail);
+
+        // When
+
+        Response response = underTest.changeTripDate(tripId);
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(updatedTripDetail);
+
+        // Then
     }
 
     // ------------------------------------------------
@@ -647,6 +677,21 @@ public class TripManagementServiceTest {
         );
     }
 
+    private Trip getTestTripWithNewDate(){
+
+        return new Trip(
+                1L,
+                "Holidays 2020",
+                getTestLocation(),
+                "Friends meet after years",
+                true,
+                7,
+                LocalDate.parse("2020-10-16"),
+                LocalDate.parse("2020-10-22"),
+                LocalDate.parse("2020-05-19")
+        );
+    }
+
     private LocationDetailsDto getTestLocationDetailsDto(){
         return new LocationDetailsDto(
                 1L,
@@ -670,6 +715,20 @@ public class TripManagementServiceTest {
                 getTestParticipantsList()
         );
     }
+
+    private TripDetailsDto getTestTripDetailsDtoDateMatcher(){
+        return new TripDetailsDto(
+                1L,
+                "Holidays 2020",
+                "Friends meet after years",
+                LocalDate.parse("2020-10-16"),
+                LocalDate.parse("2020-10-22"),
+                getTestLocationDetailsDto(),
+                getTestOrganizersList(),
+                getTestParticipantsList()
+        );
+    }
+
     private TripDetailsDto getTestTripDetailsDtoWithNewOrganizer(){
         return new TripDetailsDto(
                 1L,
@@ -809,6 +868,28 @@ public class TripManagementServiceTest {
         return new
                 DateProposition(LocalDate.parse("2020-10-14"),
                 LocalDate.parse("2020-10-21"), "test_user", 1L);
+    }
+
+    private List<DateProposition> getTestDatePropositionList(){
+
+        List<DateProposition> list = new ArrayList<>();
+
+        list.add( new DateProposition(
+                        LocalDate.parse("2020-10-16"),
+                        LocalDate.parse("2020-10-22"),
+                        "test_user", 1L));
+
+        list.add( new DateProposition(
+                        LocalDate.parse("2020-10-18"),
+                        LocalDate.parse("2020-10-25"),
+                        "test_user", 1L));
+
+        list.add( new DateProposition(
+                        LocalDate.parse("2020-10-10"),
+                        LocalDate.parse("2020-10-17"),
+                        "test_user", 1L));
+
+        return list;
     }
 
     private UserDetailsDto getTestUserDetailsDto(){
