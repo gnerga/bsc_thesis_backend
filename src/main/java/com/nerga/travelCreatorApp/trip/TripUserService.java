@@ -66,8 +66,6 @@ public class TripUserService {
        return Success.ok(mapExpensesToExpensesDetailsDto(expense));
     }
 
-
-
     public Response updateExpenseById() {
         return null;
     }
@@ -76,7 +74,7 @@ public class TripUserService {
         return null;
     }
 
-    public Response updateAmountByTripAndExpenseIdAndUserId() {
+    public Response updateExpenseShareholdersAmount() {
         return null;
     }
 
@@ -92,9 +90,13 @@ public class TripUserService {
         return null;
     }
 
-    public Response leaveTripWithGivenId() {
-        return null;
-    }
+//    public Response leaveTripWithGivenId() {
+//        return null;
+//    }
+
+    //    public Response updateAmountByTripAndExpenseIdAndUserId() {
+//        return null;
+//    }
 
     public Response addNewDateProposition(DatePropositionDto datePropositionDto, Long tripId) {
 
