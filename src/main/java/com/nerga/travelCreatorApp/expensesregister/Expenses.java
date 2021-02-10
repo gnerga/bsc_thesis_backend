@@ -1,14 +1,17 @@
 package com.nerga.travelCreatorApp.expensesregister;
 
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name="expenses")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Expenses {
 
     @Id
@@ -25,4 +28,19 @@ public class Expenses {
 
     @OneToMany
     List<ExpenseRecord> shareholders;
+
+    public Expenses(
+            String title,
+            String description,
+            float cost,
+            List<ExpenseRecord> shareholders
+    ){
+        this.title = title;
+        this.description = description;
+        this.cost = cost;
+        this.shareholders = shareholders;
+    }
+
+
+
 }

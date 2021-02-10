@@ -6,6 +6,10 @@ import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
+import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordCreateDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
@@ -14,6 +18,9 @@ import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TripUserService {
@@ -31,7 +38,26 @@ public class TripUserService {
         this.modelMapper = modelMapper;
     }
 
-    public Response createExpenseByTripId() {
+    public Response createExpense(ExpensesCreateDto newExpenses) {
+
+        Trip trip;
+        try {
+            trip = Option.ofOptional(tripRepository.findById(newExpenses.getTripId()))
+                    .getOrElseThrow(() -> new MyUserNotFoundException("TRIP_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+       if(!checkIfAllUserExists(newExpenses.getShareHolders())){
+           Error.notFound("USERS_NOT_FOUND");
+       }
+
+        return null;
+    }
+
+
+
+    public Response updateExpenseById() {
         return null;
     }
 
@@ -39,21 +65,7 @@ public class TripUserService {
         return null;
     }
 
-    public Response addUsersListToExpenseByUserIdAndTripIdAndExpenseId() {
-        return null;
-    }
-
     public Response updateAmountByTripAndExpenseIdAndUserId() {
-        return null;
-    }
-
-    public Response updateExpenseById() {
-        return null;
-    }
-
-
-
-    public Response leaveTripWithGivenId() {
         return null;
     }
 
@@ -69,6 +81,10 @@ public class TripUserService {
         return null;
     }
 
+    public Response leaveTripWithGivenId() {
+        return null;
+    }
+
     public Response addNewDateProposition(DatePropositionDto datePropositionDto, Long tripId) {
 
         Trip trip;
@@ -78,6 +94,7 @@ public class TripUserService {
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
+
 
         DateProposition proposition = modelMapper.map(datePropositionDto, DateProposition.class);
 
@@ -90,6 +107,26 @@ public class TripUserService {
 
         return Success.ok(report);
 
+    }
+
+    private boolean checkIfAllUserExists(List<ExpenseRecordCreateDto> records){
+        for (ExpenseRecordCreateDto it : records) {
+            if (!userRepository.existsById(it.getUserId())){;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Expenses mapExpensesCreateDto(ExpensesCreateDto newExpenses){
+
+        List<ExpenseRecord> records = new ArrayList<>();
+
+        for (ExpenseRecordCreateDto it : newExpenses.getShareHolders()) {
+
+        }
+
+        return null;
     }
 
 }

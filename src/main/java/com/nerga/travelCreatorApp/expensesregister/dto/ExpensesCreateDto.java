@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ExpensesCreateDto {
 
-    String tripId;
+    Long tripId;
     String title;
     String description;
     float cost;

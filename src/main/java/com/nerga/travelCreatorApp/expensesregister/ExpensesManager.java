@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.expensesregister;
 
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
 import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.Data;
 
@@ -32,11 +33,12 @@ public class ExpensesManager {
         tripExpenses.remove(expenses);
     }
 
-    public Expenses findExpenses(int expenseId){
+    public Expenses findExpenses(long expenseId){
         return tripExpenses
                 .stream()
                 .filter(element -> element.expensesId == expenseId)
                 .findFirst().orElse(null);
     }
+
 
 }

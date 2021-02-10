@@ -35,4 +35,12 @@ public class ExpenseRecord {
         this.amount = amount;
         this.expenses = expenses;
      }
+
+    public ExpenseRecord(
+            UserEntity userEntity,
+            float amount
+    ) {
+        this.userEntity = userEntity;
+        this.amount = amount;
+    }
 }

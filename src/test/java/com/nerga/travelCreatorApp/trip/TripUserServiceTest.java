@@ -6,6 +6,12 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
+import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordCreateDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
@@ -91,21 +97,88 @@ public class TripUserServiceTest {
                 response.toResponseEntity()
                         .getStatusCode()).isEqualTo(HttpStatus.OK);
 
-//        Assertions.assertThat(
-//                response.toResponseEntity()
-//                        .getBody())
-//                .isSameAs(datePropositionReturnedListDto);
-
-
 
     }
 
     @Test
     void shouldCreateExpenseByTripId(){
+        // Given
+
+        Trip testTrip = getTestTrip();
+        ExpensesCreateDto testExpensesCreateDto = getTestExpenseCreateDto();
+        Expenses testExpense = getTestExpense();
+        ExpensesDetailsDto testExpensesDetailsDto = getTestExpensesDetailsDto();
+
+        when(tripRepository.findById(any(Long.class))).thenReturn(Optional.of(testTrip));
+        when(tripRepository.save(any(Trip.class))).thenReturn(testTrip);
+
+        // When
+
+        Response response = underTest.createExpense(testExpensesCreateDto);
+
+        // Then
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getBody())
+                .isEqualToComparingFieldByField(testExpensesDetailsDto);
+
 
     }
 
 // -----------------------------------------------------------------
+
+    private ExpensesDetailsDto getTestExpensesDetailsDto(){
+
+        List<ExpenseRecordDetailsDto> list = new ArrayList<>();
+        list.add(new ExpenseRecordDetailsDto(1L, getTestUserDetailsDto(), 50));
+        list.add(new ExpenseRecordDetailsDto(2L, getTestUserDetailsDto_2(), 70));
+        return new ExpensesDetailsDto(
+                1L,
+                "Składka",
+                "Zakupy, opłaty dodatkowe",
+                120,
+                list
+        );
+    }
+
+    private ExpensesCreateDto getTestExpenseCreateDto(){
+        return new ExpensesCreateDto(
+            1L,
+                "Składka",
+                "Zakupy, opłaty dodatkowe",
+                120,
+                getExpenseRecordDtoList()
+
+        );
+    }
+
+    private List<ExpenseRecordCreateDto> getExpenseRecordDtoList(){
+        List<ExpenseRecordCreateDto> list = new ArrayList<>();
+        list.add(new ExpenseRecordCreateDto(1L, 50));
+        list.add(new ExpenseRecordCreateDto(2L, 70));
+        return list;
+    }
+
+    private Expenses getTestExpense(){
+        return new Expenses(
+                "Składka",
+                "Zakupy, opłaty dodatkowe",
+                120,
+                getExpenseRecordList()
+        );
+    }
+
+    private List<ExpenseRecord> getExpenseRecordList(){
+        List<ExpenseRecord> list = new ArrayList<>();
+        list.add(new ExpenseRecord(getTestUserEntity(), 50));
+        list.add(new ExpenseRecord(getTestUserEntity_2(), 70));
+        return list;
+    }
 
     private UserEntity getTestUserEntity(){
         UserEntity userEntity = new UserEntity();
@@ -116,6 +189,20 @@ public class TripUserServiceTest {
         userEntity.setLastName("Nowak");
         userEntity.setEmail("test@mail.com");
         userEntity.setPhoneNumber("1234516");
+        return userEntity;
+    }
+
+    private UserEntity getTestUserEntity_2(){
+        UserEntity userEntity = new UserEntity();
+
+        userEntity.setId(2L);
+        userEntity.setUsername("test_user_2");
+        userEntity.setPassword("password_1");
+        userEntity.setFirstName("Dan");
+        userEntity.setLastName("Kovalski");
+        userEntity.setEmail("test2@mail.com");
+        userEntity.setPhoneNumber("2234516");
+
         return userEntity;
     }
 
@@ -207,6 +294,18 @@ public class TripUserServiceTest {
                 "Nowak",
                 "test@gmail.com",
                 "111222333"
+
+        );
+    }
+
+    private UserDetailsDto getTestUserDetailsDto_2(){
+        return new UserDetailsDto(
+                2L,
+                "test_user2",
+                "Dan",
+                "Kovalski",
+                "test2@gmail.com",
+                "2234516"
 
         );
     }

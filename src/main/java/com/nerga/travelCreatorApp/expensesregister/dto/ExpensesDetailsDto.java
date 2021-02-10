@@ -17,6 +17,6 @@ public class ExpensesDetailsDto {
     String title;
     String description;
     float cost;
-    List<ExpensesDetailsDto> shareHolders;
+    List<ExpenseRecordDetailsDto> shareHolders;
 
 }
