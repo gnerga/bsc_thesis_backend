@@ -5,9 +5,8 @@ import com.nerga.travelCreatorApp.location.address.LocationAddress;
 import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
-import com.nerga.travelCreatorApp.trip.Trip;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
-import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
+import com.nerga.travelCreatorApp.trip.dto.TripUserAndDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -143,12 +142,12 @@ public class TripTest {
     public void whenConvertTripEntityWithUserToTripDetailsDto_thenCorrect() {
 
         trip_2.addParticipant(userEntity_2);
-        TripDetailsDto tripDetailsDto = modelMapper.map(trip_2, TripDetailsDto.class);
-        assertEquals(trip_2.getTripName(), tripDetailsDto.getTripName());
-        assertEquals(trip_2.getTripDescription(), tripDetailsDto.getTripDescription());
-        assertEquals(trip_2.getOrganizers().get(0).getUsername(), tripDetailsDto.getOrganizers().get(0).getUsername());
-        assertEquals(trip_2.getLocation().getLocationName(), tripDetailsDto.getLocation().getLocationName());
-        assertEquals(trip_2.getLocation().isPrivate(), tripDetailsDto.getLocation().isPrivate());
+        TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip_2, TripUserAndDetailsDto.class);
+        assertEquals(trip_2.getTripName(), tripUserAndDetailsDto.getTripName());
+        assertEquals(trip_2.getTripDescription(), tripUserAndDetailsDto.getTripDescription());
+        assertEquals(trip_2.getOrganizers().get(0).getUsername(), tripUserAndDetailsDto.getOrganizers().get(0).getUsername());
+        assertEquals(trip_2.getLocation().getLocationName(), tripUserAndDetailsDto.getLocation().getLocationName());
+        assertEquals(trip_2.getLocation().isPrivate(), tripUserAndDetailsDto.getLocation().isPrivate());
 
 
     }

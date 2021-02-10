@@ -12,7 +12,7 @@ import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
-import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
+import com.nerga.travelCreatorApp.trip.dto.TripUserAndDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.time.LocalDate;
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -85,7 +84,7 @@ public class TripManagementServiceTest {
 
         Location location = getTestLocation();
         Trip testTrip = getTestTrip();
-        TripDetailsDto tripTestDetailsDto = getTestTripDetailsDto();
+        TripUserAndDetailsDto tripTestDetailsDto = getTestTripDetailsDto();
         String loggedUser = "test";
         Map<String, Object> details = new HashMap<String, Object>();
         details.put("user_name", "test");
@@ -111,7 +110,7 @@ public class TripManagementServiceTest {
 
         Location location = getTestLocation();
         Trip testTrip = getTestTrip();
-        TripDetailsDto tripTestDetailsDto = getTestTripDetailsDto();
+        TripUserAndDetailsDto tripTestDetailsDto = getTestTripDetailsDto();
         String loggedUser = "test";
         Map<String, Object> details = new HashMap<String, Object>();
         details.put("user_name", "test");
@@ -120,7 +119,7 @@ public class TripManagementServiceTest {
         when(locationRepository.findById(1L)).thenReturn(Optional.of(location));
         when(modelMapper.map(tripCreateDto, Trip.class)).thenReturn(testTrip);
         when(tripRepository.save(testTrip)).thenReturn(testTrip);
-        when(modelMapper.map(testTrip, TripDetailsDto.class)).thenReturn(tripTestDetailsDto);
+        when(modelMapper.map(testTrip, TripUserAndDetailsDto.class)).thenReturn(tripTestDetailsDto);
         // When
         Response response = underTest.addTrip(tripCreateDto);
         // Then
@@ -157,12 +156,12 @@ public class TripManagementServiceTest {
         Trip testTrip = getTestTrip();
         List<Trip> testTripList = new ArrayList<>();
         testTripList.add(testTrip);
-        TripDetailsDto testTripDto = getTestTripDetailsDto();
-        List<TripDetailsDto> testTripListDto = new ArrayList<>();
+        TripUserAndDetailsDto testTripDto = getTestTripDetailsDto();
+        List<TripUserAndDetailsDto> testTripListDto = new ArrayList<>();
         testTripListDto.add(getTestTripDetailsDto());
 
         when(tripRepository.findAll()).thenReturn(testTripList);
-        when(modelMapper.map(testTrip,TripDetailsDto.class)).thenReturn(testTripDto);
+        when(modelMapper.map(testTrip, TripUserAndDetailsDto.class)).thenReturn(testTripDto);
 
         // When
         Response response = underTest.findAllTrips();
@@ -181,7 +180,7 @@ public class TripManagementServiceTest {
         // Given
 
         List<Trip> testTripList = new ArrayList<>();
-        List<TripDetailsDto> testTripListDto = new ArrayList<>();
+        List<TripUserAndDetailsDto> testTripListDto = new ArrayList<>();
 
 
         when(tripRepository.findAll()).thenReturn(testTripList);
@@ -211,13 +210,13 @@ public class TripManagementServiceTest {
         List<UserDetailsDto> testUserDetailsDto = new ArrayList<>();
         UserDetailsDto userDetailsDto = getTestUserDetailsDto2();
         testUserDetailsDto.add(userDetailsDto);
-        TripDetailsDto tripDto = getTestTripDetailsDtoWithNewOrganizer();
+        TripUserAndDetailsDto tripDto = getTestTripDetailsDtoWithNewOrganizer();
 
         when(tripRepository.findById(tripId)).thenReturn(Optional.of(trip));
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
         when(tripRepository.save(trip)).thenReturn(trip);
         when(userRepository.save(userEntity)).thenReturn(testUser);
-        when(modelMapper.map(trip, TripDetailsDto.class)).thenReturn(tripDto);
+        when(modelMapper.map(trip, TripUserAndDetailsDto.class)).thenReturn(tripDto);
 
         // When
 
@@ -270,13 +269,13 @@ public class TripManagementServiceTest {
         List<UserDetailsDto> testUserDetailsDto = new ArrayList<>();
         UserDetailsDto userDetailsDto = getTestUserDetailsDto2();
         testUserDetailsDto.add(userDetailsDto);
-        TripDetailsDto tripDto = getTestTripDetailsDtoWithNewParticipant();
+        TripUserAndDetailsDto tripDto = getTestTripDetailsDtoWithNewParticipant();
 
         when(tripRepository.findById(tripId)).thenReturn(Optional.of(trip));
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
         when(tripRepository.save(trip)).thenReturn(trip);
         when(userRepository.save(userEntity)).thenReturn(testUser);
-        when(modelMapper.map(trip, TripDetailsDto.class)).thenReturn(tripDto);
+        when(modelMapper.map(trip, TripUserAndDetailsDto.class)).thenReturn(tripDto);
 
         // When
 
@@ -336,14 +335,14 @@ public class TripManagementServiceTest {
         updatedTestTrip.addOrganizer(updatedOrganizer_1);
         updatedTestTrip.addParticipant(updatedOrganizer_2);
 
-        TripDetailsDto updatedTestTripDto = getTestTripDetailsDtoWithNewParticipant();
+        TripUserAndDetailsDto updatedTestTripDto = getTestTripDetailsDtoWithNewParticipant();
 
         when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
         when(userRepository.findById(userId)).thenReturn(Optional.of(organizer_2));
 
         when(tripRepository.save(updatedTestTrip)).thenReturn(updatedTestTrip);
         when(userRepository.save(updatedOrganizer_2)).thenReturn(updatedOrganizer_2);
-        when(modelMapper.map(updatedTestTrip, TripDetailsDto.class)).thenReturn(updatedTestTripDto);
+        when(modelMapper.map(updatedTestTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTestTripDto);
 
         // Test
 
@@ -393,7 +392,7 @@ public class TripManagementServiceTest {
         UserEntity updatedOrganizer = getTestUserEntity();
         UserEntity updatedParticipant = getTestUserEntity2();
         UserEntity participant = getTestUserEntity2();
-        TripDetailsDto returnedDto = getTestTripDetailsDto();
+        TripUserAndDetailsDto returnedDto = getTestTripDetailsDto();
 
         updatedTrip.addOrganizer(updatedOrganizer);
         testTrip.addOrganizer(organizer);
@@ -407,7 +406,7 @@ public class TripManagementServiceTest {
 
         when(tripRepository.save(updatedTrip)).thenReturn(updatedTrip);
         when(userRepository.save(updatedParticipant)).thenReturn(updatedParticipant);
-        when(modelMapper.map(updatedTrip, TripDetailsDto.class)).thenReturn(returnedDto);
+        when(modelMapper.map(updatedTrip, TripUserAndDetailsDto.class)).thenReturn(returnedDto);
 
         // When
 
@@ -438,7 +437,7 @@ public class TripManagementServiceTest {
         UserEntity updatedOrganizer_2= getTestUserEntity2();
         UserEntity organizer_2 = getTestUserEntity2();
 
-        TripDetailsDto returnedDto = getTestTripDetailsDto();
+        TripUserAndDetailsDto returnedDto = getTestTripDetailsDto();
 
         testTrip.addOrganizer(organizer);
         updatedTrip.addOrganizer(updatedOrganizer);
@@ -455,7 +454,7 @@ public class TripManagementServiceTest {
         when(tripRepository.save(updatedTrip)).thenReturn(updatedTrip);
         when(userRepository.save(updatedOrganizer_2)).thenReturn(organizer_2);
 
-        when(modelMapper.map(updatedTrip, TripDetailsDto.class)).thenReturn(returnedDto);
+        when(modelMapper.map(updatedTrip, TripUserAndDetailsDto.class)).thenReturn(returnedDto);
 
         // When
 
@@ -486,7 +485,7 @@ public class TripManagementServiceTest {
 
 
 
-        TripDetailsDto returnedDto = getTestTripDetailsDto();
+        TripUserAndDetailsDto returnedDto = getTestTripDetailsDto();
 
         testTrip.addOrganizer(organizer);
 
@@ -516,12 +515,12 @@ public class TripManagementServiceTest {
         TripUpdateDto tripUpdateDto = getTestTripUpdateDto();
         Trip testTrip = getTestTrip();
         Trip updatedTrip = getUpdatedTestTrip();
-        TripDetailsDto updatedTripDetailsDto = getUpdatedTestTripDetailsDto2();
+        TripUserAndDetailsDto updatedTripUserAndDetailsDto = getUpdatedTestTripDetailsDto2();
 
         when(tripRepository.findById(tripUpdateDto.getTripId()))
                 .thenReturn(Optional.of(testTrip));
         when(tripRepository.save(updatedTrip)).thenReturn(updatedTrip);
-        when(modelMapper.map(updatedTrip, TripDetailsDto.class)).thenReturn(updatedTripDetailsDto);
+        when(modelMapper.map(updatedTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTripUserAndDetailsDto);
 
         // When
 
@@ -536,7 +535,7 @@ public class TripManagementServiceTest {
         Assertions.assertThat(
                 response.toResponseEntity()
                         .getBody())
-                .isEqualToComparingFieldByField(updatedTripDetailsDto);
+                .isEqualToComparingFieldByField(updatedTripUserAndDetailsDto);
 
     }
 
@@ -549,7 +548,7 @@ public class TripManagementServiceTest {
         Trip testTrip = getTestTrip();
         List<DateProposition> propositionList = getTestDatePropositionList();
         Trip updatedTrip = getTestTripWithNewDate();
-        TripDetailsDto updatedTripDetail = getTestTripDetailsDtoDateMatcher();
+        TripUserAndDetailsDto updatedTripDetail = getTestTripDetailsDtoDateMatcher();
 
         testTrip.getDatePropositionMatcher().addDateProposition(propositionList.get(0));
         testTrip.getDatePropositionMatcher().addDateProposition(propositionList.get(1));
@@ -557,7 +556,7 @@ public class TripManagementServiceTest {
 
         when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
         when(tripRepository.save(testTrip)).thenReturn(updatedTrip);
-        when(modelMapper.map(updatedTrip, TripDetailsDto.class)).thenReturn(updatedTripDetail);
+        when(modelMapper.map(updatedTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTripDetail);
 
         // When
 
@@ -701,8 +700,8 @@ public class TripManagementServiceTest {
         );
     }
 
-    private TripDetailsDto getTestTripDetailsDto(){
-        return new TripDetailsDto(
+    private TripUserAndDetailsDto getTestTripDetailsDto(){
+        return new TripUserAndDetailsDto(
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
@@ -714,8 +713,8 @@ public class TripManagementServiceTest {
         );
     }
 
-    private TripDetailsDto getTestTripDetailsDtoDateMatcher(){
-        return new TripDetailsDto(
+    private TripUserAndDetailsDto getTestTripDetailsDtoDateMatcher(){
+        return new TripUserAndDetailsDto(
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
@@ -727,8 +726,8 @@ public class TripManagementServiceTest {
         );
     }
 
-    private TripDetailsDto getTestTripDetailsDtoWithNewOrganizer(){
-        return new TripDetailsDto(
+    private TripUserAndDetailsDto getTestTripDetailsDtoWithNewOrganizer(){
+        return new TripUserAndDetailsDto(
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
@@ -740,8 +739,8 @@ public class TripManagementServiceTest {
         );
     }
 
-    private TripDetailsDto getTestTripDetailsDtoWithNewParticipant(){
-        return new TripDetailsDto(
+    private TripUserAndDetailsDto getTestTripDetailsDtoWithNewParticipant(){
+        return new TripUserAndDetailsDto(
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
@@ -778,8 +777,8 @@ public class TripManagementServiceTest {
         );
     }
 
-    private TripDetailsDto getUpdatedTestTripDetailsDto2(){
-        return new TripDetailsDto(
+    private TripUserAndDetailsDto getUpdatedTestTripDetailsDto2(){
+        return new TripUserAndDetailsDto(
                 1L,
                 "Holidays 2021",
                 "Friends meet after months",
@@ -814,8 +813,8 @@ public class TripManagementServiceTest {
         );
     }
 
-    private TripDetailsDto getUpdatedTestTripDetailsDto(){
-        return new TripDetailsDto(
+    private TripUserAndDetailsDto getUpdatedTestTripDetailsDto(){
+        return new TripUserAndDetailsDto(
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",

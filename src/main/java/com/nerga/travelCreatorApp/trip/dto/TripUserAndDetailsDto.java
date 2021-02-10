@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class TripDetailsDto {
+public class TripUserAndDetailsDto {
 
     @NotNull
     private Long tripId;
@@ -31,5 +31,6 @@ public class TripDetailsDto {
 
     private List<UserDetailsDto> organizers;
     private List<UserDetailsDto> participants;
+    
 
 }

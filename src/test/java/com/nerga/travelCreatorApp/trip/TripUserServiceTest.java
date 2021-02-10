@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
+import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
@@ -13,7 +14,7 @@ import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
-import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
+import com.nerga.travelCreatorApp.trip.dto.TripUserAndDetailsDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -23,6 +24,9 @@ import org.modelmapper.ModelMapper;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static org.mockito.Mockito.when;
 
 public class TripUserServiceTest {
 
@@ -52,27 +56,30 @@ public class TripUserServiceTest {
     @Test
     public void shouldAddDatePropositionToDateMatcher(){
 
-        // Given
-
-            Long tripId = 1L;
-
-            DatePropositionDto testDatePropositionDto = getTestDatePropositionDto();
-            DateProposition dateProposition = getTestDateProposition();
-
-            Trip testTrip = getTestTrip();
-            Trip testUpdatedTrip = getTestUpdatedTrip();
-            System.out.println(testTrip.getDatePropositionMatcher().getDatePropositionList().size());
-            Trip updatedTrip = getTestUpdatedTrip();
-
-            TripDetailsDto updatedTripDetails = getUpdatedTestTripDetailsDto2();
-            DatePropositionReturnedListDto datePropositionReturnedListDto = getDatePropositionReturnedList();
-
-
-        // When
-
-
-
-        // Then
+//        // Given
+//
+//            Long tripId = 1L;
+//
+//            DatePropositionDto testDatePropositionDto = getTestDatePropositionDto();
+//            DateProposition dateProposition = getTestDateProposition();
+//
+//            Trip testTrip = getTestTrip();
+//            Trip testUpdatedTrip = getTestUpdatedTrip();
+//            Trip updatedTrip = getTestUpdatedTrip();
+//
+//            TripUserAndDetailsDto updatedTripDetails = getUpdatedTestTripDetailsDto2();
+//            DatePropositionReturnedListDto datePropositionReturnedListDto = getDatePropositionReturnedList();
+//            testUpdatedTrip.addDateProposition(dateProposition);
+//
+//            when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
+//            when(tripRepository.save(testUpdatedTrip)).thenReturn(testUpdatedTrip);
+//            when(modelMapper.map(testUpdatedTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTripDetails);
+//
+//        // When
+//
+//            Response response = underTest.addNewDateProposition(testDatePropositionDto, tripId);
+//
+//        // Then
 
 
 
@@ -189,8 +196,8 @@ public class TripUserServiceTest {
         return list;
     }
 
-    private TripDetailsDto getUpdatedTestTripDetailsDto2(){
-        return new TripDetailsDto(
+    private TripUserAndDetailsDto getUpdatedTestTripDetailsDto2(){
+        return new TripUserAndDetailsDto(
                 1L,
                 "Holidays 2021",
                 "Friends meet after months",

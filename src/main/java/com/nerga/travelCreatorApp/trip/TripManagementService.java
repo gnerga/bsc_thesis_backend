@@ -6,8 +6,6 @@ import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.location.Location;
-import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
-import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
@@ -15,7 +13,7 @@ import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 
-import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
+import com.nerga.travelCreatorApp.trip.dto.TripUserAndDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
 import com.nerga.travelCreatorApp.trip.exceptions.TripException;
 import com.nerga.travelCreatorApp.trip.exceptions.TripNotFoundException;
@@ -26,7 +24,6 @@ import io.vavr.control.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,7 +31,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 //@Service("tripService")
 public class TripManagementService {
@@ -59,13 +55,13 @@ public class TripManagementService {
         return isUserAndLocationExists(tripCreateDto)
                 .map(userEntityAndLocation -> createTrip(userEntityAndLocation, tripCreateDto))
                 .map(tripRepository::save)
-                .map(returnedTrip -> modelMapper.map(returnedTrip, TripDetailsDto.class))
+                .map(returnedTrip -> modelMapper.map(returnedTrip, TripUserAndDetailsDto.class))
                 .fold(Function.identity(), Success::ok);
     }
 
     public Response findAllTrips(){
         List<Trip> tripList = tripRepository.findAll();
-           return !tripList.isEmpty() ? Success.ok(convertListDetailsDto(tripList)) : Success.ok(new ArrayList<TripDetailsDto>());
+           return !tripList.isEmpty() ? Success.ok(convertListDetailsDto(tripList)) : Success.ok(new ArrayList<TripUserAndDetailsDto>());
     }
 
     public Response addNewOrganizerById(Long tripId, Long userId){
@@ -91,9 +87,9 @@ public class TripManagementService {
         trip = tripRepository.save(trip);
         userRepository.save(newOrganizer);
 
-        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+        TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
-        return Success.ok(tripDetailsDto);
+        return Success.ok(tripUserAndDetailsDto);
 
     }
 
@@ -122,9 +118,9 @@ public class TripManagementService {
         trip = tripRepository.save(trip);
 
 
-        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+        TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
-        return Success.ok(tripDetailsDto);
+        return Success.ok(tripUserAndDetailsDto);
     }
 
     public Response addNewParticipantById(Long tripId, Long userId){
@@ -149,9 +145,9 @@ public class TripManagementService {
         trip = tripRepository.save(trip);
         newParticipant = userRepository.save(newParticipant);
 
-        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+        TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
-        return Success.ok(tripDetailsDto);
+        return Success.ok(tripUserAndDetailsDto);
     }
 
     public Response removeParticipantById(Long tripId, Long userId){
@@ -184,9 +180,9 @@ public class TripManagementService {
         trip = tripRepository.save(trip);
         participant = userRepository.save(participant);
 
-        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+        TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
-        return Success.ok(tripDetailsDto);
+        return Success.ok(tripUserAndDetailsDto);
     }
 
     public Response updateTrip(TripUpdateDto update){
@@ -204,9 +200,9 @@ public class TripManagementService {
 
         trip = tripRepository.save(trip);
 
-        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+        TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
-        return Success.ok(tripDetailsDto);
+        return Success.ok(tripUserAndDetailsDto);
     }
 
     public Response changeTripDate(Long tripId) {
@@ -223,14 +219,14 @@ public class TripManagementService {
 
         trip = tripRepository.save(trip);
 
-        TripDetailsDto tripDetailsDto = modelMapper.map(trip, TripDetailsDto.class);
+        TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
-        return Success.ok(tripDetailsDto);
+        return Success.ok(tripUserAndDetailsDto);
 
     }
 
-    private List<TripDetailsDto> convertListDetailsDto(List<Trip> trips){
-        return trips.stream().map(trip -> modelMapper.map(trip, TripDetailsDto.class)).collect(Collectors.toList());
+    private List<TripUserAndDetailsDto> convertListDetailsDto(List<Trip> trips){
+        return trips.stream().map(trip -> modelMapper.map(trip, TripUserAndDetailsDto.class)).collect(Collectors.toList());
     }
 
     private Trip createTrip(Tuple2<UserEntity, Location> userAndLocationEntities, TripCreateDto tripCreateDto){

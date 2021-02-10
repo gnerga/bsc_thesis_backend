@@ -88,19 +88,6 @@ public class UserTest {
         assertEquals(userEntity.getUsername(), userIdDto.getUsername());
     }
 
-    @Test
-    public void whenConvertTripToTripDetailsDto_thenCorrect(){
 
-
-
-    }
-
-    @Test
-    public void whenConvertTripCreateDtoToTrip_thenCorrect(){
-
-        TripCreateDto tripCreateDto = new TripCreateDto();
-
-
-    }
 
 }

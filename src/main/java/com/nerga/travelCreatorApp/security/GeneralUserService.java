@@ -133,7 +133,9 @@ public class GeneralUserService {
                 createUserDto.getEmail(),
                 createUserDto.getPhoneNumber()
         );
-        return modelMapper.map(userRepository.save(userEntity), UserIdDto.class);
+        userEntity = userRepository.save(userEntity);
+
+        return modelMapper.map(userEntity, UserIdDto.class);
     }
 
     private UserEntity updateUserEntity (UserDetailsDto userDetailsDto, UserEntity userEntity) {
