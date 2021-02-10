@@ -15,17 +15,20 @@ import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripUserAndDetailsDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class TripUserServiceTest {
@@ -56,32 +59,49 @@ public class TripUserServiceTest {
     @Test
     public void shouldAddDatePropositionToDateMatcher(){
 
-//        // Given
-//
-//            Long tripId = 1L;
-//
-//            DatePropositionDto testDatePropositionDto = getTestDatePropositionDto();
-//            DateProposition dateProposition = getTestDateProposition();
-//
-//            Trip testTrip = getTestTrip();
-//            Trip testUpdatedTrip = getTestUpdatedTrip();
-//            Trip updatedTrip = getTestUpdatedTrip();
-//
-//            TripUserAndDetailsDto updatedTripDetails = getUpdatedTestTripDetailsDto2();
-//            DatePropositionReturnedListDto datePropositionReturnedListDto = getDatePropositionReturnedList();
-//            testUpdatedTrip.addDateProposition(dateProposition);
-//
-//            when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
-//            when(tripRepository.save(testUpdatedTrip)).thenReturn(testUpdatedTrip);
-//            when(modelMapper.map(testUpdatedTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTripDetails);
-//
-//        // When
-//
-//            Response response = underTest.addNewDateProposition(testDatePropositionDto, tripId);
-//
-//        // Then
+        // Given
+
+            Long tripId = 1L;
+
+            DatePropositionDto testDatePropositionDto = getTestDatePropositionDto();
+            DateProposition dateProposition = getTestDateProposition();
+
+            Trip testTrip = getTestTrip();
+            Trip testUpdatedTrip = getTestUpdatedTrip();
 
 
+            TripUserAndDetailsDto updatedTripDetails = getUpdatedTestTripDetailsDto2();
+            DatePropositionReturnedListDto datePropositionReturnedListDto = getDatePropositionReturned();
+
+            testUpdatedTrip.addDateProposition(dateProposition);
+
+            when(tripRepository.findById(any(Long.class))).thenReturn(Optional.of(testTrip));
+            when(modelMapper.map(testDatePropositionDto, DateProposition.class)).thenReturn(dateProposition);
+            when(tripRepository.save(any(Trip.class))).thenReturn(testUpdatedTrip);
+            when(modelMapper.map(testUpdatedTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTripDetails);
+
+        // When
+
+            Response response = underTest.addNewDateProposition(testDatePropositionDto, tripId);
+
+        // Then
+
+
+        Assertions.assertThat(
+                response.toResponseEntity()
+                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+
+//        Assertions.assertThat(
+//                response.toResponseEntity()
+//                        .getBody())
+//                .isSameAs(datePropositionReturnedListDto);
+
+
+
+    }
+
+    @Test
+    void shouldCreateExpenseByTripId(){
 
     }
 
@@ -230,10 +250,26 @@ public class TripUserServiceTest {
         list.add(new DatePropositionReturnDto("From: 18 OCTOBER 2020 To: 25 OCTOBER 2020", 0.5714285714285714));
         list.add(new DatePropositionReturnDto("From: 10 OCTOBER 2020 To: 17 OCTOBER 2020",0.14285714285714285));
 
-
         return new DatePropositionReturnedListDto(
                 "2020-10-16",
                 "2020-10-22",
+                list
+        );
+    }
+
+    private DatePropositionReturnedListDto getDatePropositionReturned(){
+        DateProposition proposition = new DateProposition(
+                LocalDate.parse("2021-06-12"),
+                LocalDate.parse( "2021-06-19"),
+                "test_name",
+                1L
+        );
+        List<DatePropositionReturnDto> list = new ArrayList<DatePropositionReturnDto>();
+        list.add(new DatePropositionReturnDto(proposition.datePropositionToString(), 0.0));
+
+        return new DatePropositionReturnedListDto(
+                proposition.getStartDate().toString(),
+                proposition.getEndDate().toString(),
                 list
         );
     }

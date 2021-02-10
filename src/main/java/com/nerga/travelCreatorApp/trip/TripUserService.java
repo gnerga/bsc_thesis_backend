@@ -2,8 +2,10 @@ package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
+import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
@@ -50,6 +52,7 @@ public class TripUserService {
     }
 
     public Response addNewDateProposition(DatePropositionDto datePropositionDto, Long tripId) {
+
         Trip trip;
         try {
             trip = Option.ofOptional(tripRepository.findById(tripId))
@@ -59,15 +62,14 @@ public class TripUserService {
         }
 
         DateProposition proposition = modelMapper.map(datePropositionDto, DateProposition.class);
-        System.out.println(trip.getDatePropositionMatcher().getDatePropositionList().size());
+
         trip.addDateProposition(proposition);
-        System.out.println(trip.getDatePropositionMatcher().getDatePropositionList().size());
         trip.getDatePropositionMatcher().runAnalysis();
+        DatePropositionReturnedListDto report = trip.getDatePropositionMatcher().getDateMatcherReport();
 
+        tripRepository.save(trip);
 
-
-
-        return null;
+        return Success.ok(report);
 
     }
 

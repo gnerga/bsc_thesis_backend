@@ -562,6 +562,10 @@ public class TripManagementServiceTest {
 
         Response response = underTest.changeTripDate(tripId);
 
+
+
+        // Then
+
         Assertions.assertThat(
                 response.toResponseEntity()
                         .getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -570,8 +574,6 @@ public class TripManagementServiceTest {
                 response.toResponseEntity()
                         .getBody())
                 .isEqualToComparingFieldByField(updatedTripDetail);
-
-        // Then
     }
 
     // ------------------------------------------------

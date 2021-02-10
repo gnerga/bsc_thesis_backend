@@ -67,7 +67,6 @@ public class DatePropositionMatcher {
         for (DateProposition it: this.analyzedDatePropositionList) {
             listOfDateProposition.add(new DatePropositionReturnDto(it.datePropositionToString(), it.getAccuracy()));
         }
-
         return new DatePropositionReturnedListDto(
                 analyzedDatePropositionList.get(0).getStartDate().toString(),
                 analyzedDatePropositionList.get(0).getEndDate().toString(),

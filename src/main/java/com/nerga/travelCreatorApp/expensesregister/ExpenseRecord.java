@@ -22,13 +22,13 @@ public class ExpenseRecord {
     @ManyToOne
     UserEntity  userEntity;
 
-    double amount;
+    float amount;
 
     public ExpenseRecord(){};
 
     public ExpenseRecord(
                         UserEntity userEntity,
-                        double amount,
+                        float amount,
                         Expenses expenses
                         ) {
         this.userEntity = userEntity;
