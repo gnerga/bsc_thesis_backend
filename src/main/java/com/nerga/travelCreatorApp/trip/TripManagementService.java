@@ -5,12 +5,11 @@ import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
-import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionRepository;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
-import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
+import com.nerga.travelCreatorApp.security.auth.exceptions.CustomUserNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
@@ -76,7 +75,7 @@ public class TripManagementService {
 
         try {
             newOrganizer = Option.ofOptional(userRepository.findById(userId))
-                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
@@ -105,7 +104,7 @@ public class TripManagementService {
 
         try {
             newOrganizer = Option.ofOptional(userRepository.findById(userId))
-                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
@@ -135,7 +134,7 @@ public class TripManagementService {
 
         try {
             newParticipant = Option.ofOptional(userRepository.findById(userId))
-                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
@@ -162,7 +161,7 @@ public class TripManagementService {
 
         try {
             participant = Option.ofOptional(userRepository.findById(userId))
-                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }

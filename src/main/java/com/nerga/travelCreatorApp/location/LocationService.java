@@ -8,7 +8,7 @@ import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
-import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
+import com.nerga.travelCreatorApp.security.auth.exceptions.CustomUserNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
@@ -38,11 +38,12 @@ public class LocationService {
     }
 
     public Response createNewLocation (LocationCreateDto locationCreateDto) {
+
         UserEntity owner;
 
         try{
             owner = Option.ofOptional(userRepository.findById(locationCreateDto.getOwner().getId()))
-                    .getOrElseThrow(()-> new MyUserNotFoundException("USER_NOT_FOUND"));
+                    .getOrElseThrow(()-> new CustomUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             // todo tu poprawic
             return Error.badRequest("USER_NOT_FOUND");

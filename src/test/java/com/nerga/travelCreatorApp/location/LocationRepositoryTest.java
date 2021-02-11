@@ -1,6 +1,5 @@
 package com.nerga.travelCreatorApp.location;
 
-import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

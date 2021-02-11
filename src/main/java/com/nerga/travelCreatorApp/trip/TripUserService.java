@@ -17,9 +17,10 @@ import com.nerga.travelCreatorApp.post.Post;
 import com.nerga.travelCreatorApp.post.PostRepository;
 import com.nerga.travelCreatorApp.post.dto.PostCreateDto;
 import com.nerga.travelCreatorApp.post.dto.PostDetailsDto;
+import com.nerga.travelCreatorApp.post.exception.PostNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
-import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
+import com.nerga.travelCreatorApp.security.auth.exceptions.CustomUserNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.trip.exceptions.TripException;
@@ -71,7 +72,7 @@ public class TripUserService {
         Trip trip;
         try {
             trip = Option.ofOptional(tripRepository.findById(newExpenses.getTripId()))
-                    .getOrElseThrow(() -> new MyUserNotFoundException("TRIP_NOT_FOUND"));
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("TRIP_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("TRIP_NOT_FOUND");
         }
@@ -95,7 +96,7 @@ public class TripUserService {
 
         try {
             expense = Option.ofOptional(expensesRepository.findById(expenseUpdateDto.getExpenseId()))
-                    .getOrElseThrow(() -> new MyUserNotFoundException("EXPENSE_NOT_FOUND"));
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("EXPENSE_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("EXPENSE_NOT_FOUND");
         }
@@ -116,7 +117,7 @@ public class TripUserService {
 
         try {
             expense = Option.ofOptional(expensesRepository.findById(newRecord.getExpenseId()))
-                    .getOrElseThrow(() -> new MyUserNotFoundException("EXPENSE_NOT_FOUND"));
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("EXPENSE_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("EXPENSE_NOT_FOUND");
         }
@@ -125,7 +126,7 @@ public class TripUserService {
 
         try {
             user = Option.ofOptional(userRepository.findById(newRecord.getUserId()))
-                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
@@ -147,7 +148,7 @@ public class TripUserService {
 
         try {
             expense = Option.ofOptional(expensesRepository.findById(updatedRecordList.getExpenseId()))
-                    .getOrElseThrow(() -> new MyUserNotFoundException("EXPENSE_NOT_FOUND"));
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("EXPENSE_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("EXPENSE_NOT_FOUND");
         }
@@ -181,7 +182,7 @@ public class TripUserService {
 
         try {
             userEntity = Option.ofOptional(userRepository.findById(newPost.getUserId()))
-                    .getOrElseThrow(() -> new MyUserNotFoundException("USER_NOT_FOUND"));
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
@@ -219,12 +220,37 @@ public class TripUserService {
         return list;
     }
 
-    public Response handUpByTripAndPostId() {
-        return null;
+    public Response handUpByTripAndPostId(Long postId, Long userId) {
+        Post post;
+
+        try {
+            post = Option.ofOptional(postRepository.findById(postId))
+                    .getOrElseThrow(()->new PostNotFoundException("POST_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("POST_NOT_FOUND");
+        }
+
+        post.addLike(userId);
+        post = postRepository.save(post);
+
+        return Success.ok(mapPostsToListPostDetailsDto(post.getTrip().posts));
     }
 
-    public Response handDownByTripAndPostId() {
-        return null;
+    public Response handDownByTripAndPostId(Long postId, Long userId) {
+
+        Post post;
+
+        try {
+            post = Option.ofOptional(postRepository.findById(postId))
+                    .getOrElseThrow(()->new PostNotFoundException("POST_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("POST_NOT_FOUND");
+        }
+
+        post.addDislike(userId);
+        post = postRepository.save(post);
+
+        return Success.ok(mapPostsToListPostDetailsDto(post.getTrip().posts));
     }
 
     public Response addNewDateProposition(DatePropositionDto datePropositionDto, Long tripId) {
@@ -232,7 +258,7 @@ public class TripUserService {
         Trip trip;
         try {
             trip = Option.ofOptional(tripRepository.findById(tripId))
-                    .getOrElseThrow(() -> new MyUserNotFoundException("USER_NOT_FOUND"));
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("USER_NOT_FOUND"));
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
