@@ -76,7 +76,7 @@ public class TripUserService {
 
        Expenses expense = mapExpensesCreateDto(newExpenses);
 
-       trip.getExpenseManager().addExpenses(expense);
+       trip.addExpense(expense);
 
        trip = tripRepository.save(trip);
 
@@ -85,34 +85,54 @@ public class TripUserService {
 
     public Response updateExpenseById(ExpenseUpdateDto expenseUpdateDto) {
 
-        Trip trip;
+        Expenses expense;
 
         try {
-            trip = Option.ofOptional(tripRepository.findById(expenseUpdateDto.getTripId()))
-                    .getOrElseThrow(() -> new MyUserNotFoundException("TRIP_NOT_FOUND"));
+            expense = Option.ofOptional(expensesRepository.findById(expenseUpdateDto.getExpenseId()))
+                    .getOrElseThrow(() -> new MyUserNotFoundException("EXPENSE_NOT_FOUND"));
         } catch (UserException e) {
-            return Error.notFound("TRIP_NOT_FOUND");
-        }
-
-        if (!trip.getExpenseManager().updateExpenses(expenseUpdateDto)){
             return Error.notFound("EXPENSE_NOT_FOUND");
         }
 
-        trip = tripRepository.save(trip);
+        expense = expense.updateFromExpensesUpdateDto(expenseUpdateDto);
+
+        expense = expensesRepository.save(expense);
 
 
         return Success.ok(mapExpensesToExpensesDetailsDto(
-                trip
-                        .getExpenseManager()
-                        .findExpenses(expenseUpdateDto
-                                .getExpenseId())));
+                expense));
     }
 
 
 
-    public Response addUserToExpenseByUserIdAndTripId(ExpenseRecordCreateDto newRecord, Long tripId) {
-        Trip trip;
-        return null;
+    public Response addUserToExpenseByUserIdAndTripId(ExpenseRecordCreateDto newRecord) {
+        Expenses expense;
+
+        try {
+            expense = Option.ofOptional(expensesRepository.findById(newRecord.getExpenseId()))
+                    .getOrElseThrow(() -> new MyUserNotFoundException("EXPENSE_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("EXPENSE_NOT_FOUND");
+        }
+
+        UserEntity user;
+
+        try {
+            user = Option.ofOptional(userRepository.findById(newRecord.getUserId()))
+                    .getOrElseThrow(()->new MyUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+        ExpenseRecord record =  new ExpenseRecord(
+                user,
+                newRecord.getAmount()
+        );
+
+        record = expenseRecordRepository.save(record);
+        expense.getShareholders().add(record);
+        expense = expensesRepository.save(expense);
+
+        return Success.ok(Success.accepted(mapExpensesToExpensesDetailsDto(expense)));
     }
 
     public Response updateExpenseShareholdersAmount() {
@@ -200,7 +220,9 @@ public class TripUserService {
                 return null;
             }
 
-            records.add(new ExpenseRecord(optional.get(), it.getAmount()));
+            ExpenseRecord record = new ExpenseRecord(optional.get(), it.getAmount());
+            record = expenseRecordRepository.save(record);
+            records.add(record);
         }
 
         Expenses expenses = new Expenses(

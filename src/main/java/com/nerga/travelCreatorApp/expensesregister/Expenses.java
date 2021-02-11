@@ -24,7 +24,7 @@ public class Expenses {
     String description;
 
     @ManyToOne
-    Trip expensesManager;
+    Trip trip;
 
     float cost;
 

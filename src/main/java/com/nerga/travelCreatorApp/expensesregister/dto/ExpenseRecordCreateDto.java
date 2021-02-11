@@ -11,7 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class ExpenseRecordCreateDto {
-    Long tripId;
+
+
     Long expenseId;
     Long userId;
     float amount;

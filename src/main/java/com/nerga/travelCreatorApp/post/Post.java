@@ -4,6 +4,7 @@ import com.nerga.travelCreatorApp.expensesregister.Expenses;
 import com.nerga.travelCreatorApp.post.like.Dislike;
 import com.nerga.travelCreatorApp.post.like.Like;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
+import com.nerga.travelCreatorApp.trip.Trip;
 import io.vavr.Tuple2;
 import lombok.Data;
 
@@ -25,7 +26,7 @@ public class Post {
     String content;
 
     @ManyToOne
-    PostManager postManager;
+    Trip trip;
 
     LocalDateTime timeStamp;
 

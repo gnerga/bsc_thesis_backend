@@ -2,8 +2,6 @@ package com.nerga.travelCreatorApp.expenses;
 
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
 import com.nerga.travelCreatorApp.expensesregister.Expenses;
-import com.nerga.travelCreatorApp.expensesregister.ExpensesManager;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordCreateDto;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,51 +11,14 @@ import org.modelmapper.ModelMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ExpensesTest {
 
     ModelMapper modelMapper;
-    ExpensesManager expensesManager;
 
     @BeforeEach
     void setUp(){
         modelMapper = new ModelMapper();
-    }
-
-    @Test
-    void shouldCreateExpenseManagerWithEmptyListOfExpenses(){
-        expensesManager = new ExpensesManager();
-        assertNotNull(expensesManager);
-        assertNotNull(expensesManager.getTripExpenses());
-    }
-
-    @Test
-    void shouldAddExpenseToManagerCollection(){
-        expensesManager = new ExpensesManager();
-        Expenses expenses = getTestExpense();
-        expensesManager.addExpenses(expenses);
-        assertEquals(expenses, expensesManager.getTripExpenses().get(0));
-    }
-
-    @Test
-    void shouldRemoveExpenseFromManagerCollection(){
-        expensesManager = new ExpensesManager();
-        Expenses expenses = getTestExpense();
-        expensesManager.addExpenses(expenses);
-        expensesManager.removeExpenses(expenses);
-        assertEquals(0, expensesManager.getTripExpenses().size());
-    }
-
-    @Test
-    void shouldFindExpenseWithGivenIdInManagerCollections(){
-        expensesManager = new ExpensesManager();
-        Expenses expenses = getTestExpense();
-        expenses.setExpensesId(1L);
-        expensesManager.addExpenses(expenses);
-        Expenses found = expensesManager.findExpenses(1L);
-        assertEquals(expenses, found);
     }
 
     private Expenses getTestExpense(){
