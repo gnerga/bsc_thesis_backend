@@ -1,9 +1,17 @@
 package com.nerga.travelCreatorApp.trip;
 
+import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
 import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
+import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
 import com.nerga.travelCreatorApp.location.LocationRepository;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.post.Post;
+import com.nerga.travelCreatorApp.post.dto.PostDetailsDto;
 import com.nerga.travelCreatorApp.post.exception.PostNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
@@ -38,6 +46,7 @@ public class TripGeneralService {
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.modelMapper.addMappings(ApplicationPropertyMaps.userEntityFieldMapping());
     }
 
     public Response findAllTripsOrganizedByLoggedUser(){
@@ -108,7 +117,63 @@ public class TripGeneralService {
     }
 
     private TripDetailsDto tripToTripDetailsDto(Trip trip){
-        return null;
+
+        return new TripDetailsDto(
+                trip.getTripId(),
+                trip.getTripName(),
+                trip.getTripDescription(),
+                modelMapper.map(trip.getLocation(), LocationDetailsDto.class),
+                trip.getDateMatcherReport(),
+                mapPostsToListPostDetailsDto(trip.getPosts()),
+                mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()),
+                mapUserEntitiesListToUserDetailsDtoList(trip.getOrganizers()),
+                mapUserEntitiesListToUserDetailsDtoList(trip.getParticipants())
+
+        );
+    }
+
+    private ExpensesDetailsDto mapExpensesToExpensesDetailsDto(Expenses expenses){
+        List<ExpenseRecordDetailsDto> list = new ArrayList<>();
+
+        for (ExpenseRecord it: expenses.getShareholders()){
+            UserDetailsDto user = modelMapper.map(it.getUserEntity(), UserDetailsDto.class);
+            list.add(new ExpenseRecordDetailsDto(it.getExpenseRecordId(), user, it.getAmount()));
+        }
+
+        return new ExpensesDetailsDto(
+                expenses.getExpensesId(),
+                expenses.getTitle(),
+                expenses.getDescription(),
+                expenses.getCost(),
+                list
+        );
+    }
+
+    private List<ExpensesDetailsDto> mapExpensesListToExpensesDetailsDtoLost(List<Expenses> expensesList){
+        List<ExpensesDetailsDto> expensesDtoList = new ArrayList<>();
+        for(Expenses expense : expensesList) {
+            expensesDtoList.add(mapExpensesToExpensesDetailsDto(expense));
+        }
+        return expensesDtoList;
+    }
+
+    private List<PostDetailsDto> mapPostsToListPostDetailsDto(List<Post> posts){
+        List<PostDetailsDto> list = new ArrayList<>();
+        for (Post it: posts){
+            list.add(new PostDetailsDto(
+                    it.getPostId(),
+                    it.getTitle(),
+                    it.getContent(),
+                    it.getTimeStamp(),
+                    modelMapper.map(it.getAuthor(), UserDetailsDto.class),
+                    it.getNumberOfLikes(),
+                    it.getNumberOfDislikes(),
+                    it.getLikes(),
+                    it.getDislikes()
+
+            ));
+        }
+        return list;
     }
 
     private List<UserDetailsDto> mapUserEntitiesListToUserDetailsDtoList(List<UserEntity> users){

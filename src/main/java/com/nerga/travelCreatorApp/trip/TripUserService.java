@@ -87,7 +87,8 @@ public class TripUserService {
 
        trip = tripRepository.save(trip);
 
-       return Success.ok(mapExpensesToExpensesDetailsDto(expense));
+//       return Success.ok(mapExpensesToExpensesDetailsDto(expense));
+       return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
     }
 
     public Response updateExpenseById(ExpenseUpdateDto expenseUpdateDto) {
@@ -201,24 +202,7 @@ public class TripUserService {
         return Success.created(mapPostsToListPostDetailsDto(trip.posts));
     }
 
-    private List<PostDetailsDto> mapPostsToListPostDetailsDto(List<Post> posts){
-        List<PostDetailsDto> list = new ArrayList<>();
-        for (Post it: posts){
-            list.add(new PostDetailsDto(
-                    it.getPostId(),
-                    it.getTitle(),
-                    it.getContent(),
-                    it.getTimeStamp(),
-                    modelMapper.map(it.getAuthor(), UserDetailsDto.class),
-                    it.getNumberOfLikes(),
-                    it.getNumberOfDislikes(),
-                    it.getLikes(),
-                    it.getDislikes()
 
-            ));
-        }
-        return list;
-    }
 
     public Response handUpByTripAndPostId(Long postId, Long userId) {
         Post post;
@@ -291,7 +275,33 @@ public class TripUserService {
                 expenses.getCost(),
                 list
         );
+    }
 
+    private List<ExpensesDetailsDto> mapExpensesListToExpensesDetailsDtoLost(List<Expenses> expensesList){
+        List<ExpensesDetailsDto> expensesDtoList = new ArrayList<>();
+        for(Expenses expense : expensesList) {
+            expensesDtoList.add(mapExpensesToExpensesDetailsDto(expense));
+        }
+        return expensesDtoList;
+    }
+
+    private List<PostDetailsDto> mapPostsToListPostDetailsDto(List<Post> posts){
+        List<PostDetailsDto> list = new ArrayList<>();
+        for (Post it: posts){
+            list.add(new PostDetailsDto(
+                    it.getPostId(),
+                    it.getTitle(),
+                    it.getContent(),
+                    it.getTimeStamp(),
+                    modelMapper.map(it.getAuthor(), UserDetailsDto.class),
+                    it.getNumberOfLikes(),
+                    it.getNumberOfDislikes(),
+                    it.getLikes(),
+                    it.getDislikes()
+
+            ));
+        }
+        return list;
     }
 
     private boolean checkIfAllUserExists(List<ExpenseRecordCreateDto> records){
