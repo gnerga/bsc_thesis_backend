@@ -14,6 +14,7 @@ import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.expensesregister.dto.*;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.post.PostRepository;
+import com.nerga.travelCreatorApp.post.dto.PostCreateDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
@@ -135,12 +136,34 @@ public class TripUserService {
         return Success.ok(Success.accepted(mapExpensesToExpensesDetailsDto(expense)));
     }
 
-    public Response updateExpenseShareholdersAmount() {
-        return null;
+    public Response updateExpenseShareholdersAmount(ExpenseRecordsUpdateListDto updatedRecordList) {
+
+        Expenses expense;
+
+        try {
+            expense = Option.ofOptional(expensesRepository.findById(updatedRecordList.getExpenseId()))
+                    .getOrElseThrow(() -> new MyUserNotFoundException("EXPENSE_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("EXPENSE_NOT_FOUND");
+        }
+
+        for(ExpenseRecord it: expense.getShareholders()){
+            for (ExpenseRecordsUpdateDto updatedRecord: updatedRecordList.getRecordsToUpdate()){
+                if(updatedRecord.getUserId().equals(it.getUserEntity().getId())){
+                    if(it.getAmount()!=updatedRecord.getAmount()){
+                        it.setAmount(updatedRecord.getAmount());
+                        expenseRecordRepository.save(it);
+                    }
+                }
+            }
+        }
+
+        expense = expensesRepository.save(expense);
+
+        return Success.ok(mapExpensesToExpensesDetailsDto(expense));
     }
 
-
-    public Response addPostByTripId() {
+    public Response addPostByTripId(PostCreateDto newPost) {
         return null;
     }
 
@@ -151,11 +174,6 @@ public class TripUserService {
     public Response handDownByTripAndPostId() {
         return null;
     }
-
-//    public Response leaveTripWithGivenId() {
-//        return null;
-//    }
-
 
     public Response addNewDateProposition(DatePropositionDto datePropositionDto, Long tripId) {
 
@@ -200,7 +218,7 @@ public class TripUserService {
 
     private boolean checkIfAllUserExists(List<ExpenseRecordCreateDto> records){
         for (ExpenseRecordCreateDto it : records) {
-            if (!userRepository.existsById(it.getUserId())){;
+            if (!userRepository.existsById(it.getUserId())){
                 return true;
             }
         }
