@@ -4,12 +4,16 @@ import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
+import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionRepository;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecordRepository;
 import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.expensesregister.dto.*;
 import com.nerga.travelCreatorApp.location.LocationRepository;
+import com.nerga.travelCreatorApp.post.PostRepository;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.auth.exceptions.MyUserNotFoundException;
@@ -31,13 +35,29 @@ public class TripUserService {
     LocationRepository locationRepository;
     UserRepository userRepository;
     ModelMapper modelMapper;
+    ExpensesRepository expensesRepository;
+    ExpenseRecordRepository expenseRecordRepository;
+    PostRepository postRepository;
+    DatePropositionRepository datePropositionRepository;
 
     @Autowired
-    public TripUserService(TripRepository tripRepository, LocationRepository locationRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public TripUserService(
+                            TripRepository tripRepository,
+                            LocationRepository locationRepository,
+                            UserRepository userRepository,
+                            ExpensesRepository expensesRepository,
+                            ExpenseRecordRepository expenseRecordRepository,
+                            DatePropositionRepository datePropositionRepository,
+                            PostRepository postRepository,
+                            ModelMapper modelMapper) {
         this.tripRepository = tripRepository;
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.expenseRecordRepository = expenseRecordRepository;
+        this.expensesRepository = expensesRepository;
+        this.postRepository = postRepository;
+        this.datePropositionRepository = datePropositionRepository;
     }
 
     public Response createExpense(ExpensesCreateDto newExpenses) {
@@ -127,9 +147,8 @@ public class TripUserService {
             return Error.notFound("USER_NOT_FOUND");
         }
 
-
         DateProposition proposition = modelMapper.map(datePropositionDto, DateProposition.class);
-
+        datePropositionRepository.save(proposition);
         trip.addDateProposition(proposition);
         trip = trip.runAnalysis();
 

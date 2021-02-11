@@ -2,6 +2,7 @@ package com.nerga.travelCreatorApp.expensesregister;
 
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseUpdateDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
+import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class Expenses {
     String description;
 
     @ManyToOne
-    ExpensesManager expensesManager;
+    Trip expensesManager;
 
     float cost;
 

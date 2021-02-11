@@ -1,6 +1,10 @@
 package com.nerga.travelCreatorApp.trip.dto;
 
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.post.Post;
+import com.nerga.travelCreatorApp.post.dto.PostDetailsDto;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,6 +35,9 @@ public class TripUserAndDetailsDto {
 
     private List<UserDetailsDto> organizers;
     private List<UserDetailsDto> participants;
+    private DatePropositionReturnedListDto datePropositions;
+    private List<PostDetailsDto> posts;
+    private List<ExpensesDetailsDto> expenses;
     
 
 }

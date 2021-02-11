@@ -3,17 +3,21 @@ package com.nerga.travelCreatorApp.trip;
 import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
+import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionRepository;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecordRepository;
 import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.expensesregister.dto.*;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
 import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.post.PostRepository;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
@@ -43,7 +47,16 @@ public class TripUserServiceTest {
     @Mock
     UserRepository userRepository;
     @Mock
+    ExpensesRepository expensesRepository;
+    @Mock
+    ExpenseRecordRepository expenseRecordRepository;
+    @Mock
+    PostRepository postRepository;
+    @Mock
+    DatePropositionRepository datePropositionRepository;
+    @Mock
     ModelMapper modelMapper;
+
 
     TripUserService underTest;
 
@@ -55,6 +68,10 @@ public class TripUserServiceTest {
                 tripRepository,
                 locationRepository,
                 userRepository,
+                expensesRepository,
+                expenseRecordRepository,
+                datePropositionRepository,
+                postRepository,
                 modelMapper
         );
     }
@@ -80,6 +97,7 @@ public class TripUserServiceTest {
 
             when(tripRepository.findById(any(Long.class))).thenReturn(Optional.of(testTrip));
             when(modelMapper.map(testDatePropositionDto, DateProposition.class)).thenReturn(dateProposition);
+            when(datePropositionRepository.save(any(DateProposition.class))).thenReturn(dateProposition);
             when(tripRepository.save(any(Trip.class))).thenReturn(testUpdatedTrip);
             when(modelMapper.map(testUpdatedTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTripDetails);
 
@@ -366,7 +384,10 @@ public class TripUserServiceTest {
                 LocalDate.parse("2021-06-19"),
                 getTestLocationDetailsDto(),
                 getTestOrganizersList(),
-                getTestParticipantsList()
+                getTestParticipantsList(),
+                null,
+                null,
+                null
         );
     }
 

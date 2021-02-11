@@ -1,4 +1,6 @@
 package com.nerga.travelCreatorApp.expensesregister;
 
-public interface ExpenseRecordRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ExpenseRecordRepository extends JpaRepository<ExpenseRecord, Long> {
 }

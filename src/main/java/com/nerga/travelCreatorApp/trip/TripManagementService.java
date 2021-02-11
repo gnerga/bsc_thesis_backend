@@ -6,6 +6,7 @@ import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
+import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionRepository;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
@@ -40,17 +41,20 @@ public class TripManagementService {
     private final TripRepository tripRepository;
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
+    private final DatePropositionRepository datePropositionRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
     public TripManagementService(TripRepository tripRepository,
                                  LocationRepository locationRepository,
                                  UserRepository userRepository,
-                                 ModelMapper modelMapper) {
+                                 ModelMapper modelMapper,
+                                 DatePropositionRepository datePropositionRepository) {
         this.tripRepository = tripRepository;
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.datePropositionRepository = datePropositionRepository;
     }
 
     public Response addTrip(TripCreateDto tripCreateDto){
@@ -234,7 +238,9 @@ public class TripManagementService {
         Trip trip = modelMapper.map(tripCreateDto, Trip.class);
         trip.addOrganizer(userAndLocationEntities._1);
         trip.setLocation(userAndLocationEntities._2);
-        trip.addDateProposition(createDateProposition(tripCreateDto, userAndLocationEntities._1));
+        trip = tripRepository.save(trip);
+        DateProposition proposition = datePropositionRepository.save(createDateProposition(tripCreateDto, userAndLocationEntities._1));
+        trip.addDateProposition(proposition);
         return trip;
     }
 

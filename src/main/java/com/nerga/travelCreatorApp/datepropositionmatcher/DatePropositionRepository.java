@@ -1,4 +1,6 @@
 package com.nerga.travelCreatorApp.datepropositionmatcher;
 
-public interface DatePropositionRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DatePropositionRepository extends JpaRepository<DateProposition, Long> {
 }

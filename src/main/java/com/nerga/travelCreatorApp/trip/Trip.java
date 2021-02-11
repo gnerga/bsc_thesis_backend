@@ -7,6 +7,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
+import com.nerga.travelCreatorApp.expensesregister.Expenses;
 import com.nerga.travelCreatorApp.expensesregister.ExpensesManager;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.post.PostManager;
@@ -66,9 +67,8 @@ public class Trip {
     @OneToMany
     private List<DateProposition> analyzedDatePropositionList;
 
-    @OneToOne
-    @JoinColumn(name = "expensesManager_id", referencedColumnName = "expensesManagerId")
-    private ExpensesManager expenseManager;
+    @OneToMany
+    List<Expenses> expenses;
 
 
     @OneToOne
@@ -106,7 +106,7 @@ public class Trip {
         this.startDate = startDate;
         this.endDate = endDate;
 
-        this.expenseManager = new ExpensesManager();
+        this.expenses = new ArrayList<>();
         this.postManager = new PostManager();
 
         this.datePropositionList = new ArrayList<>();
