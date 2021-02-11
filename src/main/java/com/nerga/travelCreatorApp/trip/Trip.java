@@ -10,6 +10,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionRetu
 import com.nerga.travelCreatorApp.expensesregister.Expenses;
 import com.nerga.travelCreatorApp.expensesregister.ExpensesManager;
 import com.nerga.travelCreatorApp.location.Location;
+import com.nerga.travelCreatorApp.post.Post;
 import com.nerga.travelCreatorApp.post.PostManager;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
@@ -71,9 +72,8 @@ public class Trip {
     List<Expenses> expenses;
 
 
-    @OneToOne
-    @JoinColumn(name = "postManager_id", referencedColumnName = "postManagerId")
-    private PostManager postManager;
+    @OneToMany
+    List<Post> posts;
 
 //    @JsonManagedReference
     @ManyToMany(mappedBy = "organizedTrips")
@@ -106,18 +106,18 @@ public class Trip {
         this.startDate = startDate;
         this.endDate = endDate;
 
-        this.expenses = new ArrayList<>();
-        this.postManager = new PostManager();
-
         this.datePropositionList = new ArrayList<>();
         this.datePropositionList.add(new DateProposition(
                 startDate,
                 endDate,
                 creatorId
         ));
+
         this.analyzedDatePropositionList = new ArrayList<>();
         this.organizers = new ArrayList<>();
         this.participants = new ArrayList<>();
+        this.expenses = new ArrayList<>();
+        this.posts = new ArrayList<>();
 
     }
 
@@ -206,6 +206,32 @@ public class Trip {
         this.location.updateLocationEntity(updatedTripDetails.getLocation());
 
         return  this;
+    }
+
+    public Trip addExpense(Expenses expense){
+        if(expenses == null){
+            expenses = new ArrayList<>();
+        }
+        expenses.add(expense);
+        return this;
+    }
+
+    public Trip removeExpense(Expenses expense){
+        expenses.remove(expense);
+        return this;
+    }
+
+    public Trip addPost(Post post){
+        if(posts == null){
+            posts = new ArrayList<>();
+        }
+        posts.add(post);
+        return this;
+    }
+
+    public Trip removePost(Post post){
+        posts.remove(post);
+        return this;
     }
 
     @Override
