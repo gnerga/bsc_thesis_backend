@@ -46,7 +46,7 @@ public class TripGeneralService {
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
-        this.modelMapper.addMappings(ApplicationPropertyMaps.userEntityFieldMapping());
+
     }
 
     public Response findAllTripsOrganizedByLoggedUser(){

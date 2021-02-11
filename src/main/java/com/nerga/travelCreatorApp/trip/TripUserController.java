@@ -17,9 +17,6 @@ public class TripUserController {
         this.tripUserService = tripUserService;
     }
 
-   @PostMapping
-    public String test(){
-        return "Hello world";
-   }
+
 
 }

@@ -61,37 +61,69 @@ public class Post {
 
     }
 
-    public void addLike(Long like){
-        if(likes.contains(like)){
-            return;
+    public void addLike(Long like) {
+        if (likes.contains(like)) {
+            likes.remove(like);
+            numberOfLikes = likes.size();
+        } else if (dislikes.contains(like)){
+            dislikes.remove(like);
+            likes.add(like);
+            numberOfLikes = likes.size();
+            numberOfDislikes = dislikes.size();
+        } else {
+            likes.add(like);
+            numberOfLikes = likes.size();
         }
-        if(dislikes.contains(like)){
-            this.removeDislike(like);
-        }
-        likes.add(like);
-        numberOfLikes = likes.size();
-
-    }
-    public void removeLike(Long like){
-        likes.remove(like);
-        numberOfLikes = likes.size();
     }
 
-    public void addDislike(Long dislike) {
+    public void addDislike(Long dislike){
         if(dislikes.contains(dislike)){
-            return;
+            dislikes.remove(dislike);
+            numberOfDislikes = dislikes.size();
+        } else if (likes.contains(dislike)){
+            likes.remove(dislike);
+            dislikes.add(dislike);
+            numberOfDislikes = dislikes.size();
+            numberOfLikes = likes.size();
+        } else {
+            dislikes.add(dislike);
+            numberOfDislikes = dislikes.size();
         }
-        if(likes.contains(dislike)){
-            removeLike(dislike);
-        }
-        this.dislikes.add(dislike);
-        numberOfDislikes = this.dislikes.size();
     }
 
-    public void removeDislike(Long dislike) {
-        this.dislikes.remove(dislike);
-        numberOfDislikes = this.dislikes.size();
-    }
+
+//    public void addLike(Long like){
+//        if(likes.contains(like)){
+//            return;
+//        }
+//        if(dislikes.contains(like)){
+//            this.removeDislike(like);
+//            return;
+//        }
+//        likes.add(like);
+//        numberOfLikes = likes.size();
+//
+//    }
+//    public void removeLike(Long like){
+//        likes.remove(like);
+//        numberOfLikes = likes.size();
+//    }
+//
+//    public void addDislike(Long dislike) {
+//        if(dislikes.contains(dislike)){
+//            return;
+//        }
+//        if(likes.contains(dislike)){
+//            removeLike(dislike);
+//        }
+//        this.dislikes.add(dislike);
+//        numberOfDislikes = this.dislikes.size();
+//    }
+//
+//    public void removeDislike(Long dislike) {
+//        this.dislikes.remove(dislike);
+//        numberOfDislikes = this.dislikes.size();
+//    }
 
 
 }

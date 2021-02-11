@@ -23,6 +23,8 @@ public class PostTest {
         );
     }
 
+
+
     @Test
     void shouldHasZeroLikesAndDislikes(){
         assertEquals(0,post.numberOfLikes,"value correct");
@@ -37,53 +39,50 @@ public class PostTest {
     }
 
     @Test
-    void shouldAddDislike(){
+    void shouldDislike(){
         post.addDislike(1L);
-        assertEquals(0,post.numberOfLikes,"value correct");
-        assertEquals(1,post.numberOfDislikes,"value correct");
+        assertEquals(0, post.numberOfLikes,"value correct");
+        assertEquals(1, post.numberOfDislikes,"value correct");
     }
 
     @Test
-    void shouldRemoveLike(){
+    void shouldRemoveLikeAfterDoubleLike(){
         post.addLike(1L);
-        post.addLike(2L);
-        assertEquals(2,post.numberOfLikes,"value correct");
-        post.removeLike(1L);
         assertEquals(1,post.numberOfLikes,"value correct");
+        post.addLike(1L);
+        assertEquals(0,post.numberOfLikes,"value correct");
+        assertEquals(0,post.numberOfDislikes,"value correct");
+
+    }
+
+    @Test
+    void shouldRemoveDisLkeAfterDoubleDislike(){
+        post.addDislike(1L);
+        assertEquals(1, post.numberOfDislikes);
+        post.addDislike(1L);
+        assertEquals(0,post.numberOfLikes,"value correct");
         assertEquals(0,post.numberOfDislikes,"value correct");
     }
 
     @Test
-    void shouldRemoveDisLike(){
-        post.addDislike(1L);
-        post.addDislike(2L);
-        assertEquals(2,post.numberOfDislikes,"value correct");
-        post.removeDislike(1L);
-        assertEquals(0,post.numberOfLikes,"value correct");
-        assertEquals(1,post.numberOfDislikes,"value correct");
-    }
-
-    @Test
-    void shouldRemoveLikeWhenGiveDislike(){
+    void shouldRemoveLikeAndAddDislike(){
         post.addLike(1L);
-        assertEquals(1,post.numberOfLikes,"value correct");
+        assertEquals(1, post.getNumberOfLikes());
+        assertEquals(0, post.getNumberOfDislikes());
         post.addDislike(1L);
-        assertEquals(1,post.numberOfDislikes,"value correct");
         assertEquals(0,post.numberOfLikes,"value correct");
+        assertEquals(1,post.numberOfDislikes,"value correct");
     }
 
     @Test
-    void shouldRemoveDislikeWhenGiveLike(){
+    void shouldRemoveDislikeAndAddLike(){
         post.addDislike(1L);
-        assertEquals(1,post.numberOfDislikes,"value correct");
+        assertEquals(0, post.getNumberOfLikes());
+        assertEquals(1, post.getNumberOfDislikes());
         post.addLike(1L);
         assertEquals(1,post.numberOfLikes,"value correct");
         assertEquals(0,post.numberOfDislikes,"value correct");
-
-
     }
-
-
 
     private UserEntity getUser(){
         UserEntity userEntity = new UserEntity();
