@@ -40,7 +40,7 @@ public class Post {
     List<Long> likes;
 
     @ElementCollection
-    List<Long> dislike;
+    List<Long> dislikes;
 
     public Post(String title, String content, LocalDateTime timeStamp, UserEntity author) {
 
@@ -53,7 +53,7 @@ public class Post {
         this.numberOfLikes = 0;
 
         this.likes = new ArrayList<>();
-        this.dislike = new ArrayList<>();
+        this.dislikes = new ArrayList<>();
 
     }
 
@@ -62,13 +62,36 @@ public class Post {
     }
 
     public void addLike(Long like){
+        if(likes.contains(like)){
+            return;
+        }
+        if(dislikes.contains(like)){
+            this.removeDislike(like);
+        }
         likes.add(like);
+        numberOfLikes = likes.size();
+
     }
     public void removeLike(Long like){
         likes.remove(like);
+        numberOfLikes = likes.size();
     }
-    public void addDislike(Long dislike) {likes.add(dislike);}
-    public void removeDislike(Long dislike) {likes.remove(dislike);}
+
+    public void addDislike(Long dislike) {
+        if(dislikes.contains(dislike)){
+            return;
+        }
+        if(likes.contains(dislike)){
+            removeLike(dislike);
+        }
+        this.dislikes.add(dislike);
+        numberOfDislikes = this.dislikes.size();
+    }
+
+    public void removeDislike(Long dislike) {
+        this.dislikes.remove(dislike);
+        numberOfDislikes = this.dislikes.size();
+    }
 
 
 }

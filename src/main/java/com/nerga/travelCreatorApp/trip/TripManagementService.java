@@ -250,8 +250,8 @@ public class TripManagementService {
         boolean isNotExist = false;
 
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-
         Optional<UserEntity> userEntityOptional = userRepository.findByUsername(loggedUser);
+
         Optional<Location> locationOptional = locationRepository.findById(tripCreateDto.getLocationId());
 
         if (userEntityOptional.isEmpty()){

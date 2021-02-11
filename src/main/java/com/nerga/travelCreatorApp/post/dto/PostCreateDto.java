@@ -14,6 +14,7 @@ public class PostCreateDto {
 
     String title;
     String content;
+    String timeStamp;
     Long userId;
 
 }

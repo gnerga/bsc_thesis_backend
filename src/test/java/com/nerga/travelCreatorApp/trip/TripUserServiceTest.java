@@ -219,7 +219,7 @@ public class TripUserServiceTest {
 
     private List<ExpenseRecordCreateDto> getExpenseRecordDtoList(){
         List<ExpenseRecordCreateDto> list = new ArrayList<>();
-        list.add(new ExpenseRecordCreateDto(1L, 1L,1L, 50));
+        list.add(new ExpenseRecordCreateDto(1L, 1L, 50));
 //        list.add(new ExpenseRecordCreateDto(2L, 70));
         return list;
     }
