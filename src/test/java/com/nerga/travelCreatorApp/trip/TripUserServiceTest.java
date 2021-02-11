@@ -8,10 +8,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionRetu
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
 import com.nerga.travelCreatorApp.expensesregister.Expenses;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordCreateDto;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.*;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
@@ -164,6 +161,15 @@ public class TripUserServiceTest {
                         .getStatusCode()).isEqualTo(HttpStatus.OK);
         Assertions.assertThat(response.toResponseEntity().getBody()).hasNoNullFieldsOrProperties();
 
+    }
+
+    @Test
+    public void shouldUpdateExpense(){
+//        ExpenseUpdateDto updateDto = new ExpenseUpdateDto(1L, 0L, "New title", "New description");
+//        Trip trip = getTestTrip();
+//        trip.getExpenseManager().addExpenses(getTestExpense());
+//        when(tripRepository.findById(updateDto.getTripId())).thenReturn(Optional.of(trip));
+//        underTest.updateExpenseById(updateDto);
     }
 
 // -----------------------------------------------------------------

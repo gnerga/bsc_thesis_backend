@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.expensesregister;
 
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseUpdateDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import lombok.*;
 
@@ -42,5 +43,18 @@ public class Expenses {
     }
 
 
+    public Expenses updateFromExpensesUpdateDto(ExpenseUpdateDto updateDto){
+        this.title = validator(this.title, updateDto.getTitle());
+        this.description = validator(this.description, updateDto.getDescription());
+        return this;
+    }
+
+    private String validator(String oldValue, String newValue){
+         if (oldValue.equals(newValue)) {
+             return oldValue;
+         } else {
+             return newValue;
+         }
+    }
 
 }

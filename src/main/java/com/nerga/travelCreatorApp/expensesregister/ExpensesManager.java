@@ -1,14 +1,18 @@
 package com.nerga.travelCreatorApp.expensesregister;
 
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseUpdateDto;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
 import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "ExpensesManager")
 public class ExpensesManager {
@@ -27,6 +31,7 @@ public class ExpensesManager {
 
     public void addExpenses(Expenses expenses){
         tripExpenses.add(expenses);
+        expenses.setExpensesManager(this);
     }
 
     public void removeExpenses(Expenses expenses){
@@ -40,5 +45,14 @@ public class ExpensesManager {
                 .findFirst().orElse(null);
     }
 
+    public boolean updateExpenses(ExpenseUpdateDto expenseUpdateDto){
+        for(Expenses it: this.tripExpenses){
+            if(it.expensesId == expenseUpdateDto.getExpenseId()){
+                it.updateFromExpensesUpdateDto(expenseUpdateDto);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

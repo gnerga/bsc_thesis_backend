@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExpenseUpdateDto {
+public class ExpenseRecordsUpdateDto {
 
     Long tripId;
     Long expenseId;
-    String title;
-    String description;
-
+    List<ExpenseRecordDetailsDto> shareHolders;
 }

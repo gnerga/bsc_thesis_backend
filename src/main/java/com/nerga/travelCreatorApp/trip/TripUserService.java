@@ -8,10 +8,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
 import com.nerga.travelCreatorApp.expensesregister.Expenses;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordCreateDto;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.*;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
@@ -66,17 +63,42 @@ public class TripUserService {
        return Success.ok(mapExpensesToExpensesDetailsDto(expense));
     }
 
-    public Response updateExpenseById() {
-        return null;
+    public Response updateExpenseById(ExpenseUpdateDto expenseUpdateDto) {
+
+        Trip trip;
+
+        try {
+            trip = Option.ofOptional(tripRepository.findById(expenseUpdateDto.getTripId()))
+                    .getOrElseThrow(() -> new MyUserNotFoundException("TRIP_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        if (!trip.getExpenseManager().updateExpenses(expenseUpdateDto)){
+            return Error.notFound("EXPENSE_NOT_FOUND");
+        }
+
+        trip = tripRepository.save(trip);
+
+
+        return Success.ok(mapExpensesToExpensesDetailsDto(
+                trip
+                        .getExpenseManager()
+                        .findExpenses(expenseUpdateDto
+                                .getExpenseId())));
     }
 
-    public Response addUserToExpenseByUserIdAndTripId() {
+
+
+    public Response addUserToExpenseByUserIdAndTripId(ExpenseRecordCreateDto newRecord, Long tripId) {
+        Trip trip;
         return null;
     }
 
     public Response updateExpenseShareholdersAmount() {
         return null;
     }
+
 
     public Response addPostByTripId() {
         return null;
@@ -94,9 +116,6 @@ public class TripUserService {
 //        return null;
 //    }
 
-    //    public Response updateAmountByTripAndExpenseIdAndUserId() {
-//        return null;
-//    }
 
     public Response addNewDateProposition(DatePropositionDto datePropositionDto, Long tripId) {
 
