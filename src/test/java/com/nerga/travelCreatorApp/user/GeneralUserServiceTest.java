@@ -61,7 +61,7 @@ public class GeneralUserServiceTest {
         var response = useCase.createUser(tCreateUserDto);
         // assert
 
-        Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+        Assertions.assertThat(response.toResponseEntity().getStatusCode()).isEqualTo(HttpStatus.CREATED);
         Assertions.assertThat(response.toResponseEntity().getBody()).isEqualToComparingFieldByField(tUserIdDto);
 
     }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.expensesregister.ExpensesManager;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.post.PostManager;
@@ -54,13 +56,20 @@ public class Trip {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-    @OneToOne
-    @JoinColumn(name = "datePropositionMatcher_id", referencedColumnName = "id")
-    private DatePropositionMatcher datePropositionMatcher;
+//    @OneToOne
+//    @JoinColumn(name = "datePropositionMatcher_id", referencedColumnName = "id")
+//    private DatePropositionMatcher datePropositionMatcher;
+
+    @OneToMany
+    private List<DateProposition> datePropositionList;
+
+    @OneToMany
+    private List<DateProposition> analyzedDatePropositionList;
 
     @OneToOne
     @JoinColumn(name = "expensesManager_id", referencedColumnName = "expensesManagerId")
     private ExpensesManager expenseManager;
+
 
     @OneToOne
     @JoinColumn(name = "postManager_id", referencedColumnName = "postManagerId")
@@ -85,7 +94,8 @@ public class Trip {
                 int tripLength,
                 LocalDate startDate,
                 LocalDate endDate,
-                LocalDate deadLine) {
+                Long creatorId
+                ) {
 
         this.tripId = tripId;
         this.tripName = tripName;
@@ -96,21 +106,57 @@ public class Trip {
         this.startDate = startDate;
         this.endDate = endDate;
 
-        this.datePropositionMatcher = new DatePropositionMatcher(
-                tripLength,
-                deadLine
-                );
         this.expenseManager = new ExpensesManager();
         this.postManager = new PostManager();
+
+        this.datePropositionList = new ArrayList<>();
+        this.datePropositionList.add(new DateProposition(
+                startDate,
+                endDate,
+                creatorId
+        ));
+        this.analyzedDatePropositionList = new ArrayList<>();
         this.organizers = new ArrayList<>();
         this.participants = new ArrayList<>();
 
     }
 
     public Trip updateDateBasedOnBestMatch(){
-        this.setStartDate(this.datePropositionMatcher.getAnalyzedDatePropositionList().get(0).getStartDate());
-        this.setEndDate(this.datePropositionMatcher.getAnalyzedDatePropositionList().get(0).getEndDate());
+        DatePropositionMatcher matcher = new DatePropositionMatcher(this.datePropositionList);
+        this.analyzedDatePropositionList = matcher.runAnalysis();
+        this.setStartDate(this.getAnalyzedDatePropositionList().get(0).getStartDate());
+        this.setEndDate(this.getAnalyzedDatePropositionList().get(0).getEndDate());
         return this;
+    }
+
+    public Trip runAnalysis(){
+        DatePropositionMatcher matcher = new DatePropositionMatcher(this.datePropositionList);
+        this.analyzedDatePropositionList = matcher.runAnalysis();
+        return this;
+    }
+
+    public DatePropositionReturnedListDto getDateMatcherReport(){
+
+        List<DatePropositionReturnDto> listOfDateProposition = new ArrayList<>();
+
+        for (DateProposition it: this.analyzedDatePropositionList) {
+            listOfDateProposition.add(new DatePropositionReturnDto(it.datePropositionToString(), it.getAccuracy()));
+        }
+        return new DatePropositionReturnedListDto(
+                analyzedDatePropositionList.get(0).getStartDate().toString(),
+                analyzedDatePropositionList.get(0).getEndDate().toString(),
+                listOfDateProposition
+        );
+    }
+
+    public int findNumberOfAddPropositions(Long ownerId){
+        int counter = 0;
+        for(DateProposition it: this.datePropositionList){
+            if(ownerId.equals(it.getOwnerId())) {
+                counter ++;
+            }
+        }
+        return counter;
     }
 
     public void addOrganizer(UserEntity user) {
@@ -140,11 +186,15 @@ public class Trip {
     }
 
     public void addDateProposition(DateProposition dateProposition){
-           datePropositionMatcher.addDateProposition(dateProposition);
+        if(datePropositionList == null){
+            datePropositionList = new ArrayList<>();
+        }
+           dateProposition.setTrip(this);
+           datePropositionList.add(dateProposition);
     }
 
     public boolean removeDateProposition(DateProposition dateProposition) {
-        return datePropositionMatcher.removeDateProposition(dateProposition);
+        return datePropositionList.remove(dateProposition);
     }
 
     public Trip updateTripFromTripUpdateDto(TripUpdateDto updatedTripDetails){

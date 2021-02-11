@@ -131,9 +131,9 @@ public class TripUserService {
         DateProposition proposition = modelMapper.map(datePropositionDto, DateProposition.class);
 
         trip.addDateProposition(proposition);
-        trip.getDatePropositionMatcher().runAnalysis();
+        trip = trip.runAnalysis();
 
-        DatePropositionReturnedListDto report = trip.getDatePropositionMatcher().getDateMatcherReport();
+        DatePropositionReturnedListDto report = trip.getDateMatcherReport();
 
         tripRepository.save(trip);
 

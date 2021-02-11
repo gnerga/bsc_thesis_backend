@@ -201,7 +201,7 @@ public class TripUserServiceTest {
 
     private List<ExpenseRecordCreateDto> getExpenseRecordDtoList(){
         List<ExpenseRecordCreateDto> list = new ArrayList<>();
-        list.add(new ExpenseRecordCreateDto(1L, 50));
+        list.add(new ExpenseRecordCreateDto(1L, 1L,1L, 50));
 //        list.add(new ExpenseRecordCreateDto(2L, 70));
         return list;
     }
@@ -281,7 +281,7 @@ public class TripUserServiceTest {
                 7,
                 LocalDate.parse("2021-05-12"),
                 LocalDate.parse("2021-05-19"),
-                LocalDate.parse("2021-05-19")
+                1L
         );
     }
 
@@ -295,7 +295,7 @@ public class TripUserServiceTest {
                 7,
                 LocalDate.parse("2021-06-12"),
                 LocalDate.parse("2021-06-19"),
-                LocalDate.parse("2021-05-19")
+                1L
         );
     }
 
@@ -373,7 +373,7 @@ public class TripUserServiceTest {
     private DateProposition getTestDateProposition(){
         return new
                 DateProposition(LocalDate.parse("2021-06-12"),
-                LocalDate.parse("2021-06-19"), "test_user", 1L);
+                LocalDate.parse("2021-06-19"), 1L);
     }
 
     private DatePropositionDto getTestDatePropositionDto(){
@@ -402,7 +402,6 @@ public class TripUserServiceTest {
         DateProposition proposition = new DateProposition(
                 LocalDate.parse("2021-06-12"),
                 LocalDate.parse( "2021-06-19"),
-                "test_name",
                 1L
         );
         List<DatePropositionReturnDto> list = new ArrayList<DatePropositionReturnDto>();

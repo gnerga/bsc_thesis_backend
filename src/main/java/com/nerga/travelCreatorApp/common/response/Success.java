@@ -21,6 +21,11 @@ public class Success<T> extends Response<T> {
         return new Success<>(HttpStatus.ACCEPTED, content);
     }
 
+    public static <T> Success<T> created (T content){
+        return new Success<>(HttpStatus.CREATED, content);
+    }
+
+
     @Override
     public ResponseEntity<T> toResponseEntity() {
         return new ResponseEntity<>(content, status);

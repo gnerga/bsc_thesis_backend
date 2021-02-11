@@ -26,7 +26,7 @@ public class DatePropositionMatcherTest {
 
     @BeforeEach
     public void beforeTest(){
-        datePropositionMatcher = new DatePropositionMatcher(7, LocalDate.parse("2020-10-14"));
+        datePropositionMatcher = new DatePropositionMatcher();
         modelMapper = new ModelMapper();
 
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -54,18 +54,6 @@ public class DatePropositionMatcherTest {
     }
 
     @Test
-    public void addNewDateProposition(){
-
-        datePropositionMatcher.addDateProposition(new DateProposition(LocalDate.parse("2020-10-14"),LocalDate.parse("2020-10-21"), "test_user", 1L));
-
-        assertEquals(LocalDate.parse("2020-10-14"), datePropositionMatcher.getDatePropositionList().get(0).getStartDate());
-        assertEquals(LocalDate.parse("2020-10-21"), datePropositionMatcher.getDatePropositionList().get(0).getEndDate());
-        assertEquals("test_user", datePropositionMatcher.getDatePropositionList().get(0).getOwnerUsername());
-        assertEquals(1L, datePropositionMatcher.getDatePropositionList().get(0).getOwnerId().longValue());
-
-    }
-
-    @Test
     public void convertNewDatePropositionBasedOnDatePropositionDto(){
         DatePropositionDto datePropositionDto = new DatePropositionDto(
                 "2020-10-14",
@@ -78,7 +66,6 @@ public class DatePropositionMatcherTest {
 
         assertEquals(LocalDate.parse(datePropositionDto.getStartDate()), dateProposition.getStartDate());
         assertEquals(LocalDate.parse(datePropositionDto.getEndDate()), dateProposition.getEndDate());
-        assertEquals(datePropositionDto.getOwnerUsername(), dateProposition.getOwnerUsername());
         assertEquals(datePropositionDto.getOwnerId(), dateProposition.getOwnerId());
 
     }
@@ -100,45 +87,12 @@ public class DatePropositionMatcherTest {
                 new DateProposition(
                         LocalDate.parse("2020-10-14"),
                         LocalDate.parse("2020-10-21"),
-                        "test_user", 1L);
+                         1L);
 
         assertEquals(proposition.datePropositionToString(), testText);
     }
 
-    @Test
-    public void shouldHowManyPropositionUserSend(){
 
-        int expectedNumber = 3;
-        Long userId = 1L;
-
-        DateProposition proposition1 =
-                new DateProposition(
-                        LocalDate.parse("2020-10-14"),
-                        LocalDate.parse("2020-10-21"),
-                        "test_user", 1L);
-
-        DateProposition proposition2 =
-                new DateProposition(
-                        LocalDate.parse("2020-10-21"),
-                        LocalDate.parse("2020-10-28"),
-                        "test_user", 1L);
-
-        DateProposition proposition3 =
-                new DateProposition(
-                        LocalDate.parse("2020-10-07"),
-                        LocalDate.parse("2020-10-14"),
-                        "test_user", 1L);
-
-
-        datePropositionMatcher.addDateProposition(proposition1);
-        datePropositionMatcher.addDateProposition(proposition2);
-        datePropositionMatcher.addDateProposition(proposition3);
-
-        int result = datePropositionMatcher.findNumberOfAddPropositions(userId);
-
-        assertEquals(expectedNumber, result);
-
-    }
 
     @Test
     public void shouldReturnDateMatcherReport(){
@@ -147,19 +101,19 @@ public class DatePropositionMatcherTest {
                 new DateProposition(
                         LocalDate.parse("2020-10-16"),
                         LocalDate.parse("2020-10-22"),
-                        "test_user", 1L);
+                        1L);
 
         DateProposition proposition2 =
                 new DateProposition(
                         LocalDate.parse("2020-10-18"),
                         LocalDate.parse("2020-10-25"),
-                        "test_user", 1L);
+                        1L);
 
         DateProposition proposition3 =
                 new DateProposition(
                         LocalDate.parse("2020-10-10"),
                         LocalDate.parse("2020-10-17"),
-                        "test_user", 1L);
+                        1L);
 
         List<DatePropositionReturnDto> list = new ArrayList<DatePropositionReturnDto>();
         list.add(new DatePropositionReturnDto("From: 16 OCTOBER 2020 To: 22 OCTOBER 2020", 0.8333333333333333));
@@ -173,16 +127,17 @@ public class DatePropositionMatcherTest {
                 list
         );
 
-        datePropositionMatcher.addDateProposition(proposition1);
-        datePropositionMatcher.addDateProposition(proposition2);
-        datePropositionMatcher.addDateProposition(proposition3);
+        List<DateProposition> propositions = new ArrayList<>();
+        propositions.add(proposition1);
+        propositions.add(proposition2);
+        propositions.add(proposition3);
+
+        datePropositionMatcher.setDatePropositionList(propositions);
         datePropositionMatcher.runAnalysis();
 
-        DatePropositionReturnedListDto result = datePropositionMatcher.getDateMatcherReport();
 
-        assertEquals(expected.getBestStartDay(), result.getBestStartDay());
-        assertEquals(expected.getBestEndDay(), result.getBestEndDay());
-        assertEquals(expected.getListOfDatePropositionReturnDto().size(), result.getListOfDatePropositionReturnDto().size());
+        assertEquals(expected.getBestStartDay(), datePropositionMatcher.getAnalyzedDatePropositionList().get(0).getStartDate().toString());
+        assertEquals(expected.getBestEndDay(), datePropositionMatcher.getAnalyzedDatePropositionList().get(0).getEndDate().toString());
 
     }
 

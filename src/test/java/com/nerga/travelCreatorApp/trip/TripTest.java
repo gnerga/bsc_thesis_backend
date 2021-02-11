@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.trip;
 
+import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
 import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
@@ -105,6 +106,49 @@ public class TripTest {
         assertEquals(LocalDate.parse("2020-11-24"), trip.getStartDate());
         assertEquals(LocalDate.parse("2020-12-04"), trip.getEndDate());
         assertEquals(trip, userEntity_2.getOrganizedTrips().get(0));
+
+    }
+
+    @Test
+    public void shouldHowManyPropositionUserSend(){
+
+        Trip trip = new Trip();
+        trip.setTripName("Wakacje Ekipy");
+        trip.setTripDescription("Najlepsze wakacje ever");
+        trip.setStartDate(LocalDate.parse("2020-11-24"));
+        trip.setEndDate(LocalDate.parse("2020-12-04"));
+        trip.setLocation(location);
+        trip.addOrganizer(userEntity);
+
+        int expectedNumber = 3;
+        Long userId = 1L;
+
+        DateProposition proposition1 =
+                new DateProposition(
+                        LocalDate.parse("2020-10-14"),
+                        LocalDate.parse("2020-10-21"),
+                        1L);
+
+        DateProposition proposition2 =
+                new DateProposition(
+                        LocalDate.parse("2020-10-21"),
+                        LocalDate.parse("2020-10-28"),
+                        1L);
+
+        DateProposition proposition3 =
+                new DateProposition(
+                        LocalDate.parse("2020-10-07"),
+                        LocalDate.parse("2020-10-14"),
+                        1L);
+
+
+        trip.addDateProposition(proposition1);
+        trip.addDateProposition(proposition2);
+        trip.addDateProposition(proposition3);
+
+        int result = trip.findNumberOfAddPropositions(userId);
+
+        assertEquals(expectedNumber, result);
 
     }
 

@@ -5,6 +5,7 @@ import com.nerga.travelCreatorApp.common.response.Error;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
+import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
@@ -24,6 +25,7 @@ import io.vavr.control.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-//@Service("tripService")
+@Service("tripManagementService")
 public class TripManagementService {
 
     private final TripRepository tripRepository;
@@ -214,7 +216,6 @@ public class TripManagementService {
             return Error.notFound("TRIP_NOT_FOUND");
         }
 
-        trip.getDatePropositionMatcher().runAnalysis();
         trip = trip.updateDateBasedOnBestMatch();
 
         trip = tripRepository.save(trip);
@@ -272,7 +273,6 @@ public class TripManagementService {
         return new DateProposition(
                 LocalDate.parse(tripCreateDto.getStartDate()),
                 LocalDate.parse(tripCreateDto.getEndDate()),
-                userEntity.getUsername(),
                 userEntity.getId());
     }
 

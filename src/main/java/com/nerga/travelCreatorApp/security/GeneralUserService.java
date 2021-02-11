@@ -41,7 +41,7 @@ public class GeneralUserService {
     public Response createUser (CreateUserDto createUserDto){
         return canRegister(createUserDto)
                 .map(user -> registerUserAccount(createUserDto, UserRole.USER))
-                .fold(Function.identity(), Success::accepted);
+                .fold(Function.identity(), Success::created);
     }
 
     public Response findUserDetailsByUsername(String username) {

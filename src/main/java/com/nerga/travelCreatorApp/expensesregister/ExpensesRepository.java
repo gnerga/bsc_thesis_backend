@@ -1,4 +1,4 @@
 package com.nerga.travelCreatorApp.expensesregister;
 
-public class ExpensesRepository {
+public interface ExpensesRepository {
 }

@@ -19,92 +19,35 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @AllArgsConstructor
-@Entity
-@Table(name = "DatePropositionMatcher")
-@NoArgsConstructor
+
+
 public class DatePropositionMatcher {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToMany
     private List<DateProposition> datePropositionList;
 
-    @OneToMany
     private List<DateProposition> analyzedDatePropositionList;
 
-    private int planedTripLength;
-
-    private boolean isAddNewPropositionIsAvailable;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate addPropositionDeadline;
 
     public DatePropositionMatcher(
-            int planedTripLength,
-            LocalDate deadline
     ){
-        this.isAddNewPropositionIsAvailable = true;
-        this.planedTripLength = planedTripLength;
-        this.addPropositionDeadline = deadline;
         this.datePropositionList = new ArrayList<>();
+        this.analyzedDatePropositionList = new ArrayList<>();
     }
 
-    public int findNumberOfAddPropositions(Long ownerId){
-        int counter = 0;
-        for(DateProposition it: this.datePropositionList){
-            if(ownerId.equals(it.getOwnerId())) {
-                counter ++;
-            }
-        }
-        return counter;
+    public DatePropositionMatcher(
+            List<DateProposition> datePropositionList
+    ){
+        this.datePropositionList = datePropositionList;
+        this.analyzedDatePropositionList = new ArrayList<>();
     }
 
-    public DatePropositionReturnedListDto getDateMatcherReport(){
-
-        List<DatePropositionReturnDto> listOfDateProposition = new ArrayList<>();
-
-        for (DateProposition it: this.analyzedDatePropositionList) {
-            listOfDateProposition.add(new DatePropositionReturnDto(it.datePropositionToString(), it.getAccuracy()));
-        }
-        return new DatePropositionReturnedListDto(
-                analyzedDatePropositionList.get(0).getStartDate().toString(),
-                analyzedDatePropositionList.get(0).getEndDate().toString(),
-                listOfDateProposition
-        );
-    }
-
-    public void addDateProposition(DateProposition newDateProposition){
-        if (newDateProposition!=null){
-            newDateProposition.setDatePropositionMatcher(this);
-            datePropositionList.add(newDateProposition);
-        }
-    }
-
-    public boolean removeDateProposition(DateProposition newDateProposition){
-        if (newDateProposition!=null){
-            return datePropositionList.remove(newDateProposition);
-        }
-        return false;
-    }
-
-    public void clearDatePropositionMatcher(){
-        this.datePropositionList.clear();
-        this.analyzedDatePropositionList.clear();
-    }
-
-    public void displayDateProposition(){
-        this.analyzedDatePropositionList
-                .forEach(System.out::println);
-    }
-
-    public void runAnalysis(){
+    public List<DateProposition> runAnalysis(){
         analyze();
-        sortBtAccuracy();
+        return sortBtAccuracy();
     }
 
     public List<DateProposition> analyze(){
-        examineAccuracy(this.planedTripLength);
+        examineAccuracy();
         return removeDuplicatedPropositions();
     }
 
@@ -119,8 +62,7 @@ public class DatePropositionMatcher {
         return this.analyzedDatePropositionList;
     }
 
-    private void examineAccuracy(int planedTripLength){
-        this.planedTripLength = planedTripLength;
+    private void examineAccuracy(){
         setStartAndEndDateThenSetDurationOfProposition();
         DatePropositionSet datePropositionSet =
                 new DatePropositionSet(collectAllDatesFromPropositionsIntoOneCollection());

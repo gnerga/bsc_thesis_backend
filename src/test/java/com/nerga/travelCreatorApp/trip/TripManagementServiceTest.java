@@ -550,9 +550,9 @@ public class TripManagementServiceTest {
         Trip updatedTrip = getTestTripWithNewDate();
         TripUserAndDetailsDto updatedTripDetail = getTestTripDetailsDtoDateMatcher();
 
-        testTrip.getDatePropositionMatcher().addDateProposition(propositionList.get(0));
-        testTrip.getDatePropositionMatcher().addDateProposition(propositionList.get(1));
-        testTrip.getDatePropositionMatcher().addDateProposition(propositionList.get(2));
+        testTrip.addDateProposition(propositionList.get(0));
+        testTrip.addDateProposition(propositionList.get(1));
+        testTrip.addDateProposition(propositionList.get(2));
 
         when(tripRepository.findById(tripId)).thenReturn(Optional.of(testTrip));
         when(tripRepository.save(testTrip)).thenReturn(updatedTrip);
@@ -660,7 +660,7 @@ public class TripManagementServiceTest {
                 7,
                 LocalDate.parse("2021-05-12"),
                 LocalDate.parse("2021-05-19"),
-                LocalDate.parse("2021-05-19")
+                1L
         );
     }
 
@@ -687,7 +687,7 @@ public class TripManagementServiceTest {
                 7,
                 LocalDate.parse("2020-10-16"),
                 LocalDate.parse("2020-10-22"),
-                LocalDate.parse("2020-05-19")
+               1L
         );
     }
 
@@ -775,7 +775,7 @@ public class TripManagementServiceTest {
                 7,
                 LocalDate.parse("2022-05-12"),
                 LocalDate.parse("2022-05-19"),
-                LocalDate.parse("2021-05-19")
+               1L
         );
     }
 
@@ -866,7 +866,7 @@ public class TripManagementServiceTest {
     private DateProposition getTestDateProposition(){
         return new
                 DateProposition(LocalDate.parse("2020-10-14"),
-                LocalDate.parse("2020-10-21"), "test_user", 1L);
+                LocalDate.parse("2020-10-21"), 1L);
     }
 
     private List<DateProposition> getTestDatePropositionList(){
@@ -876,17 +876,17 @@ public class TripManagementServiceTest {
         list.add( new DateProposition(
                         LocalDate.parse("2020-10-16"),
                         LocalDate.parse("2020-10-22"),
-                        "test_user", 1L));
+                        1L));
 
         list.add( new DateProposition(
                         LocalDate.parse("2020-10-18"),
                         LocalDate.parse("2020-10-25"),
-                        "test_user", 1L));
+                        1L));
 
         list.add( new DateProposition(
                         LocalDate.parse("2020-10-10"),
                         LocalDate.parse("2020-10-17"),
-                        "test_user", 1L));
+                        1L));
 
         return list;
     }
