@@ -1,12 +1,10 @@
 package com.nerga.travelCreatorApp.location;
 
-import com.nerga.travelCreatorApp.location.exceptions.LocationException;
+import com.nerga.travelCreatorApp.location.dto.LocationCreateDto;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/location")
@@ -19,58 +17,41 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    @PostMapping(path="test")
-    @ResponseBody
-    public String helloUserMethod(){
-        return "Hello !" ;
-    }
-
     @PostMapping(path="createLocation")
     @ResponseBody
-    public Location createNewLocation(@RequestBody LocationCreateDto locationDetails) {
-        return locationService.createNewLocation(locationDetails);
+    public ResponseEntity createNewLocation(@RequestBody LocationCreateDto locationDetails) {
+        return locationService.createNewLocation(locationDetails).toResponseEntity();
     }
 
     @GetMapping(path="findAll")
     @ResponseBody
     public ResponseEntity findAll(){
-        try {
-            List<Location> locationsList = locationService.findAllLocations();
-            return ResponseEntity.ok(locationsList);
-
-        } catch (LocationException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
+        return locationService.findAllLocations().toResponseEntity();
     }
 
     @GetMapping(path="findById/{id}")
     public ResponseEntity findLocationById(@PathVariable("id") Long id) {
-        try{
-            Location location = locationService.findById(id);
-            return ResponseEntity.ok(location);
-        } catch (LocationException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
+        return locationService.findById(id).toResponseEntity();
     }
 
     @GetMapping(path="findByDescription/{desc}")
     public ResponseEntity findLocationByDescription(@PathVariable("desc") String elementOfDescription) {
-        try{
-            List<Location> location = locationService.findByDescription(elementOfDescription);
-            return ResponseEntity.ok(location);
-        } catch (LocationException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
+        return locationService.findAllWithDescription(elementOfDescription).toResponseEntity();
     }
 
     @GetMapping(path="findByName/{name}")
     public ResponseEntity findLocationByName(@PathVariable("name") String name) {
-        try{
-            Location location = locationService.findByName(name);
-            return ResponseEntity.ok(location);
-        } catch (LocationException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
+        return locationService.findAllLocationsWithLocationName(name).toResponseEntity();
+    }
+
+    @PutMapping(path="updateById/{id}")
+    public ResponseEntity updateById(@PathVariable("id") Long id, LocationDetailsDto locationDetailsDto) {
+        return locationService.updateLocationById(id, locationDetailsDto).toResponseEntity();
+    }
+
+    @DeleteMapping(path="deleteById/{id}")
+    public ResponseEntity deleteById(@PathVariable("id")Long id){
+        return locationService.deleteLocationById(id).toResponseEntity();
     }
 
 

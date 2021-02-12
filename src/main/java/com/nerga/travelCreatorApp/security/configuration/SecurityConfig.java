@@ -6,6 +6,7 @@ import com.nerga.travelCreatorApp.security.jwt.JwtConfig;
 import com.nerga.travelCreatorApp.security.jwt.JwtCredentialsAuthenticationFilter;
 import com.nerga.travelCreatorApp.security.jwt.JwtTokenVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.crypto.SecretKey;
+import javax.servlet.annotation.WebServlet;
 
 import static com.nerga.travelCreatorApp.security.configuration.UserRole.USER;
 
@@ -48,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .headers().frameOptions().disable() // dotyczy interfejsu dla h2 normalnie usunac
+                .and()
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -55,7 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtCredentialsAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/user/**").hasRole(USER.name())
+                .antMatchers("/trip/**").permitAll()
                 .anyRequest()
                 .authenticated();
     }

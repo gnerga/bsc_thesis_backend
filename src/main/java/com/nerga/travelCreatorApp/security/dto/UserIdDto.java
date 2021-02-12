@@ -11,9 +11,4 @@ public class UserIdDto {
     private String username;
     private Long id;
 
-    public UserIdDto(UserEntity userEntity) {
-        this.username = userEntity.getUsername();
-        this.id = userEntity.getId();
-    }
-
 }

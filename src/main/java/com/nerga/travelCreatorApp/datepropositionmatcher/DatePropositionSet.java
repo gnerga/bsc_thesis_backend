@@ -6,22 +6,22 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class DatePropositionCollection {
+public class DatePropositionSet {
 
     List<LocalDate> allDatePropositions;
     LocalDate min;
     LocalDate max;
 
-    public DatePropositionCollection (List<LocalDate> allDatePropositions) {
+    public DatePropositionSet(List<LocalDate> allDatePropositions) {
         this.allDatePropositions = allDatePropositions;
         this.setMinAndMaxValue();
     }
 
     private void setMinAndMaxValue() {
        this.min = allDatePropositions.stream()
-                .min(LocalDate::compareTo).get();
+                .min(LocalDate::compareTo).orElseThrow();
         this.max = allDatePropositions.stream()
-                .max(LocalDate::compareTo).get();
+                .max(LocalDate::compareTo).orElseThrow();
     }
 
 }

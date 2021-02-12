@@ -1,27 +1,51 @@
 package com.nerga.travelCreatorApp.datepropositionmatcher;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nerga.travelCreatorApp.trip.Trip;
+import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class DateProposition implements Comparable<DateProposition> {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long datePropositionId;
+
+    @ManyToOne
+    private Trip trip;
+
     @NonNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @NonNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    @NonNull
+    private Long ownerId;
 
     private Long leftEdge;
     private Long rightEdge;
     private Long propositionDuration;
     private double accuracy;
     private int numberOfIdenticalProposition = 0;
+
+    public String datePropositionToString(){
+        return "From: "
+                + startDate.getDayOfMonth() + ' '
+                + startDate.getMonth().toString() + ' '
+                + startDate.getYear()+'\n'
+                + " To: "
+                + endDate.getDayOfMonth() + ' '
+                + endDate.getMonth().toString() + ' '
+                + endDate.getYear();
+    }
 
     public boolean isTheSameObject(DateProposition otherProposition) {
         return this == otherProposition;

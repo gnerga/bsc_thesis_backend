@@ -1,17 +1,15 @@
 package com.nerga.travelCreatorApp.location;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.nerga.travelCreatorApp.location.address.LocationAddress;
+import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
+import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -22,6 +20,45 @@ public class Location {
     private Long locationId;
     private String locationName;
     private String locationDescription;
-    private String googleMapUrl;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="location_address_id", referencedColumnName = "id")
+    private LocationAddress locationAddress;
+    @ManyToOne
+    private UserEntity owner;
+    private boolean isPrivate;
 
+    public Location updateLocationEntity(LocationDetailsDto locationDetailsDto) {
+
+        this.setLocationName(simplyValidatorInputEmptyString(
+                locationDetailsDto.getLocationName(),
+                this.getLocationName()));
+        this.setLocationDescription(simplyValidatorInputEmptyString(
+                locationDetailsDto.getLocationDescription(),
+                this.getLocationDescription()));
+        this.setPrivate(locationDetailsDto.isPrivate());
+        this.setLocationAddress(
+                locationAddress.updateLocationEntity(locationDetailsDto.getLocationAddress()));
+
+        return this;
+    }
+
+    private String simplyValidatorInputEmptyString(String newInput, String oldInput){
+        return newInput.isBlank() ? oldInput : newInput;
+    }
+
+    @Override
+    public int hashCode() {
+        return locationId == null ? 0 : locationId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (locationId == null || obj == null || getClass() != obj.getClass())
+            return false;
+
+        Location that = (Location) obj;
+        return locationId.equals(that.locationId);
+    }
 }

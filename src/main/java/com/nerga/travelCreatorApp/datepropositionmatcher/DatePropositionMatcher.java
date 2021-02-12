@@ -1,47 +1,53 @@
 package com.nerga.travelCreatorApp.datepropositionmatcher;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
+import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
+import com.nerga.travelCreatorApp.trip.Trip;
+import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
+
+
 public class DatePropositionMatcher {
 
     private List<DateProposition> datePropositionList;
+
     private List<DateProposition> analyzedDatePropositionList;
-    private int planedTripLength;
 
-    public DatePropositionMatcher(){
+
+    public DatePropositionMatcher(
+    ){
         this.datePropositionList = new ArrayList<>();
+        this.analyzedDatePropositionList = new ArrayList<>();
     }
 
-    public void addDateProposition(DateProposition newDateProposition){
-        if (newDateProposition!=null){
-            datePropositionList.add(newDateProposition);
-        }
+    public DatePropositionMatcher(
+            List<DateProposition> datePropositionList
+    ){
+        this.datePropositionList = datePropositionList;
+        this.analyzedDatePropositionList = new ArrayList<>();
     }
 
-    public boolean removeDateProposition(DateProposition newDateProposition){
-        if (newDateProposition!=null){
-            return datePropositionList.remove(newDateProposition);
-        }
-        return false;
+    public List<DateProposition> runAnalysis(){
+        analyze();
+        return sortBtAccuracy();
     }
 
-    public void displayDateProposition(){
-        this.datePropositionList
-                .forEach(System.out::println);
-    }
-
-    public List<DateProposition> analyze(int planedTripLength){
-        examineAccuracy(planedTripLength);
+    public List<DateProposition> analyze(){
+        examineAccuracy();
         return removeDuplicatedPropositions();
     }
 
@@ -56,12 +62,11 @@ public class DatePropositionMatcher {
         return this.analyzedDatePropositionList;
     }
 
-    private void examineAccuracy(int planedTripLength){
-        this.planedTripLength = planedTripLength;
+    private void examineAccuracy(){
         setStartAndEndDateThenSetDurationOfProposition();
-        DatePropositionCollection datePropositionCollection =
-                new DatePropositionCollection(collectAllDatesFromPropositionsIntoOneCollection());
-        setPropositionLeftAndRightEdge(datePropositionCollection);
+        DatePropositionSet datePropositionSet =
+                new DatePropositionSet(collectAllDatesFromPropositionsIntoOneCollection());
+        setPropositionLeftAndRightEdge(datePropositionSet);
         countAccuracy();
     }
 
@@ -166,10 +171,10 @@ public class DatePropositionMatcher {
         }
     }
 
-    private void setPropositionLeftAndRightEdge(DatePropositionCollection datePropositionCollection){
+    private void setPropositionLeftAndRightEdge(DatePropositionSet datePropositionSet){
         this.datePropositionList.forEach(dateProposition -> {
-            dateProposition.setLeftEdge(ChronoUnit.DAYS.between(datePropositionCollection.getMin(), dateProposition.getStartDate()));
-            dateProposition.setRightEdge(Math.abs(ChronoUnit.DAYS.between(datePropositionCollection.getMin(), dateProposition.getEndDate())));
+            dateProposition.setLeftEdge(ChronoUnit.DAYS.between(datePropositionSet.getMin(), dateProposition.getStartDate()));
+            dateProposition.setRightEdge(Math.abs(ChronoUnit.DAYS.between(datePropositionSet.getMin(), dateProposition.getEndDate())));
         });
     }
 

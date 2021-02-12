@@ -1,8 +1,11 @@
 package com.nerga.travelCreatorApp.security.auth.database;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.User;
 import com.nerga.travelCreatorApp.security.configuration.UserRole;
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
+import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,8 +15,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
-@NoArgsConstructor
-@Data
+@Getter
+@Setter
 //@Builder(access= AccessLevel.PUBLIC)
 public class UserEntity {
 
@@ -37,18 +40,23 @@ public class UserEntity {
     @Column(unique = true)
     private String phoneNumber;
 
-//    @JsonIgnore
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "user_trips",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "trip_id"))
-//    private List<Trip> usersTrips;
-//    @JsonIgnore
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "user_organized_trips",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "trip_id"))
-//    private List<Trip> organizedTrips;
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "participatedTrips",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "trip_tripId"))
+    private List<Trip> participatedTrips;
+
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "organizedTrips",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "trip_tripId"))
+    private List<Trip> organizedTrips;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Location> createdLocations;
 
     public UserEntity(
             String username,
@@ -68,8 +76,13 @@ public class UserEntity {
         this.email = email;
         this.phoneNumber = "n/d";
 
-//        this.usersTrips = new ArrayList<>();
-//        this.organizedTrips = new ArrayList<>();
+        this.participatedTrips = new ArrayList<>();
+        this.organizedTrips = new ArrayList<>();
+    }
+
+    public UserEntity(){
+        this.participatedTrips = new ArrayList<>();
+        this.organizedTrips = new ArrayList<>();
     }
 
     public UserEntity(
@@ -93,16 +106,9 @@ public class UserEntity {
         this.email = email;
         this.phoneNumber = phoneNumber;
 
-//        this.usersTrips = new ArrayList<>();
-//        this.organizedTrips = new ArrayList<>();
+        this.participatedTrips = new ArrayList<>();
+        this.organizedTrips = new ArrayList<>();
 
-    }
-
-    public User getUserFromEntity(){
-        return new User(
-                username, password, getGrantedAuthority(), isAccountNonExpired, isAccountNonLock, isCredentialsNonExpired,
-                isEnabled, firstName, lastName, email, phoneNumber
-        );
     }
 
     private Set<String> getPermissions(Collection<? extends GrantedAuthority> grantedAuthority) {
@@ -118,22 +124,52 @@ public class UserEntity {
                 .collect(Collectors.toSet());
     }
 
-    public Map<String, String> toIdJson(){
-        Map<String, String> entity = new HashMap<>();
-        entity.put("login", this.username);
-        entity.put("userId", String.valueOf(this.id));
-        return entity;
+    public User getUserFromEntity(){
+        return new User(
+                username, password, getGrantedAuthority(), isAccountNonExpired, isAccountNonLock, isCredentialsNonExpired,
+                isEnabled, firstName, lastName, email, phoneNumber
+        );
     }
 
-    public Map<String, String> toDetailsJson(){
-        Map<String, String> entity = new HashMap<>();
-        entity.put("login", this.username);
-        entity.put("userId", String.valueOf(this.id));
-        entity.put("firstName", this.firstName);
-        entity.put("lastName", this.lastName);
-        entity.put("email", this.email);
-        entity.put("phoneNumber", this.phoneNumber);
-        return entity;
+    public void addOrganizedTrip(Trip trip) {
+        if (organizedTrips == null) {
+            organizedTrips = new ArrayList<>();
+        }
+        organizedTrips.add(trip);
+        trip.getOrganizers().add(this);
     }
 
+    public void removeOrganizer(Trip trip) {
+        organizedTrips.remove(trip);
+        trip.getOrganizers().remove(this);
+    }
+
+    public void addParticipatedTrip(Trip trip) {
+        if ( participatedTrips == null) {
+            participatedTrips = new ArrayList<>();
+        }
+        participatedTrips.add(trip);
+        trip.getParticipants().add(this);
+    }
+
+    public void removeParticipant(Trip trip){
+        participatedTrips.remove(trip);
+        trip.getParticipants().remove(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj)
+            return true;
+        if(id == null || obj == null || getClass() != obj.getClass())
+            return false;
+
+        UserEntity that = (UserEntity) obj;
+        return id.equals(that.id);
+    }
 }
