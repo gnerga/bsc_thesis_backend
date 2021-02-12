@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.trip;
 
 import com.nerga.travelCreatorApp.trip.dto.TripCreateDto;
+import com.nerga.travelCreatorApp.trip.dto.TripUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,21 @@ public class TripManagementController {
     @PostMapping("/addParticipants={tripId}&{userId}")
     public ResponseEntity addNewParticipants(@PathVariable("tripId") Long tripId, @PathVariable("userId") Long userId){
         return tripManagementService.addNewParticipantById(tripId, userId).toResponseEntity();
+    }
+
+    @PutMapping("/update={tripId}")
+    public ResponseEntity updateTrip(@PathVariable("tripId") TripUpdateDto tripUpdateDto){
+        return tripManagementService.updateTrip(tripUpdateDto).toResponseEntity();
+    }
+
+    @DeleteMapping("/removeParticipants={tripId}&{userId}")
+    public ResponseEntity removeParticipants(@PathVariable("tripId")Long tripId, @PathVariable("userId")Long userId){
+        return tripManagementService.removeParticipantById(tripId, userId).toResponseEntity();
+    }
+
+    @DeleteMapping("/removeOrganizers={tripId}&{userId}")
+    public ResponseEntity removeOrganizers(@PathVariable("tripId")Long tripId, @PathVariable("userId")Long userId){
+        return tripManagementService.removeOrganizerById(tripId, userId).toResponseEntity();
     }
 
 }
