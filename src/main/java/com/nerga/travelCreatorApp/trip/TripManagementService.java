@@ -64,10 +64,10 @@ public class TripManagementService {
                 .fold(Function.identity(), Success::ok);
     }
 
-    public Response findAllTrips(){
-        List<Trip> tripList = tripRepository.findAll();
-           return !tripList.isEmpty() ? Success.ok(convertListDetailsDto(tripList)) : Success.ok(new ArrayList<TripUserAndDetailsDto>());
-    }
+//    public Response findAllTrips(){
+//        List<Trip> tripList = tripRepository.findAll();
+//           return !tripList.isEmpty() ? Success.ok(convertListDetailsDto(tripList)) : Success.ok(new ArrayList<TripUserAndDetailsDto>());
+//    }
 
     public Response addNewOrganizerById(Long tripId, Long userId){
         Trip trip;
