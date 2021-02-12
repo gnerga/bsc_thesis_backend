@@ -23,6 +23,11 @@ public class GeneralUserController {
         return generalUserService.createUser(createUserDto).toResponseEntity();
     }
 
+    @GetMapping("user/findAll")
+    public ResponseEntity findAllUser(){
+        return generalUserService.findAllUsers().toResponseEntity();
+    }
+
     @GetMapping("user/findId/{username}")
     public ResponseEntity findUserId(@PathVariable("username") String username){
         return generalUserService.findUserIdByUsername(username).toResponseEntity();
