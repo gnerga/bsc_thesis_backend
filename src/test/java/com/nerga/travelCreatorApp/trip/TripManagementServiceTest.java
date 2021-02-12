@@ -4,6 +4,8 @@ import com.nerga.travelCreatorApp.common.propertymap.ApplicationPropertyMaps;
 import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionRepository;
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecordRepository;
+import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
@@ -50,6 +52,10 @@ public class TripManagementServiceTest {
     @Mock
     private DatePropositionRepository datePropositionRepository;
     @Mock
+    private ExpensesRepository expensesRepository;
+    @Mock
+    private ExpenseRecordRepository expenseRecordRepository;
+    @Mock
     private ModelMapper modelMapper;
 
     @Mock
@@ -73,6 +79,8 @@ public class TripManagementServiceTest {
                 locationRepository,
                 userRepository,
                 modelMapper,
+                expensesRepository,
+                expenseRecordRepository,
                 datePropositionRepository
         );
         userEntity = getTestUserEntity();

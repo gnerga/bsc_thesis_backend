@@ -43,7 +43,6 @@ public class Expenses {
         this.shareholders = shareholders;
     }
 
-
     public Expenses updateFromExpensesUpdateDto(ExpenseUpdateDto updateDto){
         this.title = validator(this.title, updateDto.getTitle());
         this.description = validator(this.description, updateDto.getDescription());

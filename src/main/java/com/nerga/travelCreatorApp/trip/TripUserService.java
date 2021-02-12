@@ -337,7 +337,7 @@ public class TripUserService {
                 records
         );
 
-        expensesRepository.save(expenses);
+        expenses = expensesRepository.save(expenses);
 
         for (ExpenseRecordCreateDto it : newExpenses.getShareHolders()) {
 

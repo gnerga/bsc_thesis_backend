@@ -6,6 +6,10 @@ import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionRepository;
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
+import com.nerga.travelCreatorApp.expensesregister.ExpenseRecordRepository;
+import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
@@ -41,6 +45,8 @@ public class TripManagementService {
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
     private final DatePropositionRepository datePropositionRepository;
+    private final ExpensesRepository expensesRepository;
+    private final ExpenseRecordRepository expenseRecordRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
@@ -48,12 +54,16 @@ public class TripManagementService {
                                  LocationRepository locationRepository,
                                  UserRepository userRepository,
                                  ModelMapper modelMapper,
+                                 ExpensesRepository expensesRepository,
+                                 ExpenseRecordRepository expenseRecordRepository,
                                  DatePropositionRepository datePropositionRepository) {
         this.tripRepository = tripRepository;
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.datePropositionRepository = datePropositionRepository;
+        this.expenseRecordRepository = expenseRecordRepository;
+        this.expensesRepository = expensesRepository;
     }
 
     public Response addTrip(TripCreateDto tripCreateDto){
@@ -174,9 +184,10 @@ public class TripManagementService {
         }
 
         if (trip.getParticipants().contains(participant)) {
+            removeUserRecordsFromExpenses(participant.getId(), trip);
             trip.removeParticipant(participant);
         } else if (trip.getOrganizers().contains(participant)) {
-
+            removeUserRecordsFromExpenses(participant.getId(), trip);
             trip.removeOrganizer(participant);
         } else {
             return Error.notFound("USER_NOT_PARTICIPATED_IN_TRIP");
@@ -188,6 +199,25 @@ public class TripManagementService {
         TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
         return Success.ok(tripUserAndDetailsDto);
+    }
+
+    private void  removeUserRecordsFromExpenses(Long userId, Trip trip){
+
+        if(!trip.getExpenses().isEmpty() || trip.getExpenses() == null){
+
+            for(Expenses expense: trip.getExpenses()){
+                for (ExpenseRecord record : expense.getShareholders()){
+                    if(record.getUserEntity().getId().equals(userId)){
+                        expense.setCost(expense.getCost() - record.getAmount());
+                        expense.getShareholders().remove(record);
+                        expense = expensesRepository.save(expense);
+                        expenseRecordRepository.delete(record);
+                        return;
+                    }
+                }
+
+            }
+        }
     }
 
     public Response updateTrip(TripUpdateDto update){
