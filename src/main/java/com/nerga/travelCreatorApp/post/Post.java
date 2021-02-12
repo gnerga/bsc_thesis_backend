@@ -92,38 +92,7 @@ public class Post {
     }
 
 
-//    public void addLike(Long like){
-//        if(likes.contains(like)){
-//            return;
-//        }
-//        if(dislikes.contains(like)){
-//            this.removeDislike(like);
-//            return;
-//        }
-//        likes.add(like);
-//        numberOfLikes = likes.size();
-//
-//    }
-//    public void removeLike(Long like){
-//        likes.remove(like);
-//        numberOfLikes = likes.size();
-//    }
-//
-//    public void addDislike(Long dislike) {
-//        if(dislikes.contains(dislike)){
-//            return;
-//        }
-//        if(likes.contains(dislike)){
-//            removeLike(dislike);
-//        }
-//        this.dislikes.add(dislike);
-//        numberOfDislikes = this.dislikes.size();
-//    }
-//
-//    public void removeDislike(Long dislike) {
-//        this.dislikes.remove(dislike);
-//        numberOfDislikes = this.dislikes.size();
-//    }
+
 
 
 }

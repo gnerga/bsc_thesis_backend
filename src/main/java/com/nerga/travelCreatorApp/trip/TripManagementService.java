@@ -240,6 +240,7 @@ public class TripManagementService {
         trip = tripRepository.save(trip);
         DateProposition proposition = datePropositionRepository.save(createDateProposition(tripCreateDto, userAndLocationEntities._1));
         trip.addDateProposition(proposition);
+        trip = tripRepository.save(trip);
         return trip;
     }
 

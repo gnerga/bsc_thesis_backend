@@ -103,14 +103,7 @@ public class Trip {
         this.tripLength = tripLength;
         this.startDate = startDate;
         this.endDate = endDate;
-
         this.datePropositionList = new ArrayList<>();
-        this.datePropositionList.add(new DateProposition(
-                startDate,
-                endDate,
-                creatorId
-        ));
-
         this.analyzedDatePropositionList = new ArrayList<>();
         this.organizers = new ArrayList<>();
         this.participants = new ArrayList<>();
@@ -134,6 +127,10 @@ public class Trip {
     }
 
     public DatePropositionReturnedListDto getDateMatcherReport(){
+
+        if(analyzedDatePropositionList.isEmpty() || analyzedDatePropositionList == null){
+            return null;
+        }
 
         List<DatePropositionReturnDto> listOfDateProposition = new ArrayList<>();
 

@@ -23,12 +23,12 @@ public class TripManagementController {
         return tripManagementService.addTrip(tripCreateDto).toResponseEntity();
     }
 
-    @PostMapping("/addOrganizer={tripId}&{userId}")
+    @PutMapping("/addOrganizer={tripId}&{userId}")
     public ResponseEntity addNewOrganizer(@PathVariable("tripId") Long tripId, @PathVariable("userId") Long userId){
         return tripManagementService.addNewOrganizerById(tripId, userId).toResponseEntity();
     }
 
-    @PostMapping("/addParticipants={tripId}&{userId}")
+    @PutMapping("/addParticipant={tripId}&{userId}")
     public ResponseEntity addNewParticipants(@PathVariable("tripId") Long tripId, @PathVariable("userId") Long userId){
         return tripManagementService.addNewParticipantById(tripId, userId).toResponseEntity();
     }
@@ -38,12 +38,12 @@ public class TripManagementController {
         return tripManagementService.updateTrip(tripUpdateDto).toResponseEntity();
     }
 
-    @DeleteMapping("/removeParticipants={tripId}&{userId}")
+    @PutMapping("/removeParticipant={tripId}&{userId}")
     public ResponseEntity removeParticipants(@PathVariable("tripId")Long tripId, @PathVariable("userId")Long userId){
         return tripManagementService.removeParticipantById(tripId, userId).toResponseEntity();
     }
 
-    @DeleteMapping("/removeOrganizers={tripId}&{userId}")
+    @PutMapping("/removeOrganizer={tripId}&{userId}")
     public ResponseEntity removeOrganizers(@PathVariable("tripId")Long tripId, @PathVariable("userId")Long userId){
         return tripManagementService.removeOrganizerById(tripId, userId).toResponseEntity();
     }

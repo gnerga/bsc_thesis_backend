@@ -136,6 +136,7 @@ public class TripUserService {
 
         record = expenseRecordRepository.save(record);
         expense.getShareholders().add(record);
+        expense.setCost(expense.getCost() + record.getAmount());
         expense = expensesRepository.save(expense);
 
         return Success.ok(Success.accepted(mapExpensesToExpensesDetailsDto(expense)));
@@ -210,6 +211,16 @@ public class TripUserService {
             return Error.notFound("POST_NOT_FOUND");
         }
 
+        UserEntity user;
+
+        try {
+            user = Option.ofOptional(userRepository.findById(userId))
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+
         post.addLike(userId);
         post = postRepository.save(post);
 
@@ -243,6 +254,10 @@ public class TripUserService {
             return Error.notFound("USER_NOT_FOUND");
         }
 
+        if (trip.findNumberOfAddPropositions(datePropositionDto.getOwnerId()) > 3 ) {
+            return Error.badRequest("DATE_PROPOSITION_LIMIT_REACHED");
+        }
+
         DateProposition proposition = modelMapper.map(datePropositionDto, DateProposition.class);
         datePropositionRepository.save(proposition);
         trip.addDateProposition(proposition);
@@ -255,6 +270,7 @@ public class TripUserService {
         return Success.ok(report);
 
     }
+
 
     private ExpensesDetailsDto mapExpensesToExpensesDetailsDto(Expenses expenses){
         List<ExpenseRecordDetailsDto> list = new ArrayList<>();
@@ -314,6 +330,15 @@ public class TripUserService {
         List<ExpenseRecord> records = new ArrayList<>();
         Optional<UserEntity> optional;
 
+        Expenses expenses = new Expenses(
+                newExpenses.getTitle(),
+                newExpenses.getDescription(),
+                newExpenses.getCost(),
+                records
+        );
+
+        expensesRepository.save(expenses);
+
         for (ExpenseRecordCreateDto it : newExpenses.getShareHolders()) {
 
             optional = userRepository.findById(it.getUserId());
@@ -325,15 +350,11 @@ public class TripUserService {
             ExpenseRecord record = new ExpenseRecord(optional.get(), it.getAmount());
             record = expenseRecordRepository.save(record);
             records.add(record);
+            expenseRecordRepository.save(record);
         }
 
-        Expenses expenses = new Expenses(
-                newExpenses.getTitle(),
-                newExpenses.getDescription(),
-                newExpenses.getCost(),
-                records
-        );
-
+        expenses.setShareholders(records);
+        expenses = expensesRepository.save(expenses);
         return expenses;
     }
 
