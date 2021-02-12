@@ -91,7 +91,7 @@ public class TripUserService {
        return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
     }
 
-    public Response updateExpenseById(ExpenseUpdateDto expenseUpdateDto) {
+    public Response updateExpense(ExpenseUpdateDto expenseUpdateDto) {
 
         Expenses expense;
 
@@ -111,9 +111,7 @@ public class TripUserService {
                 expense));
     }
 
-
-
-    public Response addUserToExpenseByUserIdAndTripId(ExpenseRecordCreateDto newRecord) {
+    public Response addUserToExpense(ExpenseRecordCreateDto newRecord) {
         Expenses expense;
 
         try {
@@ -201,8 +199,6 @@ public class TripUserService {
 
         return Success.created(mapPostsToListPostDetailsDto(trip.posts));
     }
-
-
 
     public Response handUpByTripAndPostId(Long postId, Long userId) {
         Post post;
