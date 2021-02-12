@@ -18,7 +18,7 @@ public class Expenses {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long expensesId;
+    Long expensesId;
 
     String title;
     String description;
@@ -56,6 +56,22 @@ public class Expenses {
          } else {
              return newValue;
          }
+    }
+
+    @Override
+    public int hashCode() {
+        return expensesId == null ? 0 : expensesId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj)
+            return true;
+        if(expensesId == null || obj == null || getClass() != obj.getClass())
+            return false;
+
+        Expenses that = (Expenses) obj;
+        return expensesId.equals(that.expensesId);
     }
 
 }

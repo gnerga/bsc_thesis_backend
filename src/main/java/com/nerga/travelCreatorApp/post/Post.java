@@ -91,7 +91,21 @@ public class Post {
         }
     }
 
+    @Override
+    public int hashCode() {
+        return postId == null ? 0 : postId.hashCode();
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj)
+            return true;
+        if(postId == null || obj == null || getClass() != obj.getClass())
+            return false;
+
+        Post that = (Post) obj;
+        return postId.equals(that.postId);
+    }
 
 
 

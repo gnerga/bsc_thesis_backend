@@ -193,7 +193,7 @@ public class TripUserService {
                 LocalDateTime.parse(newPost.getTimeStamp()),
                 userEntity
         );
-
+        post.setTrip(trip);
         postRepository.save(post);
         trip.addPost(post);
         trip = tripRepository.save(trip);
@@ -224,7 +224,7 @@ public class TripUserService {
         post.addLike(userId);
         post = postRepository.save(post);
 
-        return Success.ok(mapPostsToListPostDetailsDto(post.getTrip().posts));
+        return Success.ok(mapPostsToListPostDetailsDto(post.getTrip().getPosts()));
     }
 
     public Response handDownByTripAndPostId(Long postId, Long userId) {

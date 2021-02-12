@@ -14,7 +14,7 @@ public class ExpenseRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long expenseRecordId;
+    Long expenseRecordId;
 
     @ManyToOne
     Expenses expenses;
@@ -43,4 +43,21 @@ public class ExpenseRecord {
         this.userEntity = userEntity;
         this.amount = amount;
     }
+
+    @Override
+    public int hashCode() {
+        return expenseRecordId == null ? 0 : expenseRecordId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this==obj)
+            return true;
+        if(expenseRecordId == null || obj == null || getClass() != obj.getClass())
+            return false;
+
+        ExpenseRecord that = (ExpenseRecord) obj;
+        return expenseRecordId.equals(that.expenseRecordId);
+    }
+
 }
