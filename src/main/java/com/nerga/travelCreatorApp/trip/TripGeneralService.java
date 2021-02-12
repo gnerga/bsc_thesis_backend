@@ -104,6 +104,19 @@ public class TripGeneralService {
         return Success.ok(mapUserEntitiesListToUserDetailsDtoList(trip.getParticipants()));
     }
 
+    public Response getAllTripUsersAndParticipants(Long tripId){
+        Trip trip;
+        try{
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(() -> new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (Exception e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        return Success.ok(mapAndMergeUserEntitiesListToUserDetailsDtoList(trip.getOrganizers(), trip.getParticipants()));
+
+    }
+
     public Response getTripById(Long tripId){
         Trip trip;
         try {
