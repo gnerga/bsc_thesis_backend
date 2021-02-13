@@ -18,7 +18,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -107,7 +109,8 @@ public class Trip {
     public Trip updateDateBasedOnBestMatch(){
         DatePropositionMatcher matcher = new DatePropositionMatcher(this.datePropositionList);
         this.analyzedDatePropositionList = matcher.runAnalysis();
-        if(this.getAnalyzedDatePropositionList().get(0).getAccuracy() == 0.0){
+        System.out.println(this.getAnalyzedDatePropositionList().get(0).getAccuracy());
+        if(this.getAnalyzedDatePropositionList().get(0).getAccuracy() != 0.0){
             this.setStartDate(this.getAnalyzedDatePropositionList().get(0).getStartDate());
             this.setEndDate(this.getAnalyzedDatePropositionList().get(0).getEndDate());
         }
@@ -117,6 +120,9 @@ public class Trip {
     public Trip runAnalysis(){
         DatePropositionMatcher matcher = new DatePropositionMatcher(this.datePropositionList);
         this.analyzedDatePropositionList = matcher.runAnalysis();
+        this.analyzedDatePropositionList = this.analyzedDatePropositionList
+                .stream()
+                .sorted(Comparator.comparingDouble(DateProposition::getAccuracy).reversed()).collect(Collectors.toList());
         return this;
     }
 

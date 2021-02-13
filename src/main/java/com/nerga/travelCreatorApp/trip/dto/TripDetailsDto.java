@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -21,6 +22,8 @@ public class TripDetailsDto {
     Long tripId;
     String tripName;
     String tripDescription;
+    LocalDate startDate;
+    LocalDate endDate;
     LocationDetailsDto locationDetailsDto;
     DatePropositionReturnedListDto dateProposition;
     List<PostDetailsDto> posts;
