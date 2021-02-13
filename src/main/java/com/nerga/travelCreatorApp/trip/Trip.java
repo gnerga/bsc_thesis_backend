@@ -107,8 +107,10 @@ public class Trip {
     public Trip updateDateBasedOnBestMatch(){
         DatePropositionMatcher matcher = new DatePropositionMatcher(this.datePropositionList);
         this.analyzedDatePropositionList = matcher.runAnalysis();
-        this.setStartDate(this.getAnalyzedDatePropositionList().get(0).getStartDate());
-        this.setEndDate(this.getAnalyzedDatePropositionList().get(0).getEndDate());
+        if(this.getAnalyzedDatePropositionList().get(0).getAccuracy() == 0.0){
+            this.setStartDate(this.getAnalyzedDatePropositionList().get(0).getStartDate());
+            this.setEndDate(this.getAnalyzedDatePropositionList().get(0).getEndDate());
+        }
         return this;
     }
 

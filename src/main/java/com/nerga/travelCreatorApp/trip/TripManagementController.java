@@ -48,4 +48,9 @@ public class TripManagementController {
         return tripManagementService.removeOrganizerById(tripId, userId).toResponseEntity();
     }
 
+    @PutMapping("/updateDate={tripId}")
+    public ResponseEntity updateTripDate(@PathVariable("tripId") Long tripId){
+        return tripManagementService.changeTripDate(tripId).toResponseEntity();
+    }
+
 }

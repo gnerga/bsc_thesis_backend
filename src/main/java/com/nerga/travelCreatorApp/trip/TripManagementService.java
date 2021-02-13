@@ -201,25 +201,6 @@ public class TripManagementService {
         return Success.ok(tripUserAndDetailsDto);
     }
 
-    private void  removeUserRecordsFromExpenses(Long userId, Trip trip){
-
-        if(!trip.getExpenses().isEmpty() || trip.getExpenses() == null){
-
-            for(Expenses expense: trip.getExpenses()){
-                for (ExpenseRecord record : expense.getShareholders()){
-                    if(record.getUserEntity().getId().equals(userId)){
-                        expense.setCost(expense.getCost() - record.getAmount());
-                        expense.getShareholders().remove(record);
-                        expense = expensesRepository.save(expense);
-                        expenseRecordRepository.delete(record);
-                        return;
-                    }
-                }
-
-            }
-        }
-    }
-
     public Response updateTrip(TripUpdateDto update){
 
         Trip trip;
@@ -257,6 +238,25 @@ public class TripManagementService {
 
         return Success.ok(tripUserAndDetailsDto);
 
+    }
+
+    private void  removeUserRecordsFromExpenses(Long userId, Trip trip){
+
+        if(!trip.getExpenses().isEmpty() || trip.getExpenses() == null){
+
+            for(Expenses expense: trip.getExpenses()){
+                for (ExpenseRecord record : expense.getShareholders()){
+                    if(record.getUserEntity().getId().equals(userId)){
+                        expense.setCost(expense.getCost() - record.getAmount());
+                        expense.getShareholders().remove(record);
+                        expense = expensesRepository.save(expense);
+                        expenseRecordRepository.delete(record);
+                        return;
+                    }
+                }
+
+            }
+        }
     }
 
     private List<TripUserAndDetailsDto> convertListDetailsDto(List<Trip> trips){
