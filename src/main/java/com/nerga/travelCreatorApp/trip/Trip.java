@@ -26,6 +26,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Trip {
 
     @Id
@@ -56,10 +57,6 @@ public class Trip {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-//    @OneToOne
-//    @JoinColumn(name = "datePropositionMatcher_id", referencedColumnName = "id")
-//    private DatePropositionMatcher datePropositionMatcher;
-
     @OneToMany
     private List<DateProposition> datePropositionList;
 
@@ -69,18 +66,13 @@ public class Trip {
     @OneToMany
     List<Expenses> expenses;
 
-
     @OneToMany
     List<Post> posts;
 
-//    @JsonManagedReference
     @ManyToMany(mappedBy = "organizedTrips")
-//    @Singular
     private List<UserEntity> organizers;
 
-//    @JsonManagedReference
     @ManyToMany(mappedBy = "participatedTrips")
-//    @Singular
     private List<UserEntity> participants;
 
     public Trip(

@@ -3,6 +3,7 @@ package com.nerga.travelCreatorApp.location;
 import com.nerga.travelCreatorApp.location.address.LocationAddress;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
+import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,13 +19,20 @@ public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long locationId;
+
+    @NotNull
     private String locationName;
+
+    @NonNull
     private String locationDescription;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="location_address_id", referencedColumnName = "id")
     private LocationAddress locationAddress;
+
     @ManyToOne
     private UserEntity owner;
+
     private boolean isPrivate;
 
     public Location updateLocationEntity(LocationDetailsDto locationDetailsDto) {
