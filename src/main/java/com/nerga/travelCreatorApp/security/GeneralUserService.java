@@ -14,6 +14,7 @@ import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,16 @@ public class GeneralUserService {
     public Response findAllUsers(){
         List<UserDetailsDto> userDetailsDtoList =
                 returnListOfUserDetailsDto(userRepository.findAll());
+        return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
+    }
+
+    public Response findAllUsersWithoutAuthorizedUser(){
+        List<UserDetailsDto> userDetailsDtoList =
+                returnListOfUserDetailsDto(userRepository.findAllByUsernameIsNot(
+                        SecurityContextHolder.getContext()
+                                .getAuthentication()
+                                .getPrincipal()
+                                .toString()));
         return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
     }
 

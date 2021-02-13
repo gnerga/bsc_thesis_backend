@@ -28,6 +28,12 @@ public class GeneralUserController {
         return generalUserService.findAllUsers().toResponseEntity();
     }
 
+    @GetMapping("user/findOtherUsers")
+    public ResponseEntity findAllUserWithoutAuthorizedUser(){
+        return generalUserService.findAllUsersWithoutAuthorizedUser().toResponseEntity();
+    }
+
+
     @GetMapping("user/findId/{username}")
     public ResponseEntity findUserId(@PathVariable("username") String username){
         return generalUserService.findUserIdByUsername(username).toResponseEntity();
