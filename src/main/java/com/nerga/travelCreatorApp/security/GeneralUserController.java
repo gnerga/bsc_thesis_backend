@@ -23,10 +23,21 @@ public class GeneralUserController {
         return generalUserService.createUser(createUserDto).toResponseEntity();
     }
 
+    @GetMapping("/loggedUserDetails")
+    public ResponseEntity findLoggedUserDetails(){
+        return generalUserService.getUserDetailsForLoggedUser().toResponseEntity();
+    }
+
     @GetMapping("user/findAll")
     public ResponseEntity findAllUser(){
         return generalUserService.findAllUsers().toResponseEntity();
     }
+
+    @GetMapping("user/findOtherUsers")
+    public ResponseEntity findAllUserWithoutAuthorizedUser(){
+        return generalUserService.findAllUsersWithoutAuthorizedUser().toResponseEntity();
+    }
+
 
     @GetMapping("user/findId/{username}")
     public ResponseEntity findUserId(@PathVariable("username") String username){

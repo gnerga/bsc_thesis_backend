@@ -4,6 +4,7 @@ import com.nerga.travelCreatorApp.common.response.Response;
 import com.nerga.travelCreatorApp.common.response.Success;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
+import com.nerga.travelCreatorApp.security.auth.exceptions.CustomUserNotFoundException;
 import com.nerga.travelCreatorApp.security.configuration.UserRole;
 import com.nerga.travelCreatorApp.security.dto.CreateUserDto;
 import com.nerga.travelCreatorApp.security.dto.UserCredentialsDto;
@@ -14,6 +15,7 @@ import io.vavr.control.Option;
 import io.vavr.control.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +57,32 @@ public class GeneralUserService {
         List<UserDetailsDto> userDetailsDtoList =
                 returnListOfUserDetailsDto(userRepository.findAll());
         return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
+    }
+
+    public Response findAllUsersWithoutAuthorizedUser(){
+        List<UserDetailsDto> userDetailsDtoList =
+                returnListOfUserDetailsDto(userRepository.findAllByUsernameIsNot(
+                        SecurityContextHolder.getContext()
+                                .getAuthentication()
+                                .getPrincipal()
+                                .toString()));
+        return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
+    }
+
+    public Response getUserDetailsForLoggedUser(){
+        String username = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal()
+                .toString();
+        UserEntity user;
+        try{
+            user = Option.ofOptional(userRepository.findByUsername(username))
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("USER_NOt_FOUND"));
+        } catch (Exception e){
+            return Error.badRequest("USER_NOT_FOUND");
+        }
+        return Success.ok(modelMapper.map(user, UserDetailsDto.class));
+
     }
 
     public Response findUserDetailsById(Long id) {

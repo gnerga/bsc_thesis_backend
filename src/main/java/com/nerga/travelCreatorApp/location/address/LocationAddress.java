@@ -1,6 +1,7 @@
 package com.nerga.travelCreatorApp.location.address;
 
 import com.nerga.travelCreatorApp.location.address.dto.LocationAddressDetailsDto;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,11 +19,17 @@ public class LocationAddress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long locationAddressId;
+    @NotNull
     private String countryName;
+    @NotNull
     private String cityName;
+    @NotNull
     private String streetNameAndNumber;
+
     private String zipCode;
+    @NotNull
     private double latitude;
+    @NotNull
     private double longitude;
 
     public LocationAddress updateLocationEntity(LocationAddressDetailsDto locationDetailsDto) {

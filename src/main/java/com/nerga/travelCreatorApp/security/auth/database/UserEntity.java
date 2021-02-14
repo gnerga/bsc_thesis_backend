@@ -7,6 +7,7 @@ import com.nerga.travelCreatorApp.security.configuration.UserRole;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.*;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Setter
-//@Builder(access= AccessLevel.PUBLIC)
+
 public class UserEntity {
 
     @Id
@@ -27,18 +28,24 @@ public class UserEntity {
     private String username;
     @NonNull
     private String password;
+    @NonNull
+    private String firstName;
+    @NonNull
+    private String lastName;
+    @NonNull
+    @Column(unique = true)
+    private String email;
+
+    @Column(unique = true)
+    @NumberFormat
+    private String phoneNumber;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> permissions;
     private boolean isAccountNonExpired;
     private boolean isAccountNonLock;
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
-    private String firstName;
-    private String lastName;
-    @Column(unique = true)
-    private String email;
-    @Column(unique = true)
-    private String phoneNumber;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
@@ -129,32 +136,6 @@ public class UserEntity {
                 username, password, getGrantedAuthority(), isAccountNonExpired, isAccountNonLock, isCredentialsNonExpired,
                 isEnabled, firstName, lastName, email, phoneNumber
         );
-    }
-
-    public void addOrganizedTrip(Trip trip) {
-        if (organizedTrips == null) {
-            organizedTrips = new ArrayList<>();
-        }
-        organizedTrips.add(trip);
-        trip.getOrganizers().add(this);
-    }
-
-    public void removeOrganizer(Trip trip) {
-        organizedTrips.remove(trip);
-        trip.getOrganizers().remove(this);
-    }
-
-    public void addParticipatedTrip(Trip trip) {
-        if ( participatedTrips == null) {
-            participatedTrips = new ArrayList<>();
-        }
-        participatedTrips.add(trip);
-        trip.getParticipants().add(this);
-    }
-
-    public void removeParticipant(Trip trip){
-        participatedTrips.remove(trip);
-        trip.getParticipants().remove(this);
     }
 
     @Override

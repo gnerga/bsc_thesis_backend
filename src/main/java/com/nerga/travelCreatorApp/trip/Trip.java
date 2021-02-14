@@ -18,7 +18,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -26,6 +28,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class Trip {
 
     @Id
@@ -56,10 +59,6 @@ public class Trip {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-//    @OneToOne
-//    @JoinColumn(name = "datePropositionMatcher_id", referencedColumnName = "id")
-//    private DatePropositionMatcher datePropositionMatcher;
-
     @OneToMany
     private List<DateProposition> datePropositionList;
 
@@ -69,18 +68,13 @@ public class Trip {
     @OneToMany
     List<Expenses> expenses;
 
-
     @OneToMany
     List<Post> posts;
 
-//    @JsonManagedReference
     @ManyToMany(mappedBy = "organizedTrips")
-//    @Singular
     private List<UserEntity> organizers;
 
-//    @JsonManagedReference
     @ManyToMany(mappedBy = "participatedTrips")
-//    @Singular
     private List<UserEntity> participants;
 
     public Trip(
@@ -115,14 +109,20 @@ public class Trip {
     public Trip updateDateBasedOnBestMatch(){
         DatePropositionMatcher matcher = new DatePropositionMatcher(this.datePropositionList);
         this.analyzedDatePropositionList = matcher.runAnalysis();
-        this.setStartDate(this.getAnalyzedDatePropositionList().get(0).getStartDate());
-        this.setEndDate(this.getAnalyzedDatePropositionList().get(0).getEndDate());
+        System.out.println(this.getAnalyzedDatePropositionList().get(0).getAccuracy());
+        if(this.getAnalyzedDatePropositionList().get(0).getAccuracy() != 0.0){
+            this.setStartDate(this.getAnalyzedDatePropositionList().get(0).getStartDate());
+            this.setEndDate(this.getAnalyzedDatePropositionList().get(0).getEndDate());
+        }
         return this;
     }
 
     public Trip runAnalysis(){
         DatePropositionMatcher matcher = new DatePropositionMatcher(this.datePropositionList);
         this.analyzedDatePropositionList = matcher.runAnalysis();
+        this.analyzedDatePropositionList = this.analyzedDatePropositionList
+                .stream()
+                .sorted(Comparator.comparingDouble(DateProposition::getAccuracy).reversed()).collect(Collectors.toList());
         return this;
     }
 

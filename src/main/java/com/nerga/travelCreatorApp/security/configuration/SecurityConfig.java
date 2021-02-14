@@ -59,9 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtCredentialsAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/register").permitAll()
-                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/login").permitAll()
+//                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/user/**").hasRole(USER.name())
-                .antMatchers("/trip/**").permitAll()
+//                .antMatchers("/trip/**").permitAll()
+                .antMatchers("/trip/**").hasRole(USER.name())
+                .antMatchers("/location/**").hasRole(USER.name())
                 .anyRequest()
                 .authenticated();
     }
