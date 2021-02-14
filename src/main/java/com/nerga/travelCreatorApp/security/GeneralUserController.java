@@ -23,6 +23,11 @@ public class GeneralUserController {
         return generalUserService.createUser(createUserDto).toResponseEntity();
     }
 
+    @GetMapping("/loggedUserDetails")
+    public ResponseEntity findLoggedUserDetails(){
+        return generalUserService.getUserDetailsForLoggedUser().toResponseEntity();
+    }
+
     @GetMapping("user/findAll")
     public ResponseEntity findAllUser(){
         return generalUserService.findAllUsers().toResponseEntity();

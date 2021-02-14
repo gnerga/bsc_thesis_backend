@@ -11,7 +11,7 @@ public class TripCreateDto {
 
     private String tripName;
     private String tripDescription;
-private boolean isActiveTrip;
+    private boolean isActiveTrip;
     private int tripLength;
     private String startDate;
     private String endDate;
