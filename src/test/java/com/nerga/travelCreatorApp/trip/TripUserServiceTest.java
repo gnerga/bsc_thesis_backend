@@ -153,33 +153,33 @@ public class TripUserServiceTest {
 
     }
 
-    @Test
-    void shouldCreateExpenseByTripId(){
-        // Given
-
-        Trip testTrip = getTestTrip();
-        ExpensesCreateDto testExpensesCreateDto = getTestExpenseCreateDto();
-//        Expenses testExpense = getTestExpense();
-        ExpensesDetailsDto testExpensesDetailsDto = getTestExpensesDetailsDto();
-
-        when(tripRepository.findById(any(Long.class))).thenReturn(Optional.of(testTrip));
-        when(userRepository.existsById(any(Long.class))).thenReturn(true);
-        when(tripRepository.save(any(Trip.class))).thenReturn(testTrip);
-        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(getTestUserEntity()));
-        when(modelMapper.map(getTestUserEntity(), UserDetailsDto.class)).thenReturn(getTestUserDetailsDto());
-
-        // When
-
-        Response response = underTest.createExpense(testExpensesCreateDto);
-
-        // Then
-
-        Assertions.assertThat(
-                response.toResponseEntity()
-                        .getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(response.toResponseEntity().getBody()).hasNoNullFieldsOrProperties();
-
-    }
+//    @Test
+//    void shouldCreateExpenseByTripId(){
+//        // Given
+//
+//        Trip testTrip = getTestTrip();
+//        ExpensesCreateDto testExpensesCreateDto = getTestExpenseCreateDto();
+////        Expenses testExpense = getTestExpense();
+//        ExpensesDetailsDto testExpensesDetailsDto = getTestExpensesDetailsDto();
+//
+//        when(tripRepository.findById(any(Long.class))).thenReturn(Optional.of(testTrip));
+//        when(userRepository.existsById(any(Long.class))).thenReturn(true);
+//        when(tripRepository.save(any(Trip.class))).thenReturn(testTrip);
+//        when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(getTestUserEntity()));
+//        when(modelMapper.map(getTestUserEntity(), UserDetailsDto.class)).thenReturn(getTestUserDetailsDto());
+//
+//        // When
+//
+//        Response response = underTest.createExpense(testExpensesCreateDto);
+//
+//        // Then
+//
+//        Assertions.assertThat(
+//                response.toResponseEntity()
+//                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+//        Assertions.assertThat(response.toResponseEntity().getBody()).hasNoNullFieldsOrProperties();
+//
+//    }
 
     @Test
     public void shouldUpdateExpense(){
