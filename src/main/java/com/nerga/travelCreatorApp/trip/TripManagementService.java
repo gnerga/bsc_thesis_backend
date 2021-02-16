@@ -162,7 +162,7 @@ public class TripManagementService {
 
         TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
-        return Success.ok(tripUserAndDetailsDto);
+        return Success.created(tripUserAndDetailsDto);
     }
 
     public Response removeParticipantById(Long tripId, Long userId){
