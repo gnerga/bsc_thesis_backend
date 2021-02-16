@@ -13,6 +13,7 @@ import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,6 +70,21 @@ public class LocationService {
 
     public Response findAllLocations(){
         List<Location> locationList = locationRepository.findAll();
+        List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
+        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+    }
+
+    public Response findAllUserLocations(){
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        UserEntity userEntity;
+        try {
+            userEntity = Option.ofOptional(userRepository.findByUsername(loggedUser))
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        List<Location> locationList = locationRepository.findLocationByOwner(userEntity);
         List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
         return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
