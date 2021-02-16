@@ -1,5 +1,6 @@
 package com.nerga.travelCreatorApp.location;
 
+import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,8 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     List<Location> findLocationsByLocationNameContains(String locationName);
     List<Location> findLocationsByLocationDescriptionContains(String locationDetail);
+
+    List<Location> findLocationByOwner(UserEntity userEntity);
 
     boolean existsLocationByLocationName(String locationName);
 
