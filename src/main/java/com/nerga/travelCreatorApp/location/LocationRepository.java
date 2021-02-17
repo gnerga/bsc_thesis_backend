@@ -12,6 +12,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
 
     List<Location> findLocationsByLocationNameContains(String locationName);
     List<Location> findLocationsByLocationDescriptionContains(String locationDetail);
+    List<Location> findLocationByLocationDescriptionAndOwner(String locationDetail, UserEntity owner);
 
     List<Location> findLocationByOwner(UserEntity userEntity);
 
