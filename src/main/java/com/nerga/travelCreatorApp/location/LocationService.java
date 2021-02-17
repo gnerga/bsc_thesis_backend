@@ -89,6 +89,21 @@ public class LocationService {
         return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
 
+    public Response findAllUserLocationsWithDescription(String description){
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        UserEntity userEntity;
+        try {
+            userEntity = Option.ofOptional(userRepository.findByUsername(loggedUser))
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        List<Location> locationList = locationRepository.findLocationByLocationDescriptionAndOwner(description, userEntity);
+        List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
+        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+    }
+
     public Response findById(Long id){
         return Option.ofOptional(locationRepository.findById(id))
                 .map(locationEntity -> modelMapper.map(locationEntity, LocationDetailsDto.class))

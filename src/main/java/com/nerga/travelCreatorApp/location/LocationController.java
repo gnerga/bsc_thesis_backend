@@ -31,8 +31,14 @@ public class LocationController {
 
     @GetMapping(path="findAllByUser")
     @ResponseBody
-    public ResponseEntity findByUserAll(){
+    public ResponseEntity findAllByUser(){
         return locationService.findAllUserLocations().toResponseEntity();
+    }
+
+    @GetMapping(path="findAllByUserAndDescription={description}")
+    @ResponseBody
+    public ResponseEntity findAllByUserAndDescription(@PathVariable("description") String description){
+        return locationService.findAllUserLocationsWithDescription(description).toResponseEntity();
     }
 
     @GetMapping(path="findById/{id}")
