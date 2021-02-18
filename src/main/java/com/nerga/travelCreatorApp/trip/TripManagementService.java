@@ -156,9 +156,17 @@ public class TripManagementService {
             return Error.notFound("TRIP_NOT_FOUND");
         }
 
+        if (
+                trip.getParticipants().contains(newParticipant) ||
+                        trip.getOrganizers().contains(newParticipant)
+        ) {
+            return Error.badRequest("GIVEN_USER_ALREADY_IS_TRIP_PARTICIPANT");
+        }
+
+
         trip.addParticipant(newParticipant);
         trip = tripRepository.save(trip);
-        newParticipant = userRepository.save(newParticipant);
+        userRepository.save(newParticipant);
 
         TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip, TripUserAndDetailsDto.class);
 
