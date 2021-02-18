@@ -99,7 +99,7 @@ public class LocationService {
             return Error.notFound("USER_NOT_FOUND");
         }
 
-        List<Location> locationList = locationRepository.findLocationByLocationDescriptionAndOwner(description, userEntity);
+        List<Location> locationList = locationRepository.findLocationByLocationDescriptionContainsAndOwner(description, userEntity);
         List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
         return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
@@ -114,7 +114,7 @@ public class LocationService {
             return Error.notFound("USER_NOT_FOUND");
         }
 
-        List<Location> locationList = locationRepository.findLocationByLocationNameAndOwner(name, userEntity);
+        List<Location> locationList = locationRepository.findLocationByLocationNameContainsAndOwner(name, userEntity);
         List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
         return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
