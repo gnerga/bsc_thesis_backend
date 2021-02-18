@@ -16,7 +16,6 @@ public interface TripRepository extends JpaRepository<Trip,  Long> {
 
     Optional<List<Trip>> findByOrganizersContaining(UserEntity user);
     Optional<List<Trip>> findByParticipantsContaining(UserEntity user);
-
     Optional<List<Trip>> findTripsByStartDateAndEndDate(LocalDate startDate,
                                                         LocalDate endDate);
 
