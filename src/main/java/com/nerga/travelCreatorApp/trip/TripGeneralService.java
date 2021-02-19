@@ -135,6 +135,7 @@ public class TripGeneralService {
                 trip.getTripId(),
                 trip.getTripName(),
                 trip.getTripDescription(),
+                trip.getTripLength(),
                 trip.getStartDate(),
                 trip.getEndDate(),
                 modelMapper.map(trip.getLocation(), LocationDetailsDto.class),

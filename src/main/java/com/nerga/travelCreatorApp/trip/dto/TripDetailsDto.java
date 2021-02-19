@@ -22,6 +22,7 @@ public class TripDetailsDto {
     Long tripId;
     String tripName;
     String tripDescription;
+    int tripLength;
     LocalDate startDate;
     LocalDate endDate;
     LocationDetailsDto location;
