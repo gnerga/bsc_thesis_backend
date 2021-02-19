@@ -380,6 +380,7 @@ public class TripUserServiceTest {
                 1L,
                 "Holidays 2021",
                 "Friends meet after months",
+                10,
                 LocalDate.parse("2021-06-12"),
                 LocalDate.parse("2021-06-19"),
                 getTestLocationDetailsDto(),

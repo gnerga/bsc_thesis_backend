@@ -17,6 +17,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -113,6 +114,7 @@ public class Trip {
         if(this.getAnalyzedDatePropositionList().get(0).getAccuracy() != 0.0){
             this.setStartDate(this.getAnalyzedDatePropositionList().get(0).getStartDate());
             this.setEndDate(this.getAnalyzedDatePropositionList().get(0).getEndDate());
+            this.setTripLength(Period.between(this.getStartDate(), this.getEndDate()).getDays());
         }
         return this;
     }
