@@ -96,6 +96,7 @@ public class TripTest {
         trip.setTripDescription("Najlepsze wakacje ever");
         trip.setStartDate(LocalDate.parse("2020-11-24"));
         trip.setEndDate(LocalDate.parse("2020-12-04"));
+        trip.setTripLength(10);
         trip.setLocation(location);
         trip.addOrganizer(userEntity_2);
 
@@ -186,9 +187,11 @@ public class TripTest {
     public void whenConvertTripEntityWithUserToTripDetailsDto_thenCorrect() {
 
         trip_2.addParticipant(userEntity_2);
+        trip_2.setTripLength(10);
         TripUserAndDetailsDto tripUserAndDetailsDto = modelMapper.map(trip_2, TripUserAndDetailsDto.class);
         assertEquals(trip_2.getTripName(), tripUserAndDetailsDto.getTripName());
         assertEquals(trip_2.getTripDescription(), tripUserAndDetailsDto.getTripDescription());
+        assertEquals(trip_2.getTripLength(), tripUserAndDetailsDto.getTripLength());
         assertEquals(trip_2.getOrganizers().get(0).getUsername(), tripUserAndDetailsDto.getOrganizers().get(0).getUsername());
         assertEquals(trip_2.getLocation().getLocationName(), tripUserAndDetailsDto.getLocation().getLocationName());
         assertEquals(trip_2.getLocation().isPrivate(), tripUserAndDetailsDto.getLocation().isPrivate());

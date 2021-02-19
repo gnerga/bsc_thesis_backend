@@ -25,6 +25,7 @@ public class TripUserAndDetailsDto {
     private String tripName;
     @NotNull
     private String tripDescription;
+    private int tripLength;
     @NotNull
     private LocalDate startDate;
     @NotNull

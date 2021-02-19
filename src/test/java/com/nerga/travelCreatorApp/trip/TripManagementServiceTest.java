@@ -303,7 +303,7 @@ public class TripManagementServiceTest {
 
         Assertions.assertThat(
                 response.toResponseEntity()
-                        .getStatusCode()).isEqualTo(HttpStatus.OK);
+                        .getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
 
         Assertions.assertThat(
                 response.toResponseEntity()
@@ -725,6 +725,7 @@ public class TripManagementServiceTest {
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
+                10,
                 LocalDate.parse("2021-05-12"),
                 LocalDate.parse("2021-05-19"),
                 getTestLocationDetailsDto(),
@@ -741,6 +742,7 @@ public class TripManagementServiceTest {
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
+                10,
                 LocalDate.parse("2020-10-16"),
                 LocalDate.parse("2020-10-22"),
                 getTestLocationDetailsDto(),
@@ -757,6 +759,7 @@ public class TripManagementServiceTest {
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
+                10,
                 LocalDate.parse("2021-05-12"),
                 LocalDate.parse("2021-05-19"),
                 getTestLocationDetailsDto(),
@@ -773,6 +776,7 @@ public class TripManagementServiceTest {
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
+                10,
                 LocalDate.parse("2021-05-12"),
                 LocalDate.parse("2021-05-19"),
                 getTestLocationDetailsDto(),
@@ -814,6 +818,7 @@ public class TripManagementServiceTest {
                 1L,
                 "Holidays 2021",
                 "Friends meet after months",
+                10,
                 LocalDate.parse("2022-05-12"),
                 LocalDate.parse("2022-05-19"),
                 getTestLocationDetailsDto(),
@@ -853,6 +858,7 @@ public class TripManagementServiceTest {
                 1L,
                 "Holidays 2020",
                 "Friends meet after years",
+                10,
                 LocalDate.parse("2021-05-12"),
                 LocalDate.parse("2021-05-19"),
                 getTestLocationDetailsDto(),
