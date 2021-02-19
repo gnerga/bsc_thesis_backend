@@ -24,7 +24,7 @@ public class TripDetailsDto {
     String tripDescription;
     LocalDate startDate;
     LocalDate endDate;
-    LocationDetailsDto locationDetailsDto;
+    LocationDetailsDto location;
     DatePropositionReturnedListDto dateProposition;
     List<PostDetailsDto> posts;
     List<ExpensesDetailsDto> expenses;
