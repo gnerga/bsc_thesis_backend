@@ -125,7 +125,7 @@ public class TripGeneralService {
         } catch (TripException e) {
             return Error.notFound("TRIP_NOT_FOUND");
         }
-
+        trip.runAnalysis();
         return Success.ok(tripToTripDetailsDto(trip));
     }
 

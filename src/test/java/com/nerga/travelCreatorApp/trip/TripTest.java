@@ -126,20 +126,20 @@ public class TripTest {
 
         DateProposition proposition1 =
                 new DateProposition(
-                        LocalDate.parse("2020-10-14"),
-                        LocalDate.parse("2020-10-21"),
+                        LocalDate.parse("2021-02-19"),
+                        LocalDate.parse("2021-02-26"),
                         1L);
 
         DateProposition proposition2 =
                 new DateProposition(
-                        LocalDate.parse("2020-10-21"),
-                        LocalDate.parse("2020-10-28"),
+                        LocalDate.parse("2021-02-17"),
+                        LocalDate.parse("2021-02-14"),
                         1L);
 
         DateProposition proposition3 =
                 new DateProposition(
-                        LocalDate.parse("2020-10-07"),
-                        LocalDate.parse("2020-10-14"),
+                        LocalDate.parse("2021-02-15"),
+                        LocalDate.parse("2021-02-22"),
                         1L);
 
 
@@ -150,6 +150,50 @@ public class TripTest {
         int result = trip.findNumberOfAddPropositions(userId);
 
         assertEquals(expectedNumber, result);
+
+    }
+
+    @Test
+    public void shouldCreateReport(){
+
+        Trip trip = new Trip();
+        trip.setTripName("Wakacje Ekipy");
+        trip.setTripDescription("Najlepsze wakacje ever");
+        trip.setStartDate(LocalDate.parse("2020-11-24"));
+        trip.setEndDate(LocalDate.parse("2020-12-04"));
+        trip.setLocation(location);
+        trip.addOrganizer(userEntity);
+
+        int expectedNumber = 3;
+        Long userId = 1L;
+
+        DateProposition proposition3 =
+                new DateProposition(
+                        LocalDate.parse("2021-02-18"),
+                        LocalDate.parse("2021-02-27"),
+                        1L);
+
+        DateProposition proposition1 =
+                new DateProposition(
+                        LocalDate.parse("2021-02-17"),
+                        LocalDate.parse("2021-02-14"),
+                        1L);
+
+        DateProposition proposition2 =
+                new DateProposition(
+                        LocalDate.parse("2021-02-15"),
+                        LocalDate.parse("2021-02-22"),
+                        1L);
+
+
+        trip.addDateProposition(proposition1);
+        trip.addDateProposition(proposition2);
+        trip.addDateProposition(proposition3);
+
+        trip.runAnalysis();
+        var result = trip.getDateMatcherReport();
+
+        System.out.println(result);
 
     }
 
