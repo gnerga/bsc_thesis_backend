@@ -31,10 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TripUserService {
@@ -301,10 +299,12 @@ public class TripUserService {
     private List<PostDetailsDto> mapPostsToListPostDetailsDto(List<Post> posts){
         List<PostDetailsDto> list = new ArrayList<>();
 
-        Collections.sort(posts);
-        Collections.reverse(posts);
-
-        for (Post it: posts){
+//        Collections.sort(posts);
+//        Collections.reverse(posts);
+        List<Post> sortedPosts = posts.stream()
+                .sorted(Comparator.comparing(Post::getTimeStamp).reversed().thenComparing(Post::getTimeStamp).reversed())
+                .collect(Collectors.toList());
+        for (Post it: sortedPosts){
             list.add(new PostDetailsDto(
                     it.getPostId(),
                     it.getTitle(),
