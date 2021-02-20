@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -299,6 +300,10 @@ public class TripUserService {
 
     private List<PostDetailsDto> mapPostsToListPostDetailsDto(List<Post> posts){
         List<PostDetailsDto> list = new ArrayList<>();
+
+        Collections.sort(posts);
+        Collections.reverse(posts);
+
         for (Post it: posts){
             list.add(new PostDetailsDto(
                     it.getPostId(),

@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +26,53 @@ public class PostTest {
         );
     }
 
+    @Test
+    void shouldSortListOfPost(){
+        Post post = new Post(
+                "Ogłoszenie",
+                "Zrzuta na autobus",
+                LocalDateTime.parse("2021-03-13T10:15:30"),
+                null);
 
+        Post post2 = new Post(
+                "Ogłoszenie",
+                "Zrzuta na autobus",
+                LocalDateTime.parse("2021-03-13T11:15:30"),
+                null);
+
+        Post post5 = new Post(
+                "Ogłoszenie",
+                "Zrzuta na autobus",
+                LocalDateTime.parse("2021-03-13T11:14:30"),
+                null);
+
+        Post post3 = new Post(
+                "Ogłoszenie",
+                "Zrzuta na autobus",
+                LocalDateTime.parse("2021-02-13T10:15:30"),
+                null);
+
+        Post post4 = new Post(
+                "Ogłoszenie",
+                "Zrzuta na autobus",
+                LocalDateTime.parse("2021-02-13T09:15:30"),
+                null);
+
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
+        posts.add(post2);
+        posts.add(post5);
+        posts.add(post3);
+        posts.add(post4);
+
+        Collections.sort(posts);
+        Collections.reverse(posts);
+
+       for (Post it: posts) {
+           System.out.println(it.timeStamp);
+       }
+
+    }
 
     @Test
     void shouldHasZeroLikesAndDislikes(){

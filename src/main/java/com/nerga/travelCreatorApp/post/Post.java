@@ -110,6 +110,7 @@ public class Post implements Comparable<Post>{
 
     @Override
     public int compareTo(Post o) {
-        return Long.valueOf(this.getTimeStamp().toString()).compareTo(Long.valueOf(o.getTimeStamp().toString()));
+//        return Long.valueOf(this.getTimeStamp().toString()).compareTo(Long.valueOf(o.getTimeStamp().toString()));
+        return this.getTimeStamp().compareTo(o.getTimeStamp());
     }
 }
