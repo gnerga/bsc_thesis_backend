@@ -20,7 +20,7 @@ public class PostDetailsDto {
     Long postId;
     String title;
     String content;
-    LocalDateTime localDateTime;
+    LocalDateTime timeStamp;
     UserDetailsDto author;
     int numberOfLikes;
     int getNumberOfLikes;
