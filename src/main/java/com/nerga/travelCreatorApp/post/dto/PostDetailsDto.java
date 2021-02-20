@@ -22,9 +22,9 @@ public class PostDetailsDto {
     String content;
     LocalDateTime timeStamp;
     UserDetailsDto author;
-    int numberOfLikes;
-    int getNumberOfLikes;
-    List<Long> likes;
-    List<Long> dislikes;
+    int likes;
+    int dislikes;
+    List<Long> listOfLikes;
+    List<Long> listOfDislikes;
 
 }
