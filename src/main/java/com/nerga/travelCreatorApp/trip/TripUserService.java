@@ -302,8 +302,9 @@ public class TripUserService {
 //        Collections.sort(posts);
 //        Collections.reverse(posts);
         List<Post> sortedPosts = posts.stream()
-                .sorted(Comparator.comparing(Post::getTimeStamp))
+                .sorted(Comparator.comparing(Post::getTimeStamp).reversed())
                 .collect(Collectors.toList());
+
         for (Post it: sortedPosts){
             list.add(new PostDetailsDto(
                     it.getPostId(),
