@@ -7,6 +7,8 @@ import io.vavr.Tuple2;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +110,6 @@ public class Post implements Comparable<Post>{
 
     @Override
     public int compareTo(Post o) {
-        return this.getTimeStamp().compareTo(o.getTimeStamp());
+        return Long.valueOf(this.getTimeStamp().toString()).compareTo(Long.valueOf(o.getTimeStamp().toString()));
     }
 }
