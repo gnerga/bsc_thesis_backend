@@ -139,6 +139,11 @@ public class Trip {
         for (DateProposition it: this.analyzedDatePropositionList) {
             listOfDateProposition.add(new DatePropositionReturnDto(it.datePropositionToString(), it.getAccuracy()));
         }
+
+        this.analyzedDatePropositionList = this.analyzedDatePropositionList
+                .stream()
+                .sorted(Comparator.comparingDouble(DateProposition::getAccuracy).reversed()).collect(Collectors.toList());
+
         return new DatePropositionReturnedListDto(
                 analyzedDatePropositionList.get(0).getStartDate().toString(),
                 analyzedDatePropositionList.get(0).getEndDate().toString(),

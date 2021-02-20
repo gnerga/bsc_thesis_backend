@@ -7,6 +7,8 @@ import io.vavr.Tuple2;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
 @Data
 @Table(name = "post")
 @Entity
-public class Post {
+public class Post implements Comparable<Post>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -106,5 +108,8 @@ public class Post {
     }
 
 
-
+    @Override
+    public int compareTo(Post o) {
+        return Long.valueOf(this.getTimeStamp().toString()).compareTo(Long.valueOf(o.getTimeStamp().toString()));
+    }
 }

@@ -20,11 +20,11 @@ public class PostDetailsDto {
     Long postId;
     String title;
     String content;
-    LocalDateTime localDateTime;
+    LocalDateTime timeStamp;
     UserDetailsDto author;
-    int numberOfLikes;
-    int getNumberOfLikes;
-    List<Long> likes;
-    List<Long> dislikes;
+    int likes;
+    int dislikes;
+    List<Long> listOfLikes;
+    List<Long> listOfDislikes;
 
 }
