@@ -299,8 +299,6 @@ public class TripUserService {
     private List<PostDetailsDto> mapPostsToListPostDetailsDto(List<Post> posts){
         List<PostDetailsDto> list = new ArrayList<>();
 
-//        Collections.sort(posts);
-//        Collections.reverse(posts);
         List<Post> sortedPosts = posts.stream()
                 .sorted(Comparator.comparing(Post::getTimeStamp).reversed())
                 .collect(Collectors.toList());

@@ -73,7 +73,7 @@ public class PostTest {
 //        Collections.reverse(posts);
 
         List<Post> sortedPosts = posts.stream()
-                .sorted(Comparator.comparing(Post::getTimeStamp).reversed())
+                .sorted(Comparator.comparing(Post::getTimeStamp))
                 .collect(Collectors.toList());
 
        for (Post it: sortedPosts) {
@@ -94,6 +94,7 @@ public class PostTest {
 
             ));
         }
+        System.out.println();
         for (PostDetailsDto it: list){
             System.out.println(it.getTimeStamp());
         }
