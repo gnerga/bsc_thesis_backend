@@ -313,6 +313,7 @@ public class TripUserService {
 
             ));
         }
+
         return list;
     }
 

@@ -30,6 +30,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -174,6 +176,7 @@ public class TripGeneralService {
     }
 
     private List<PostDetailsDto> mapPostsToListPostDetailsDto(List<Post> posts){
+        Collections.sort(posts);
         List<PostDetailsDto> list = new ArrayList<>();
         for (Post it: posts){
             list.add(new PostDetailsDto(

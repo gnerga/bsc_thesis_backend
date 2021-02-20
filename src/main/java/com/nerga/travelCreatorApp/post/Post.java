@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @Table(name = "post")
 @Entity
-public class Post {
+public class Post implements Comparable<Post>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -106,5 +106,8 @@ public class Post {
     }
 
 
-
+    @Override
+    public int compareTo(Post o) {
+        return this.getTimeStamp().compareTo(o.getTimeStamp());
+    }
 }
