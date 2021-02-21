@@ -29,10 +29,8 @@ import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TripGeneralService {
@@ -176,9 +174,11 @@ public class TripGeneralService {
     }
 
     private List<PostDetailsDto> mapPostsToListPostDetailsDto(List<Post> posts){
-        Collections.sort(posts);
+        List<Post> sortedPosts = posts.stream()
+                .sorted(Comparator.comparing(Post::getTimeStamp).reversed())
+                .collect(Collectors.toList());
         List<PostDetailsDto> list = new ArrayList<>();
-        for (Post it: posts){
+        for (Post it: sortedPosts){
             list.add(new PostDetailsDto(
                     it.getPostId(),
                     it.getTitle(),

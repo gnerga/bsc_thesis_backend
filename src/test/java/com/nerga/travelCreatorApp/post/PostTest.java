@@ -1,14 +1,18 @@
 package com.nerga.travelCreatorApp.post;
 
+import com.nerga.travelCreatorApp.post.dto.PostDetailsDto;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 
+import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,12 +69,35 @@ public class PostTest {
         posts.add(post3);
         posts.add(post4);
 
-        Collections.sort(posts);
-        Collections.reverse(posts);
+//        Collections.sort(posts);
+//        Collections.reverse(posts);
 
-       for (Post it: posts) {
+        List<Post> sortedPosts = posts.stream()
+                .sorted(Comparator.comparing(Post::getTimeStamp))
+                .collect(Collectors.toList());
+
+       for (Post it: sortedPosts) {
            System.out.println(it.timeStamp);
        }
+        List<PostDetailsDto> list = new ArrayList<>();
+        for (Post it: sortedPosts){
+            list.add(new PostDetailsDto(
+                    it.getPostId(),
+                    it.getTitle(),
+                    it.getContent(),
+                    it.getTimeStamp(),
+                    null,
+                    it.getNumberOfLikes(),
+                    it.getNumberOfDislikes(),
+                    it.getLikes(),
+                    it.getDislikes()
+
+            ));
+        }
+        System.out.println();
+        for (PostDetailsDto it: list){
+            System.out.println(it.getTimeStamp());
+        }
 
     }
 
