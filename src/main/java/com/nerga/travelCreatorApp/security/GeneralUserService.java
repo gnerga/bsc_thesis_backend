@@ -93,7 +93,7 @@ public class GeneralUserService {
                 .collect(Collectors.toList());
 
         allUsers.clear();
-        allUsers = Stream.of(l1,l2,l3).flatMap(Collection::stream).collect(Collectors.toList());
+        allUsers = Stream.of(l1,l2,l3).flatMap(Collection::stream).distinct().collect(Collectors.toList());
 
         List<UserDetailsDto> userDetailsDtoList =
                 returnListOfUserDetailsDto(allUsers);
