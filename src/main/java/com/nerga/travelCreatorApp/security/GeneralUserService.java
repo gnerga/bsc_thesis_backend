@@ -69,6 +69,16 @@ public class GeneralUserService {
         return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
     }
 
+    public Response findAllUsersWithoutAuthorizedUserAndContainsGivenText(String text){
+        List<UserDetailsDto> userDetailsDtoList =
+                returnListOfUserDetailsDto(userRepository.findAllByUsernameIsNotAndUsernameContainsOrFirstNameContainsOrLastNameContains(
+                        SecurityContextHolder.getContext()
+                                .getAuthentication()
+                                .getPrincipal()
+                                .toString(), text, text ,text));
+        return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
+    }
+
     public Response getUserDetailsForLoggedUser(){
         String username = SecurityContextHolder.getContext()
                 .getAuthentication()

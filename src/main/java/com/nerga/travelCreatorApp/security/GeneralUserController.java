@@ -31,6 +31,10 @@ public class GeneralUserController {
     @GetMapping("user/findAll")
     public ResponseEntity findAllUser(){
         return generalUserService.findAllUsers().toResponseEntity();
+
+    }    @GetMapping("user/findAllContains={text}")
+    public ResponseEntity findAllUserContains(@PathVariable("text") String text){
+        return generalUserService.findAllUsersWithoutAuthorizedUserAndContainsGivenText(text).toResponseEntity();
     }
 
     @GetMapping("user/findOtherUsers")
