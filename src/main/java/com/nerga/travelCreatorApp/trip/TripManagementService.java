@@ -273,9 +273,11 @@ public class TripManagementService {
         }
 
         for (DateProposition it: trip.getDatePropositionList()) {
+            trip.getAnalyzedDatePropositionList().remove(it);
             datePropositionRepository.delete(it);
+
         }
-        trip.getDatePropositionList().clear();;
+        trip.getDatePropositionList().clear();
         trip = tripRepository.save(trip);
         DateProposition dateProposition = new DateProposition(trip.getStartDate(), trip.getEndDate(), userEntity.getId());
         datePropositionRepository.save(dateProposition);
