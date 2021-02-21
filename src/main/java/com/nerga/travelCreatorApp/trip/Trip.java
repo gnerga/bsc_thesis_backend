@@ -110,7 +110,6 @@ public class Trip {
     public Trip updateDateBasedOnBestMatch(){
         DatePropositionMatcher matcher = new DatePropositionMatcher(this.datePropositionList);
         this.analyzedDatePropositionList = matcher.runAnalysis();
-        System.out.println(this.getAnalyzedDatePropositionList().get(0).getAccuracy());
         if(this.getAnalyzedDatePropositionList().get(0).getAccuracy() != 0.0){
             this.setStartDate(this.getAnalyzedDatePropositionList().get(0).getStartDate());
             this.setEndDate(this.getAnalyzedDatePropositionList().get(0).getEndDate());

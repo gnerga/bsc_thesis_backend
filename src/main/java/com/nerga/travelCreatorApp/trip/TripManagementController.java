@@ -53,4 +53,9 @@ public class TripManagementController {
         return tripManagementService.changeTripDate(tripId).toResponseEntity();
     }
 
+    @PutMapping("/resetTripDatePropositions={tripId}")
+    public ResponseEntity resetDatePropositions(@PathVariable("tripId") Long tripId){
+        return tripManagementService.resetDatePropositions(tripId).toResponseEntity();
+    }
+
 }

@@ -254,6 +254,38 @@ public class TripManagementService {
 
     }
 
+    public Response resetDatePropositions(Long tripId){
+        Trip trip;
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        UserEntity userEntity;
+        try {
+            userEntity = Option.ofOptional(userRepository.findByUsername(loggedUser))
+                    .getOrElseThrow(()->new CustomUserNotFoundException("USER_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        for (DateProposition it: trip.getDatePropositionList()) {
+            datePropositionRepository.delete(it);
+        }
+        trip.getDatePropositionList().clear();;
+        trip = tripRepository.save(trip);
+        DateProposition dateProposition = new DateProposition(trip.getStartDate(), trip.getEndDate(), userEntity.getId());
+        datePropositionRepository.save(dateProposition);
+        trip.addDateProposition(dateProposition);
+        tripRepository.save(trip);
+
+        return Success.ok(null);
+
+    }
+
     private void  removeUserRecordsFromExpenses(Long userId, Trip trip){
 
         if(!trip.getExpenses().isEmpty() || trip.getExpenses() == null){

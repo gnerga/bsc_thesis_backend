@@ -40,7 +40,7 @@ public class TripGeneralController {
 
     @GetMapping("/tripUsers={tripId}")
     public ResponseEntity findAllTripOrganizersAndParticipants(@PathVariable("tripId") Long tripId){
-        return tripGeneralService.getAllTripUsersAndParticipants(tripId).toResponseEntity();
+        return tripGeneralService.getAllTripParticipantsAndOrganizers(tripId).toResponseEntity();
     }
 
     @GetMapping("/trip={tripId}")
