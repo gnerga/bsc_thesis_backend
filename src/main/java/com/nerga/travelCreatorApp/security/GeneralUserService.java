@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class GeneralUserService {
@@ -70,13 +71,30 @@ public class GeneralUserService {
     }
 
     public Response findAllUsersWithoutAuthorizedUserAndContainsGivenText(String text){
-        List<UserDetailsDto> userDetailsDtoList =
-                returnListOfUserDetailsDto(userRepository.findAllByUsernameIsNotAndUsernameContainsOrFirstNameContainsOrLastNameContains(
+        List<UserDetailsDto> userDetailsDtoList;
+        List<UserDetailsDto> userDetailsDtoList2;
+        List<UserDetailsDto> userDetailsDtoList3;
+                userDetailsDtoList = returnListOfUserDetailsDto(userRepository.findAllByUsernameIsNotAndUsernameContains(
                         SecurityContextHolder.getContext()
                                 .getAuthentication()
                                 .getPrincipal()
-                                .toString(), text, text ,text));
-        return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
+                                .toString(), text));
+        userDetailsDtoList2 = returnListOfUserDetailsDto(userRepository.findAllByUsernameIsNotAndFirstNameContains(
+                SecurityContextHolder.getContext()
+                        .getAuthentication()
+                        .getPrincipal()
+                        .toString(), text));
+        userDetailsDtoList3 = returnListOfUserDetailsDto(userRepository.findAllByUsernameIsNotAndLastNameContains(
+                SecurityContextHolder.getContext()
+                        .getAuthentication()
+                        .getPrincipal()
+                        .toString(), text));
+        List<UserDetailsDto> temp= Stream.concat(
+                userDetailsDtoList.stream(),
+                userDetailsDtoList2.stream()
+                ).collect(Collectors.toList());
+        List<UserDetailsDto> result = Stream.concat(userDetailsDtoList3.stream(), temp.stream()).collect(Collectors.toList());
+        return !result.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
     }
 
     public Response getUserDetailsForLoggedUser(){

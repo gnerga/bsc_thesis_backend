@@ -11,7 +11,13 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUsername(String username);
     boolean existsByUsername(String username);
     List<UserEntity>  findAllByUsernameIsNot(String username);
-    List<UserEntity>  findAllByUsernameIsNotAndUsernameContainsOrFirstNameContainsOrLastNameContains(
+    List<UserEntity>  findAllByUsernameIsNotAndUsernameContains(
             String username,
-            String user, String firstName, String lastName);
+            String text);
+    List<UserEntity>  findAllByUsernameIsNotAndFirstNameContains(
+            String username,
+            String text);
+    List<UserEntity> findAllByUsernameIsNotAndLastNameContains(
+            String username,
+            String text);
 }
