@@ -273,8 +273,8 @@ public class TripManagementService {
         }
         List<DateProposition> l1 = List.copyOf(trip.getDatePropositionList());
 
-            trip.getDatePropositionList().clear();
-            trip.getAnalyzedDatePropositionList().clear();
+        trip.getDatePropositionList().clear();
+        trip.getAnalyzedDatePropositionList().clear();
 
         trip = tripRepository.save(trip);
         l1.forEach(datePropositionRepository::delete);
@@ -282,9 +282,11 @@ public class TripManagementService {
         DateProposition dateProposition = new DateProposition(trip.getStartDate(), trip.getEndDate(), userEntity.getId());
         datePropositionRepository.save(dateProposition);
         trip.addDateProposition(dateProposition);
-        tripRepository.save(trip);
+        trip = tripRepository.save(trip);
 
-        return Success.ok(null);
+        TripUserAndDetailsDto tripUserAndDetailsDto = tripToTripDetailsDto(trip);
+
+        return Success.ok(tripUserAndDetailsDto);
 
     }
 
