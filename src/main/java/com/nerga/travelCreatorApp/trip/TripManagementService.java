@@ -273,7 +273,7 @@ public class TripManagementService {
         }
         List<DateProposition> l1 = List.copyOf(trip.getDatePropositionList());
         for (DateProposition it: trip.getDatePropositionList()) {
-            trip.getAnalyzedDatePropositionList().remove(it);
+            trip.getDatePropositionList().remove(it);
             trip.getAnalyzedDatePropositionList().remove(it);
         }
         trip = tripRepository.save(trip);
