@@ -271,14 +271,14 @@ public class TripManagementService {
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
-
+        List<DateProposition> l1 = List.copyOf(trip.getDatePropositionList());
         for (DateProposition it: trip.getDatePropositionList()) {
             trip.getAnalyzedDatePropositionList().remove(it);
-            datePropositionRepository.delete(it);
-
+            trip.getAnalyzedDatePropositionList().remove(it);
         }
-        trip.getDatePropositionList().clear();
         trip = tripRepository.save(trip);
+        l1.forEach(datePropositionRepository::delete);
+
         DateProposition dateProposition = new DateProposition(trip.getStartDate(), trip.getEndDate(), userEntity.getId());
         datePropositionRepository.save(dateProposition);
         trip.addDateProposition(dateProposition);
