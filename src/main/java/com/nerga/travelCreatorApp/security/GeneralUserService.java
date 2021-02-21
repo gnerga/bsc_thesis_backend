@@ -19,10 +19,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class GeneralUserService {
@@ -66,6 +69,36 @@ public class GeneralUserService {
                                 .getAuthentication()
                                 .getPrincipal()
                                 .toString()));
+        return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
+    }
+
+    public Response findAllUsersWithoutAuthorizedUserAndContainsGivenText(String text){
+
+        List<UserEntity> allUsers = userRepository.findAllByUsernameIsNot( SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal()
+                .toString());
+
+        List<UserEntity> l1 = allUsers.stream()
+                .filter(user-> user.getUsername().toLowerCase(Locale.ROOT)
+                .contains(text.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toList());
+        List<UserEntity> l2 = allUsers.stream()
+                .filter(user-> user.getFirstName().toLowerCase(Locale.ROOT)
+                        .contains(text.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toList());
+        List<UserEntity> l3 = allUsers.stream()
+                .filter(user-> user.getLastName().toLowerCase(Locale.ROOT)
+                        .contains(text.toLowerCase(Locale.ROOT)))
+                .collect(Collectors.toList());
+
+        allUsers.clear();
+        allUsers = Stream.of(l1,l2,l3).flatMap(Collection::stream).distinct().collect(Collectors.toList());
+
+        List<UserDetailsDto> userDetailsDtoList =
+                returnListOfUserDetailsDto(allUsers);
+
+
         return !userDetailsDtoList.isEmpty() ? Success.ok(userDetailsDtoList) : Error.badRequest("USERS_NOT_FOUND");
     }
 
