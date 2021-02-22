@@ -270,7 +270,6 @@ public class TripUserService {
 
     }
 
-
     private ExpensesDetailsDto mapExpensesToExpensesDetailsDto(Expenses expenses){
         List<ExpenseRecordDetailsDto> list = new ArrayList<>();
 

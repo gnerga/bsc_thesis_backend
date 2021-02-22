@@ -92,6 +92,7 @@ public class TripGeneralService {
 
         return Success.ok(mapUserEntitiesListToUserDetailsDtoList(trip.getOrganizers()));
     }
+
     public Response getAllTripParticipants(Long tripId){
         Trip trip;
         try {
@@ -104,7 +105,7 @@ public class TripGeneralService {
         return Success.ok(mapUserEntitiesListToUserDetailsDtoList(trip.getParticipants()));
     }
 
-    public Response getAllTripUsersAndParticipants(Long tripId){
+    public Response getAllTripParticipantsAndOrganizers(Long tripId){
         Trip trip;
         try{
             trip = Option.ofOptional(tripRepository.findById(tripId))
