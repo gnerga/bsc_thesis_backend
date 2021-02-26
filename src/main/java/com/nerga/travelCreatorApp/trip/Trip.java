@@ -67,7 +67,7 @@ public class Trip {
     private List<DateProposition> analyzedDatePropositionList;
 
     @OneToMany
-    List<Expense> expens;
+    List<Expense> expenses;
 
     @OneToMany
     List<Post> posts;
@@ -102,7 +102,7 @@ public class Trip {
         this.analyzedDatePropositionList = new ArrayList<>();
         this.organizers = new ArrayList<>();
         this.participants = new ArrayList<>();
-        this.expens = new ArrayList<>();
+        this.expenses = new ArrayList<>();
         this.posts = new ArrayList<>();
 
     }
@@ -210,15 +210,15 @@ public class Trip {
     }
 
     public Trip addExpense(Expense expense){
-        if(expens == null){
-            expens = new ArrayList<>();
+        if(expenses == null){
+            expenses = new ArrayList<>();
         }
-        expens.add(expense);
+        expenses.add(expense);
         return this;
     }
 
     public Trip removeExpense(Expense expense){
-        expens.remove(expense);
+        expenses.remove(expense);
         return this;
     }
 

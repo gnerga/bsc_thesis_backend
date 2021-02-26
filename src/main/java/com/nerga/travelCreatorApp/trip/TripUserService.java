@@ -87,7 +87,9 @@ public class TripUserService {
        trip = tripRepository.save(trip);
 
 //       return Success.ok(mapExpensesToExpensesDetailsDto(expense));
-       return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpens()));
+
+       return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
+
     }
 
     public Response updateExpense(ExpenseUpdateDto expenseUpdateDto) {
