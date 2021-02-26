@@ -9,7 +9,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecordRepository;
-import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.Expense;
 import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.expensesregister.dto.*;
 import com.nerga.travelCreatorApp.location.LocationRepository;
@@ -80,19 +80,19 @@ public class TripUserService {
            return Error.notFound("USER_NOT_FOUND");
        }
 
-       Expenses expense = mapExpensesCreateDto(newExpenses);
+       Expense expense = mapExpensesCreateDto(newExpenses);
 
        trip.addExpense(expense);
 
        trip = tripRepository.save(trip);
 
 //       return Success.ok(mapExpensesToExpensesDetailsDto(expense));
-       return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
+       return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpens()));
     }
 
     public Response updateExpense(ExpenseUpdateDto expenseUpdateDto) {
 
-        Expenses expense;
+        Expense expense;
 
         try {
             expense = Option.ofOptional(expensesRepository.findById(expenseUpdateDto.getExpenseId()))
@@ -111,7 +111,7 @@ public class TripUserService {
     }
 
     public Response addUserToExpense(ExpenseRecordCreateDto newRecord) {
-        Expenses expense;
+        Expense expense;
 
         try {
             expense = Option.ofOptional(expensesRepository.findById(newRecord.getExpenseId()))
@@ -143,7 +143,7 @@ public class TripUserService {
 
     public Response updateExpenseShareholdersAmount(ExpenseRecordsUpdateListDto updatedRecordList) {
 
-        Expenses expense;
+        Expense expense;
 
         try {
             expense = Option.ofOptional(expensesRepository.findById(updatedRecordList.getExpenseId()))
@@ -270,26 +270,26 @@ public class TripUserService {
 
     }
 
-    private ExpensesDetailsDto mapExpensesToExpensesDetailsDto(Expenses expenses){
+    private ExpensesDetailsDto mapExpensesToExpensesDetailsDto(Expense expense){
         List<ExpenseRecordDetailsDto> list = new ArrayList<>();
 
-        for (ExpenseRecord it: expenses.getShareholders()){
+        for (ExpenseRecord it: expense.getShareholders()){
             UserDetailsDto user = modelMapper.map(it.getUserEntity(), UserDetailsDto.class);
             list.add(new ExpenseRecordDetailsDto(it.getExpenseRecordId(), user, it.getAmount()));
         }
 
         return new ExpensesDetailsDto(
-                expenses.getExpensesId(),
-                expenses.getTitle(),
-                expenses.getDescription(),
-                expenses.getCost(),
+                expense.getExpensesId(),
+                expense.getTitle(),
+                expense.getDescription(),
+                expense.getCost(),
                 list
         );
     }
 
-    private List<ExpensesDetailsDto> mapExpensesListToExpensesDetailsDtoLost(List<Expenses> expensesList){
+    private List<ExpensesDetailsDto> mapExpensesListToExpensesDetailsDtoLost(List<Expense> expenseList){
         List<ExpensesDetailsDto> expensesDtoList = new ArrayList<>();
-        for(Expenses expense : expensesList) {
+        for(Expense expense : expenseList) {
             expensesDtoList.add(mapExpensesToExpensesDetailsDto(expense));
         }
         return expensesDtoList;
@@ -329,19 +329,19 @@ public class TripUserService {
         return false;
     }
 
-    private Expenses mapExpensesCreateDto(ExpensesCreateDto newExpenses){
+    private Expense mapExpensesCreateDto(ExpensesCreateDto newExpenses){
 
         List<ExpenseRecord> records = new ArrayList<>();
         Optional<UserEntity> optional;
 
-        Expenses expenses = new Expenses(
+        Expense expense = new Expense(
                 newExpenses.getTitle(),
                 newExpenses.getDescription(),
                 newExpenses.getCost(),
                 records
         );
 
-        expenses = expensesRepository.save(expenses);
+        expense = expensesRepository.save(expense);
 
         for (ExpenseRecordCreateDto it : newExpenses.getShareHolders()) {
 
@@ -357,9 +357,9 @@ public class TripUserService {
             expenseRecordRepository.save(record);
         }
 
-        expenses.setShareholders(records);
-        expenses = expensesRepository.save(expenses);
-        return expenses;
+        expense.setShareholders(records);
+        expense = expensesRepository.save(expense);
+        return expense;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.nerga.travelCreatorApp.expensesregister;
 
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseUpdateDto;
-import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.trip.Trip;
 import lombok.*;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @Table(name="expenses")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Expenses {
+public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +30,7 @@ public class Expenses {
     @OneToMany
     List<ExpenseRecord> shareholders;
 
-    public Expenses(
+    public Expense(
             String title,
             String description,
             float cost,
@@ -43,7 +42,7 @@ public class Expenses {
         this.shareholders = shareholders;
     }
 
-    public Expenses updateFromExpensesUpdateDto(ExpenseUpdateDto updateDto){
+    public Expense updateFromExpensesUpdateDto(ExpenseUpdateDto updateDto){
         this.title = validator(this.title, updateDto.getTitle());
         this.description = validator(this.description, updateDto.getDescription());
         return this;
@@ -69,7 +68,7 @@ public class Expenses {
         if(expensesId == null || obj == null || getClass() != obj.getClass())
             return false;
 
-        Expenses that = (Expenses) obj;
+        Expense that = (Expense) obj;
         return expensesId.equals(that.expensesId);
     }
 

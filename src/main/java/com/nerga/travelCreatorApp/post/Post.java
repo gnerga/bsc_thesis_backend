@@ -1,14 +1,10 @@
 package com.nerga.travelCreatorApp.post;
 
-import com.nerga.travelCreatorApp.expensesregister.Expenses;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import com.nerga.travelCreatorApp.trip.Trip;
-import io.vavr.Tuple2;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

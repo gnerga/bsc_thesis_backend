@@ -119,7 +119,6 @@ public class LocationService {
         List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
         return Success.ok(locationDetailsDtoList);
 //        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
-//        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
 
     public Response findById(Long id){

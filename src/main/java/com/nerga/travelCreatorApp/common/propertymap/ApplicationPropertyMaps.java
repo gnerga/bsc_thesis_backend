@@ -1,7 +1,7 @@
 package com.nerga.travelCreatorApp.common.propertymap;
 
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
-import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.Expense;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
 import com.nerga.travelCreatorApp.location.Location;
@@ -24,7 +24,7 @@ public class ApplicationPropertyMaps {
         };
     }
 
-    public static PropertyMap<Expenses, ExpensesDetailsDto> expensesRecordFieldMapping(){
+    public static PropertyMap<Expense, ExpensesDetailsDto> expensesRecordFieldMapping(){
         return null;
     }
 

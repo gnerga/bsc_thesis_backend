@@ -7,7 +7,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
-import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.Expense;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.post.Post;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
@@ -67,7 +67,7 @@ public class Trip {
     private List<DateProposition> analyzedDatePropositionList;
 
     @OneToMany
-    List<Expenses> expenses;
+    List<Expense> expens;
 
     @OneToMany
     List<Post> posts;
@@ -102,7 +102,7 @@ public class Trip {
         this.analyzedDatePropositionList = new ArrayList<>();
         this.organizers = new ArrayList<>();
         this.participants = new ArrayList<>();
-        this.expenses = new ArrayList<>();
+        this.expens = new ArrayList<>();
         this.posts = new ArrayList<>();
 
     }
@@ -209,16 +209,16 @@ public class Trip {
         return  this;
     }
 
-    public Trip addExpense(Expenses expense){
-        if(expenses == null){
-            expenses = new ArrayList<>();
+    public Trip addExpense(Expense expense){
+        if(expens == null){
+            expens = new ArrayList<>();
         }
-        expenses.add(expense);
+        expens.add(expense);
         return this;
     }
 
-    public Trip removeExpense(Expenses expense){
-        expenses.remove(expense);
+    public Trip removeExpense(Expense expense){
+        expens.remove(expense);
         return this;
     }
 
