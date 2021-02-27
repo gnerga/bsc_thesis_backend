@@ -189,7 +189,7 @@ public class TripGeneralService {
                 modelMapper.map(trip.getLocation(), LocationDetailsDto.class),
                 trip.getDateMatcherReport(),
                 mapPostsToListPostDetailsDto(trip.getPosts()),
-                mapExpensesListToExpensesDetailsDtoLost(trip.getExpens()),
+                mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()),
                 mapUserEntitiesListToUserDetailsDtoList(trip.getOrganizers()),
                 mapUserEntitiesListToUserDetailsDtoList(trip.getParticipants())
 

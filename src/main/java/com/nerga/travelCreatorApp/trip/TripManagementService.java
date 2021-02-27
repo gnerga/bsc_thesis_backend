@@ -292,9 +292,9 @@ public class TripManagementService {
 
     private void  removeUserRecordsFromExpenses(Long userId, Trip trip){
 
-        if(!trip.getExpens().isEmpty() || trip.getExpens() == null){
+        if(!trip.getExpenses().isEmpty() || trip.getExpenses() == null){
 
-            for(Expense expense: trip.getExpens()){
+            for(Expense expense: trip.getExpenses()){
                 for (ExpenseRecord record : expense.getShareholders()){
                     if(record.getUserEntity().getId().equals(userId)){
                         expense.setCost(expense.getCost() - record.getAmount());
@@ -376,7 +376,7 @@ public class TripManagementService {
                 mapUserEntitiesListToUserDetailsDtoList(trip.getParticipants()),
                 trip.getDateMatcherReport(),
                 mapPostsToListPostDetailsDto(trip.getPosts()),
-                mapExpensesListToExpensesDetailsDtoLost(trip.getExpens())
+                mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses())
 
 
         );
