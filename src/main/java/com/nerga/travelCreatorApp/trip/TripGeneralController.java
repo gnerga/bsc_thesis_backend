@@ -43,7 +43,7 @@ public class TripGeneralController {
         return tripGeneralService.getAllTripParticipantsAndOrganizers(tripId).toResponseEntity();
     }
 
-    @GetMapping("/tripExpenseUsers={tripId}&{expenseId}")
+    @GetMapping("/tripUsersNotIncludedToExpense={tripId}&{expenseId}")
     public ResponseEntity findAllParticipantsNotIncludedToExpenseWithGivenId(@PathVariable("tripId") Long tripId, @PathVariable("expenseId") Long expenseId){
         return tripGeneralService.getAllParticipantsNotIncludedToExpenseWithGivenId(tripId, expenseId).toResponseEntity();
     }
