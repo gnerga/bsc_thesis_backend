@@ -164,7 +164,57 @@ public class TripUserService {
                 }
             }
         }
+        expense = expensesRepository.save(expense);
 
+        return Success.ok(mapExpensesToExpensesDetailsDto(expense));
+    }
+
+    public Response updateExpenseShareholders(ExpenseRecordsUpdateListDto updatedRecordList) {
+
+        Expense expense;
+
+        try {
+            expense = Option.ofOptional(expensesRepository.findById(updatedRecordList.getExpenseId()))
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("EXPENSE_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("EXPENSE_NOT_FOUND");
+        }
+
+        if(checkIfAllUserExistsBeforeUpdate(updatedRecordList.getRecordsToUpdate())){
+            return Error.notFound("USER_NOT_FOUND");
+        }
+
+        for(ExpenseRecord it: expense.getShareholders()){
+            for (ExpenseRecordsUpdateDto updatedRecord: updatedRecordList.getRecordsToUpdate()){
+                if(updatedRecord.getUserId().equals(it.getUserEntity().getId())){
+                    if(it.getAmount()!=updatedRecord.getAmount()){
+                        it.setAmount(updatedRecord.getAmount());
+                        expenseRecordRepository.save(it);
+                    }
+                }
+            }
+        }
+
+        UserEntity user;
+
+        for (ExpenseRecordsUpdateDto updatedRecord: updatedRecordList.getRecordsToUpdate()){
+            for(ExpenseRecord it: expense.getShareholders()){
+                if (updatedRecord.getUserId().equals(it.getUserEntity().getId())){
+                    continue;
+                } else {
+                    user = userRepository.findById(updatedRecord.getUserId()).get();
+                    ExpenseRecord newExpense = new ExpenseRecord(user, updatedRecord.getAmount());
+                    expenseRecordRepository.save(newExpense);
+                    expense.getShareholders().add(newExpense);
+                }
+            }
+        }
+
+        expense = expensesRepository.save(expense);
+
+        double overallAmount = expense.getShareholders().stream().mapToDouble(ExpenseRecord::getAmount).sum();
+        System.out.println(overallAmount);
+        expense.setCost((float)overallAmount);
         expense = expensesRepository.save(expense);
 
         return Success.ok(mapExpensesToExpensesDetailsDto(expense));
@@ -324,6 +374,15 @@ public class TripUserService {
 
     private boolean checkIfAllUserExists(List<ExpenseRecordCreateDto> records){
         for (ExpenseRecordCreateDto it : records) {
+            if (!userRepository.existsById(it.getUserId())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean checkIfAllUserExistsBeforeUpdate(List<ExpenseRecordsUpdateDto> records){
+        for (ExpenseRecordsUpdateDto it : records) {
             if (!userRepository.existsById(it.getUserId())){
                 return true;
             }

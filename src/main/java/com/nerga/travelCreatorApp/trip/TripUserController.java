@@ -39,7 +39,7 @@ public class TripUserController {
 
     @PutMapping("/updateExpenseShareholdersList")
     public ResponseEntity updateExpenseShareHoldersList(@RequestBody ExpenseRecordsUpdateListDto recordUpdateList){
-        return tripUserService.updateExpenseShareholdersAmount(recordUpdateList).toResponseEntity();
+        return tripUserService.updateExpenseShareholders(recordUpdateList).toResponseEntity();
     }
 
     @PostMapping("/addPostToTrip={tripId}")
