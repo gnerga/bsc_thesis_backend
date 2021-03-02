@@ -129,6 +129,7 @@ public class TripUserService {
         } catch (UserException e) {
             return Error.notFound("USER_NOT_FOUND");
         }
+
         ExpenseRecord record =  new ExpenseRecord(
                 user,
                 newRecord.getAmount()
@@ -138,6 +139,9 @@ public class TripUserService {
         expense.getShareholders().add(record);
         expense.setCost(expense.getCost() + record.getAmount());
         expense = expensesRepository.save(expense);
+
+        System.out.println(expense.getCost());
+
         Trip trip;
         try {
             trip = Option.ofOptional(tripRepository.findById(expense.getTrip().getTripId()))
