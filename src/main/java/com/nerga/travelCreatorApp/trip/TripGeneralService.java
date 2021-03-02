@@ -146,6 +146,7 @@ public class TripGeneralService {
 
 
         participants.addAll(trip.getParticipants());
+        System.out.println(participants.size());
         participants.addAll(trip.getOrganizers());
 
         System.out.println(participants.size());
