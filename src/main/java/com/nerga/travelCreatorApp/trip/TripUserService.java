@@ -84,9 +84,12 @@ public class TripUserService {
        Expense expense = mapExpensesCreateDto(newExpenses);
 
        trip.addExpense(expense);
-       trip = tripRepository.save(trip);
        expense.setTrip(trip);
+       trip = tripRepository.save(trip);
        expensesRepository.save(expense);
+
+
+
 
        return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
 
