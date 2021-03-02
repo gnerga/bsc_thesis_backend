@@ -69,6 +69,7 @@ public class TripUserService {
     public Response createExpense(ExpensesCreateDto newExpenses) {
 
         Trip trip;
+
         try {
             trip = Option.ofOptional(tripRepository.findById(newExpenses.getTripId()))
                     .getOrElseThrow(() -> new CustomUserNotFoundException("TRIP_NOT_FOUND"));
@@ -85,8 +86,6 @@ public class TripUserService {
        trip.addExpense(expense);
 
        trip = tripRepository.save(trip);
-
-//       return Success.ok(mapExpensesToExpensesDetailsDto(expense));
 
        return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
 
@@ -143,35 +142,37 @@ public class TripUserService {
         return Success.ok(Success.accepted(mapExpensesToExpensesDetailsDto(expense)));
     }
 
-    public Response updateExpenseShareholdersAmount(ExpenseRecordsUpdateListDto updatedRecordList) {
+//    public Response updateExpenseShareholdersAmount(ExpenseRecordsUpdateListDto updatedRecordList) {
+//
+//        Expense expense;
+//
+//        try {
+//            expense = Option.ofOptional(expensesRepository.findById(updatedRecordList.getExpenseId()))
+//                    .getOrElseThrow(() -> new CustomUserNotFoundException("EXPENSE_NOT_FOUND"));
+//        } catch (UserException e) {
+//            return Error.notFound("EXPENSE_NOT_FOUND");
+//        }
+//
+//        for(ExpenseRecord it: expense.getShareholders()){
+//            for (ExpenseRecordsUpdateDto updatedRecord: updatedRecordList.getRecordsToUpdate()){
+//                if(updatedRecord.getUserId().equals(it.getUserEntity().getId())){
+//                    if(it.getAmount()!=updatedRecord.getAmount()){
+//                        it.setAmount(updatedRecord.getAmount());
+//                        expenseRecordRepository.save(it);
+//                    }
+//                }
+//            }
+//        }
+//        expense = expensesRepository.save(expense);
+//
+//        return Success.ok(mapExpensesToExpensesDetailsDto(expense));
+//    }
 
-        Expense expense;
-
-        try {
-            expense = Option.ofOptional(expensesRepository.findById(updatedRecordList.getExpenseId()))
-                    .getOrElseThrow(() -> new CustomUserNotFoundException("EXPENSE_NOT_FOUND"));
-        } catch (UserException e) {
-            return Error.notFound("EXPENSE_NOT_FOUND");
-        }
-
-        for(ExpenseRecord it: expense.getShareholders()){
-            for (ExpenseRecordsUpdateDto updatedRecord: updatedRecordList.getRecordsToUpdate()){
-                if(updatedRecord.getUserId().equals(it.getUserEntity().getId())){
-                    if(it.getAmount()!=updatedRecord.getAmount()){
-                        it.setAmount(updatedRecord.getAmount());
-                        expenseRecordRepository.save(it);
-                    }
-                }
-            }
-        }
-        expense = expensesRepository.save(expense);
-
-        return Success.ok(mapExpensesToExpensesDetailsDto(expense));
-    }
-
+    // TODO works but need to be clean
     public Response updateExpenseShareholders(ExpenseRecordsUpdateListDto updatedRecordList) {
 
         Expense expense;
+        Trip trip;
 
         try {
             expense = Option.ofOptional(expensesRepository.findById(updatedRecordList.getExpenseId()))
@@ -217,7 +218,14 @@ public class TripUserService {
         expense.setCost((float)overallAmount);
         expense = expensesRepository.save(expense);
 
-        return Success.ok(mapExpensesToExpensesDetailsDto(expense));
+        try {
+            trip = Option.ofOptional(tripRepository.findById(updatedRecordList.getTripId()))
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("TRIP_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
     }
 
     public Response addPostByTripId(PostCreateDto newPost, Long tripId) {
