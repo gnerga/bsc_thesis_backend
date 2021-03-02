@@ -37,6 +37,12 @@ public class TripUserController {
         return tripUserService.addUserToExpense(newRecord).toResponseEntity();
     }
 
+
+    @PutMapping("/removeExpenseRecord")
+    public ResponseEntity removeExpenseRecord(@RequestBody ExpenseRecordCreateDto removeRecord){
+        return tripUserService.removeUserFromExpense(removeRecord).toResponseEntity();
+    }
+
     @PutMapping("/updateExpenseShareholdersList")
     public ResponseEntity updateExpenseShareHoldersList(@RequestBody ExpenseRecordsUpdateListDto recordUpdateList){
         return tripUserService.updateExpenseShareholders(recordUpdateList).toResponseEntity();
