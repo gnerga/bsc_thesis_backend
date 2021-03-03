@@ -111,8 +111,15 @@ public class TripUserService {
         expense = expensesRepository.save(expense);
 
 
-        return Success.ok(mapExpensesToExpensesDetailsDto(
-                expense));
+        Trip trip;
+        try {
+            trip = Option.ofOptional(tripRepository.findById(expense.getTrip().getTripId()))
+                    .getOrElseThrow(() -> new CustomUserNotFoundException("TRIP_NOT_FOUND"));
+        } catch (UserException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
     }
 
     public Response addUserToExpense(ExpenseRecordCreateDto newRecord) {
