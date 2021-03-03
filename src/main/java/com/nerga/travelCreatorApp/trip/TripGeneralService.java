@@ -136,7 +136,7 @@ public class TripGeneralService {
         }
 
         try{
-            expense = Option.ofOptional(expensesRepository.findById(tripId)).getOrElseThrow(() -> new ExpenseNotFoundException("EXPENSE_NOT_FOUND"));
+            expense = Option.ofOptional(expensesRepository.findById(expenseId)).getOrElseThrow(() -> new ExpenseNotFoundException("EXPENSE_NOT_FOUND"));
         } catch (Exception e){
             return Error.notFound("EXPENSE_NOT_FOUND");
         }
