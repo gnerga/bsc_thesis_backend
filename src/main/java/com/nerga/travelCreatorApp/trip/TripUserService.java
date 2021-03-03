@@ -179,14 +179,20 @@ public class TripUserService {
             return Error.notFound("USER_NOT_FOUND");
         }
 
+        List<ExpenseRecord> recordsToRemove = new ArrayList<>();
+
         for (ExpenseRecord record : expense.getShareholders()){
             if(record.getUserEntity().getId().equals(user.getId())){
                 expense.setCost(expense.getCost() - record.getAmount());
-                expense.getShareholders().remove(record);
-                expenseRecordRepository.delete(record);
+                recordsToRemove.add(record);
             }
         }
+        expense.getShareholders().removeAll(recordsToRemove);
         expense = expensesRepository.save(expense);
+        recordsToRemove.forEach(record -> {
+            expenseRecordRepository.delete(record);
+        });
+
 
         Trip trip;
         try {
