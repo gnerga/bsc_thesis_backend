@@ -158,6 +158,9 @@ public class TripUserService {
     }
 
     public Response removeUserFromExpense(ExpenseRecordCreateDto removeRecord) {
+        System.out.println(removeRecord.getExpenseId());
+        System.out.println(removeRecord.getUserId());
+
         Expense expense;
 
         try {
@@ -177,7 +180,7 @@ public class TripUserService {
         }
 
         for (ExpenseRecord record : expense.getShareholders()){
-            if(record.getUserEntity().getId().equals(removeRecord.getUserId())){
+            if(record.getUserEntity().getId().equals(user.getId())){
                 expense.setCost(expense.getCost() - record.getAmount());
                 expense.getShareholders().remove(record);
                 expense = expensesRepository.save(expense);

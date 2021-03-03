@@ -146,10 +146,7 @@ public class TripGeneralService {
 
 
         participants.addAll(trip.getParticipants());
-        System.out.println(participants.size());
         participants.addAll(trip.getOrganizers());
-
-        System.out.println(participants.size());
 
         List<UserEntity> participantsNotIncludedToExpense = new ArrayList<>();
 
@@ -158,8 +155,6 @@ public class TripGeneralService {
                     shareHolders.add(expenseRecord.getUserEntity());
                 }
         );
-
-        System.out.println(shareHolders.size());
 
         participants.forEach(participant->{
             if(!shareHolders.contains(participant)){
