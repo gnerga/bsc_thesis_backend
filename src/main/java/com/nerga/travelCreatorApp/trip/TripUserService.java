@@ -183,10 +183,10 @@ public class TripUserService {
             if(record.getUserEntity().getId().equals(user.getId())){
                 expense.setCost(expense.getCost() - record.getAmount());
                 expense.getShareholders().remove(record);
-                expense = expensesRepository.save(expense);
                 expenseRecordRepository.delete(record);
             }
         }
+        expense = expensesRepository.save(expense);
 
         Trip trip;
         try {
