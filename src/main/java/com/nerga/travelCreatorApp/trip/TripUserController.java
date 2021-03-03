@@ -32,6 +32,11 @@ public class TripUserController {
         return tripUserService.updateExpense(expenseUpdateDto).toResponseEntity();
     }
 
+    @DeleteMapping("/removeExpense={expenseId}")
+    public ResponseEntity removeExpense(@PathVariable("expenseId") Long expenseId){
+        return tripUserService.removeExpenseFromTrip(expenseId).toResponseEntity();
+    }
+
     @PutMapping("/addExpenseRecord")
     public ResponseEntity addExpenseRecord(@RequestBody ExpenseRecordCreateDto newRecord){
         return tripUserService.addUserToExpense(newRecord).toResponseEntity();
