@@ -325,7 +325,7 @@ public class TripUserService {
 
         String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 
-        if (post.getAuthor().getUsername().equals(loggedUser)){
+        if (!post.getAuthor().getUsername().equals(loggedUser)){
             return Error.Unauthorized("UNAUTHORIZED_OPERATION");
         }
 
