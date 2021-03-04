@@ -227,10 +227,9 @@ public class TripUserService {
 
         trip.removeExpense(expense);
         trip = tripRepository.save(trip);
-        expense.getShareholders().forEach(record->{
-            expenseRecordRepository.delete(record);
-        });
+        List<ExpenseRecord> recordsToRemove = new ArrayList<>(expense.getShareholders());
         expensesRepository.delete(expense);
+        expenseRecordRepository.deleteAll(recordsToRemove);
         return Success.ok(mapExpensesListToExpensesDetailsDtoLost(trip.getExpenses()));
     }
 
