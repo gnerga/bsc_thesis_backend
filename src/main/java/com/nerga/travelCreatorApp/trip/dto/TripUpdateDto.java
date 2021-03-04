@@ -24,8 +24,8 @@ public class TripUpdateDto {
     private String startDate;
     @NotNull
     private String endDate;
-//    @NotNull
-//    private LocationDetailsDto location;
+    @NotNull
+    private LocationDetailsDto location;
 
 
 }
