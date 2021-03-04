@@ -204,7 +204,7 @@ public class Trip {
         this.tripDescription = updatedTripDetails.getTripDescription();
         this.startDate = LocalDate.parse(updatedTripDetails.getStartDate());
         this.endDate = LocalDate.parse(updatedTripDetails.getEndDate());
-        this.location.updateLocationEntity(updatedTripDetails.getLocation());
+//        this.location.updateLocationEntity(updatedTripDetails.getLocation());
 
         return  this;
     }

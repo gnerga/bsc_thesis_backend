@@ -28,6 +28,7 @@ import com.nerga.travelCreatorApp.trip.exceptions.TripNotFoundException;
 import io.vavr.control.Option;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -302,6 +303,38 @@ public class TripUserService {
         trip = tripRepository.save(trip);
 
         return Success.created(mapPostsToListPostDetailsDto(trip.posts));
+    }
+
+    public Response removePostFromTrip(Long tripId, Long postId){
+        Trip trip;
+        Post post;
+
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        try {
+            post = Option.ofOptional(postRepository.findById(postId))
+                    .getOrElseThrow(()->new PostNotFoundException("POST_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("POST_NOT_FOUND");
+        }
+
+        String loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+
+        if (post.getAuthor().getUsername().equals(loggedUser)){
+            return Error.Unauthorized("UNAUTHORIZED_OPERATION");
+        }
+
+        trip.removePost(post);
+        postRepository.delete(post);
+        trip = tripRepository.save(trip);
+
+        return Success.ok(mapPostsToListPostDetailsDto(trip.getPosts()));
+
     }
 
     public Response handUpByTripAndPostId(Long postId, Long userId) {

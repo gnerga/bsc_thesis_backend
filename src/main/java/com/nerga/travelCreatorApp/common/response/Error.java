@@ -21,6 +21,7 @@ public class Error extends Response<String> {
         return new Error(HttpStatus.BAD_REQUEST, code);
     }
     public static Error notFound(String code) {return new Error(HttpStatus.NOT_FOUND, code);}
+    public static Error Unauthorized(String code){return new Error(HttpStatus.UNAUTHORIZED, code);}
 
     public static Error concatCodes(Seq<Error> errors) {
         var errorCodes = errors.map(e -> e.code).reduceLeft((a,b) -> a.concat(System.lineSeparator()+b));

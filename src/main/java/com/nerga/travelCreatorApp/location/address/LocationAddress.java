@@ -32,7 +32,7 @@ public class LocationAddress {
     @NotNull
     private double longitude;
 
-    public LocationAddress updateLocationEntity(LocationAddressDetailsDto locationDetailsDto) {
+    public LocationAddress updateAddressEntity(LocationAddressDetailsDto locationDetailsDto) {
 
         this.countryName = simplyValidatorInputEmptyString(locationDetailsDto.getCountryName(), this.countryName);
         this.cityName = simplyValidatorInputEmptyString(locationDetailsDto.getCityName(), this.getCityName());

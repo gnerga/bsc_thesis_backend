@@ -58,6 +58,11 @@ public class TripUserController {
         return tripUserService.addPostByTripId(post, tripId).toResponseEntity();
     }
 
+    @DeleteMapping("/removePostFromTrip={tripId}&{postId}")
+    public ResponseEntity removePost(@PathVariable("tripId")Long tripId, @PathVariable("postId")Long postId) {
+        return tripUserService.removePostFromTrip(tripId, postId).toResponseEntity();
+    }
+
     @PutMapping("/giveHandUpToPost={postId}&{userId}")
     public ResponseEntity handUp(@PathVariable("postId") Long postId, @PathVariable("userId") Long userId){
         return tripUserService.handUpByTripAndPostId(postId, userId).toResponseEntity();
