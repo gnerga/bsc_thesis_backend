@@ -20,6 +20,7 @@ import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsForListViewDto;
+import com.nerga.travelCreatorApp.trip.dto.TripSummaryDto;
 import com.nerga.travelCreatorApp.trip.exceptions.TripException;
 import com.nerga.travelCreatorApp.trip.exceptions.TripNotFoundException;
 import io.vavr.control.Option;
@@ -176,6 +177,44 @@ public class TripGeneralService {
         }
         trip.runAnalysis();
         return Success.ok(tripToTripDetailsDto(trip));
+    }
+
+    public Response getTripReportByUd(Long tripId){
+
+        Trip trip;
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(() -> new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        return null;
+    }
+
+    private TripSummaryDto generateTripSummary(Trip trip) {
+
+        TripSummaryDto summary = new TripSummaryDto();
+
+        summary.setTripName(trip.getTripName());
+        summary.setTripDescription(trip.getTripDescription());
+        summary.setStartDate(trip.getStartDate().toString());
+        summary.setEndDate(trip.getEndDate().toString());
+        summary.setCountry(trip.getLocation().getLocationAddress().getCountryName());
+        summary.setAddress(
+                trip.getLocation().getLocationAddress().getStreetNameAndNumber()
+                        + "\n" +
+                        trip.getLocation().getLocationAddress().getCityName()
+                        + ", " +
+                        trip.getLocation().getLocationAddress().getZipCode()
+        );
+        summary.setLocationDescription(trip.getLocation().getLocationDescription());
+
+        summary.setTotalExpenses(trip.getExpenses().stream().mapToDouble(Expense::getCost).sum());
+
+
+
+        return null;
     }
 
     private TripDetailsDto tripToTripDetailsDto(Trip trip){

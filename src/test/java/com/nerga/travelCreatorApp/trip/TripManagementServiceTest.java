@@ -364,13 +364,13 @@ public class TripManagementServiceTest {
 
         when(tripRepository.save(updatedTestTrip)).thenReturn(updatedTestTrip);
         when(userRepository.save(updatedOrganizer_2)).thenReturn(updatedOrganizer_2);
-        when(modelMapper.map(updatedTestTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTestTripDto);
+//        when(modelMapper.map(updatedTestTrip, TripUserAndDetailsDto.class)).thenReturn(updatedTestTripDto);
+
 
         // Test
 
         Response response = underTest.removeOrganizerById(tripId, userId);
-        System.out.println(response);
-        System.out.println(response.toResponseEntity().getBody());
+
 
         // Then
 
