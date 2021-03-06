@@ -53,4 +53,9 @@ public class TripGeneralController {
         return tripGeneralService.getTripById(tripId).toResponseEntity();
     }
 
+    @GetMapping("/generateTripReport={tripId}&{isExpensesIncluded}")
+    public ResponseEntity generateTripReport(@PathVariable("tripId") Long tripId, @PathVariable("isExpensesIncluded") boolean isExpensesIncluded){
+        return tripGeneralService.getTripReportById(tripId, isExpensesIncluded).toResponseEntity();
+    }
+
 }

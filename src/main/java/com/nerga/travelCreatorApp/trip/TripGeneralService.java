@@ -181,7 +181,7 @@ public class TripGeneralService {
         return Success.ok(tripToTripDetailsDto(trip));
     }
 
-    public Response getTripReportByUd(Long tripId){
+    public Response getTripReportById(Long tripId, boolean isExpensesIncluded){
 
         Trip trip;
         try {
@@ -191,7 +191,7 @@ public class TripGeneralService {
             return Error.notFound("TRIP_NOT_FOUND");
         }
 
-        return Success.ok(generateTripSummary(trip, true));
+        return Success.ok(generateTripSummary(trip, isExpensesIncluded));
     }
 
     private TripSummaryDto generateTripSummary(Trip trip, boolean isExpenseRecordIncluded) {
