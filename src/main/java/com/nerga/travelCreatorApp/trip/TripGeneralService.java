@@ -191,7 +191,7 @@ public class TripGeneralService {
             return Error.notFound("TRIP_NOT_FOUND");
         }
 
-        return null;
+        return Success.ok(generateTripSummary(trip, true));
     }
 
     private TripSummaryDto generateTripSummary(Trip trip, boolean isExpenseRecordIncluded) {
@@ -251,7 +251,7 @@ public class TripGeneralService {
             double overallExpenses = 0.0;
             for(Expense expense: trip.getExpenses()) {
                 for(ExpenseRecord record: expense.getShareholders()){
-                    if(it.getUsername() == record.getUserEntity().getUsername()){
+                    if(it.getUsername().equals(record.getUserEntity().getUsername())){
                         overallExpenses+=record.getAmount();
                     }
                 }
@@ -262,7 +262,7 @@ public class TripGeneralService {
         summary.setParticipants(usersSummary);
         summary.setExpensesSummary(expensesSummary);
 
-        return null;
+        return summary;
     }
 
     private List<UserSummaryDto> createUserSummary(List<UserEntity> users){
