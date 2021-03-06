@@ -8,6 +8,7 @@ import com.nerga.travelCreatorApp.expensesregister.Expense;
 import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
+import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesSummaryDto;
 import com.nerga.travelCreatorApp.expensesregister.exceptions.ExpenseNotFoundException;
 import com.nerga.travelCreatorApp.location.LocationRepository;
 import com.nerga.travelCreatorApp.location.dto.LocationDetailsDto;
@@ -18,6 +19,7 @@ import com.nerga.travelCreatorApp.security.auth.database.UserRepository;
 import com.nerga.travelCreatorApp.security.auth.exceptions.CustomUserNotFoundException;
 import com.nerga.travelCreatorApp.security.auth.exceptions.UserException;
 import com.nerga.travelCreatorApp.security.dto.UserDetailsDto;
+import com.nerga.travelCreatorApp.security.dto.UserSummaryDto;
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsDto;
 import com.nerga.travelCreatorApp.trip.dto.TripDetailsForListViewDto;
 import com.nerga.travelCreatorApp.trip.dto.TripSummaryDto;
@@ -192,7 +194,7 @@ public class TripGeneralService {
         return null;
     }
 
-    private TripSummaryDto generateTripSummary(Trip trip) {
+    private TripSummaryDto generateTripSummary(Trip trip, boolean isExpenseRecordIncluded) {
 
         TripSummaryDto summary = new TripSummaryDto();
 
@@ -211,9 +213,63 @@ public class TripGeneralService {
         summary.setLocationDescription(trip.getLocation().getLocationDescription());
 
         summary.setTotalExpenses(trip.getExpenses().stream().mapToDouble(Expense::getCost).sum());
+        summary.setExpenseReportIncluded(isExpenseRecordIncluded);
 
+        List<UserSummaryDto> usersSummary = new ArrayList<>();
+        List<ExpensesSummaryDto> expensesSummary = new ArrayList<>();
 
+        trip.getOrganizers().forEach(organizer -> {
+            usersSummary.add(new UserSummaryDto(
+                    organizer.getUsername(),
+                    organizer.getFirstName(),
+                    organizer.getLastName(),
+                    organizer.getEmail(),
+                    organizer.getPhoneNumber()));
+        });
 
+        trip.getParticipants().forEach(participant -> {
+            usersSummary.add(new UserSummaryDto(
+                    participant.getUsername(),
+                    participant.getFirstName(),
+                    participant.getLastName(),
+                    participant.getEmail(),
+                    participant.getPhoneNumber()));
+        });
+
+        for (Expense  it: trip.getExpenses()){
+            ExpensesSummaryDto expenseSummary = new ExpensesSummaryDto();
+            expenseSummary.setExpenseName(it.getTitle());
+            expenseSummary.setExpenseDescription(it.getDescription());
+            double total = 0.0;
+            for(ExpenseRecord record : it.getShareholders()){
+                total += record.getAmount();
+            }
+            expenseSummary.setExpenseCost(total);
+        }
+
+        for(UserSummaryDto it: usersSummary) {
+            double overallExpenses = 0.0;
+            for(Expense expense: trip.getExpenses()) {
+                for(ExpenseRecord record: expense.getShareholders()){
+                    if(it.getUsername() == record.getUserEntity().getUsername()){
+                        overallExpenses+=record.getAmount();
+                    }
+                }
+            }
+            it.setTotalExpensesCost(overallExpenses);
+        }
+
+        summary.setParticipants(usersSummary);
+        summary.setExpensesSummary(expensesSummary);
+
+        return null;
+    }
+
+    private List<UserSummaryDto> createUserSummary(List<UserEntity> users){
+        return null;
+    }
+
+    private List<ExpensesSummaryDto> createExpensesSummary(List<Expense> expenses){
         return null;
     }
 

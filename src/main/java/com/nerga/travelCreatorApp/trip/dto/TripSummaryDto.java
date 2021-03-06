@@ -29,4 +29,6 @@ public class TripSummaryDto {
     List<UserSummaryDto> participants;
     List<ExpensesSummaryDto> expensesSummary;
 
+    boolean isExpenseReportIncluded;
+
 }

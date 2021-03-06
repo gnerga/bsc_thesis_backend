@@ -12,7 +12,7 @@ import lombok.Setter;
 public class ExpensesSummaryDto {
 
     String expenseName;
-    String expenseSummary;
-    String expenseCost;
+    String expenseDescription;
+    double expenseCost;
 
 }

@@ -1,18 +1,22 @@
 package com.nerga.travelCreatorApp.security.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class UserSummaryDto {
+    @NonNull
+    String username;
+    @NonNull
     String firstName;
+    @NonNull
     String lastName;
+    @NonNull
     String email;
+    @NonNull
     String phoneNumber;
-    String totalExpensesCost;
+    double totalExpensesCost;
 }
