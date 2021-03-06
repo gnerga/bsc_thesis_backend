@@ -237,14 +237,15 @@ public class TripGeneralService {
         });
 
         for (Expense  it: trip.getExpenses()){
-            ExpensesSummaryDto expenseSummary = new ExpensesSummaryDto();
-            expenseSummary.setExpenseName(it.getTitle());
-            expenseSummary.setExpenseDescription(it.getDescription());
+            ExpensesSummaryDto expenseRecordSummary = new ExpensesSummaryDto();
+            expenseRecordSummary.setExpenseName(it.getTitle());
+            expenseRecordSummary.setExpenseDescription(it.getDescription());
             double total = 0.0;
             for(ExpenseRecord record : it.getShareholders()){
                 total += record.getAmount();
             }
-            expenseSummary.setExpenseCost(total);
+            expenseRecordSummary.setExpenseCost(total);
+            expensesSummary.add(expenseRecordSummary);
         }
 
         for(UserSummaryDto it: usersSummary) {
