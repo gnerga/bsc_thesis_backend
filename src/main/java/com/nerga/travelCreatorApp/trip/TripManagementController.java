@@ -58,4 +58,10 @@ public class TripManagementController {
         return tripManagementService.resetDatePropositions(tripId).toResponseEntity();
     }
 
+    @PutMapping("/updateDescription={tripId}&{description}")
+    public ResponseEntity updateDescription(@PathVariable("tripId") Long tripId, @PathVariable("description") String description)
+    {
+        return tripManagementService.updateTripDescription(tripId, description).toResponseEntity();
+    }
+
 }
