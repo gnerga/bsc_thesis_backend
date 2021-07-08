@@ -214,6 +214,26 @@ public class TripManagementService {
         return Success.ok(tripUserAndDetailsDto);
     }
 
+    // todo usunąć tego druta
+
+    public Response updateTripDescription(Long tripId, String newDescription){
+        Trip trip;
+
+        try {
+            trip = Option.ofOptional(tripRepository.findById(tripId))
+                    .getOrElseThrow(()->new TripNotFoundException("TRIP_NOT_FOUND"));
+        } catch (TripException e) {
+            return Error.notFound("TRIP_NOT_FOUND");
+        }
+
+        trip.setTripDescription(newDescription);
+
+        trip = tripRepository.save(trip);
+
+        return Success.ok(tripToTripDetailsDto(trip));
+
+    }
+
     public Response updateTrip(TripUpdateDto update){
 
         Trip trip;
