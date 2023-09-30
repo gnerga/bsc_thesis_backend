@@ -1,18 +1,16 @@
 package com.nerga.travelCreatorApp.expenses;
 
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
-import com.nerga.travelCreatorApp.expensesregister.Expenses;
-import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesCreateDto;
+import com.nerga.travelCreatorApp.expensesregister.Expense;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class ExpensesTest {
+public class ExpenseTest {
 
     ModelMapper modelMapper;
 
@@ -21,8 +19,8 @@ public class ExpensesTest {
         modelMapper = new ModelMapper();
     }
 
-    private Expenses getTestExpense(){
-        return new Expenses(
+    private Expense getTestExpense(){
+        return new Expense(
                 "Składka",
                 "Zakupy, opłaty dodatkowe",
                 120,

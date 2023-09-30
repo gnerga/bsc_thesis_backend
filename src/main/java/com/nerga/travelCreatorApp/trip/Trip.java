@@ -7,7 +7,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionMatcher;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnDto;
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
-import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.Expense;
 import com.nerga.travelCreatorApp.location.Location;
 import com.nerga.travelCreatorApp.post.Post;
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
@@ -67,7 +67,7 @@ public class Trip {
     private List<DateProposition> analyzedDatePropositionList;
 
     @OneToMany
-    List<Expenses> expenses;
+    List<Expense> expenses;
 
     @OneToMany
     List<Post> posts;
@@ -209,7 +209,7 @@ public class Trip {
         return  this;
     }
 
-    public Trip addExpense(Expenses expense){
+    public Trip addExpense(Expense expense){
         if(expenses == null){
             expenses = new ArrayList<>();
         }
@@ -217,7 +217,7 @@ public class Trip {
         return this;
     }
 
-    public Trip removeExpense(Expenses expense){
+    public Trip removeExpense(Expense expense){
         expenses.remove(expense);
         return this;
     }

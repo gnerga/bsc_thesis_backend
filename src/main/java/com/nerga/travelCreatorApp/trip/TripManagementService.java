@@ -8,7 +8,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.DateProposition;
 import com.nerga.travelCreatorApp.datepropositionmatcher.DatePropositionRepository;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecordRepository;
-import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.Expense;
 import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpenseRecordDetailsDto;
 import com.nerga.travelCreatorApp.expensesregister.dto.ExpensesDetailsDto;
@@ -294,7 +294,7 @@ public class TripManagementService {
 
         if(!trip.getExpenses().isEmpty() || trip.getExpenses() == null){
 
-            for(Expenses expense: trip.getExpenses()){
+            for(Expense expense: trip.getExpenses()){
                 for (ExpenseRecord record : expense.getShareholders()){
                     if(record.getUserEntity().getId().equals(userId)){
                         expense.setCost(expense.getCost() - record.getAmount());
@@ -382,26 +382,26 @@ public class TripManagementService {
         );
     }
 
-    private ExpensesDetailsDto mapExpensesToExpensesDetailsDto(Expenses expenses){
+    private ExpensesDetailsDto mapExpensesToExpensesDetailsDto(Expense expense){
         List<ExpenseRecordDetailsDto> list = new ArrayList<>();
 
-        for (ExpenseRecord it: expenses.getShareholders()){
+        for (ExpenseRecord it: expense.getShareholders()){
             UserDetailsDto user = modelMapper.map(it.getUserEntity(), UserDetailsDto.class);
             list.add(new ExpenseRecordDetailsDto(it.getExpenseRecordId(), user, it.getAmount()));
         }
 
         return new ExpensesDetailsDto(
-                expenses.getExpensesId(),
-                expenses.getTitle(),
-                expenses.getDescription(),
-                expenses.getCost(),
+                expense.getExpensesId(),
+                expense.getTitle(),
+                expense.getDescription(),
+                expense.getCost(),
                 list
         );
     }
 
-    private List<ExpensesDetailsDto> mapExpensesListToExpensesDetailsDtoLost(List<Expenses> expensesList){
+    private List<ExpensesDetailsDto> mapExpensesListToExpensesDetailsDtoLost(List<Expense> expenseList){
         List<ExpensesDetailsDto> expensesDtoList = new ArrayList<>();
-        for(Expenses expense : expensesList) {
+        for(Expense expense : expenseList) {
             expensesDtoList.add(mapExpensesToExpensesDetailsDto(expense));
         }
         return expensesDtoList;

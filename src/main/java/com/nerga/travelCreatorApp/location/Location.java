@@ -45,7 +45,7 @@ public class Location {
                 this.getLocationDescription()));
         this.setPrivate(locationDetailsDto.isPrivate());
         this.setLocationAddress(
-                locationAddress.updateLocationEntity(locationDetailsDto.getLocationAddress()));
+                locationAddress.updateAddressEntity(locationDetailsDto.getLocationAddress()));
 
         return this;
     }

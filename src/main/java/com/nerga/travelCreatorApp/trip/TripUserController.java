@@ -32,19 +32,35 @@ public class TripUserController {
         return tripUserService.updateExpense(expenseUpdateDto).toResponseEntity();
     }
 
+    @DeleteMapping("/removeExpense={expenseId}")
+    public ResponseEntity removeExpense(@PathVariable("expenseId") Long expenseId){
+        return tripUserService.removeExpenseFromTrip(expenseId).toResponseEntity();
+    }
+
     @PutMapping("/addExpenseRecord")
     public ResponseEntity addExpenseRecord(@RequestBody ExpenseRecordCreateDto newRecord){
         return tripUserService.addUserToExpense(newRecord).toResponseEntity();
     }
 
+
+    @PutMapping("/removeExpenseRecord")
+    public ResponseEntity removeExpenseRecord(@RequestBody ExpenseRecordCreateDto removeRecord){
+        return tripUserService.removeUserFromExpense(removeRecord).toResponseEntity();
+    }
+
     @PutMapping("/updateExpenseShareholdersList")
     public ResponseEntity updateExpenseShareHoldersList(@RequestBody ExpenseRecordsUpdateListDto recordUpdateList){
-        return tripUserService.updateExpenseShareholdersAmount(recordUpdateList).toResponseEntity();
+        return tripUserService.updateExpenseShareholders(recordUpdateList).toResponseEntity();
     }
 
     @PostMapping("/addPostToTrip={tripId}")
     public ResponseEntity addPostToTrip(@RequestBody PostCreateDto post, @PathVariable("tripId") Long tripId){
         return tripUserService.addPostByTripId(post, tripId).toResponseEntity();
+    }
+
+    @DeleteMapping("/removePostFromTrip={tripId}&{postId}")
+    public ResponseEntity removePost(@PathVariable("tripId")Long tripId, @PathVariable("postId")Long postId) {
+        return tripUserService.removePostFromTrip(tripId, postId).toResponseEntity();
     }
 
     @PutMapping("/giveHandUpToPost={postId}&{userId}")

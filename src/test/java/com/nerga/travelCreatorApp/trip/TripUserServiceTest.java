@@ -9,7 +9,7 @@ import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionRetu
 import com.nerga.travelCreatorApp.datepropositionmatcher.dto.DatePropositionReturnedListDto;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecord;
 import com.nerga.travelCreatorApp.expensesregister.ExpenseRecordRepository;
-import com.nerga.travelCreatorApp.expensesregister.Expenses;
+import com.nerga.travelCreatorApp.expensesregister.Expense;
 import com.nerga.travelCreatorApp.expensesregister.ExpensesRepository;
 import com.nerga.travelCreatorApp.expensesregister.dto.*;
 import com.nerga.travelCreatorApp.location.Location;
@@ -224,8 +224,8 @@ public class TripUserServiceTest {
         return list;
     }
 
-    private Expenses getTestExpense(){
-        return new Expenses(
+    private Expense getTestExpense(){
+        return new Expense(
                 "Składka",
                 "Zakupy, opłaty dodatkowe",
                 120,

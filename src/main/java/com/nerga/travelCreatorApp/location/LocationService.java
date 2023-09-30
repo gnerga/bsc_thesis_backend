@@ -71,7 +71,8 @@ public class LocationService {
     public Response findAllLocations(){
         List<Location> locationList = locationRepository.findAll();
         List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
-        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+//        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+        return Success.ok(locationDetailsDtoList);
     }
 
     public Response findAllUserLocations(){
@@ -86,7 +87,8 @@ public class LocationService {
 
         List<Location> locationList = locationRepository.findLocationByOwner(userEntity);
         List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
-        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+        return Success.ok(locationDetailsDtoList);
+//        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
 
     public Response findAllUserLocationsWithDescription(String description){
@@ -101,7 +103,8 @@ public class LocationService {
 
         List<Location> locationList = locationRepository.findLocationByLocationDescriptionContainsAndOwner(description, userEntity);
         List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
-        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+        return Success.ok(locationDetailsDtoList);
+//        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
 
     public Response findAllUserLocationsWithName(String name){
@@ -116,7 +119,8 @@ public class LocationService {
 
         List<Location> locationList = locationRepository.findLocationByLocationNameContainsAndOwner(name, userEntity);
         List<LocationDetailsDto> locationDetailsDtoList = returnLocationDTOSList(locationList);
-        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
+        return Success.ok(locationDetailsDtoList);
+//        return !locationList.isEmpty() ? Success.ok(locationDetailsDtoList) : Error.badRequest("LOCATIONS_NOT_FOUND");
     }
 
     public Response findById(Long id){

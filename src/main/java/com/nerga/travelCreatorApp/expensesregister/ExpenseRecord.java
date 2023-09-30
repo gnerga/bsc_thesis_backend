@@ -1,9 +1,7 @@
 package com.nerga.travelCreatorApp.expensesregister;
 
 import com.nerga.travelCreatorApp.security.auth.database.UserEntity;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -17,7 +15,7 @@ public class ExpenseRecord {
     Long expenseRecordId;
 
     @ManyToOne
-    Expenses expenses;
+    Expense expense;
 
     @ManyToOne
     UserEntity  userEntity;
@@ -29,11 +27,11 @@ public class ExpenseRecord {
     public ExpenseRecord(
                         UserEntity userEntity,
                         float amount,
-                        Expenses expenses
+                        Expense expense
                         ) {
         this.userEntity = userEntity;
         this.amount = amount;
-        this.expenses = expenses;
+        this.expense = expense;
      }
 
     public ExpenseRecord(

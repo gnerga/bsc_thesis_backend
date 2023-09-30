@@ -43,9 +43,19 @@ public class TripGeneralController {
         return tripGeneralService.getAllTripParticipantsAndOrganizers(tripId).toResponseEntity();
     }
 
+    @GetMapping("/tripUsersNotIncludedToExpense={tripId}&{expenseId}")
+    public ResponseEntity findAllParticipantsNotIncludedToExpenseWithGivenId(@PathVariable("tripId") Long tripId, @PathVariable("expenseId") Long expenseId){
+        return tripGeneralService.getAllParticipantsNotIncludedToExpenseWithGivenId(tripId, expenseId).toResponseEntity();
+    }
+
     @GetMapping("/trip={tripId}")
     public ResponseEntity findTrip(@PathVariable("tripId") Long tripId){
         return tripGeneralService.getTripById(tripId).toResponseEntity();
+    }
+
+    @GetMapping("/generateTripReport={tripId}&{isExpensesIncluded}")
+    public ResponseEntity generateTripReport(@PathVariable("tripId") Long tripId, @PathVariable("isExpensesIncluded") boolean isExpensesIncluded){
+        return tripGeneralService.getTripReportById(tripId, isExpensesIncluded).toResponseEntity();
     }
 
 }
